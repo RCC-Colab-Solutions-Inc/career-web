@@ -20,4 +20,9 @@ class JobPosting extends Model
     {
         return $this->hasOne(jobdescription::class);
     }
+
+    public function applicants()
+    {
+        return $this->hasMany(ApplicantsApplication::class, 'priority_job_id', 'id');
+    }
 }
