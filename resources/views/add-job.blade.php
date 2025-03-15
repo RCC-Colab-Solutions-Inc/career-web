@@ -26,7 +26,7 @@
             </div>
             
             <!-- Job Form -->
-            <form action="add-job" method="POST">
+            <form action="addjob" method="POST">
                 @csrf
                 <!-- Main Form Card -->
                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
@@ -41,6 +41,19 @@
                                     type="text" 
                                     placeholder="Enter job title"
                                     name="jobtitle" 
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    required
+                                >
+                            </div>
+                            
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    placeholder="Enter job title"
+                                    name="company" 
                                     class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                                     required
                                 >

@@ -22,7 +22,7 @@
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <!-- Search Box -->
-        <div class="relative flex-grow md:max-w-md">
+        <div class="relative flex-grow">
             <input 
                 type="text" 
                 placeholder="Search applicants..." 
@@ -34,24 +34,8 @@
                 </svg>
             </div>
         </div>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Job Position Filter -->
-        <div>
-            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Position</label>
-            <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                <option>All Positions</option>
-                <option>Senior .NET Developer</option>
-                <option>UX/UI Designer</option>
-                <option>IT Support Specialist</option>
-                <option>Backend Developer</option>
-            </select>
-        </div>
-        
-        <!-- Status Filter -->
-        <div>
-            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Status</label>
+        <div class="relative flex-grow">
+            
             <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
                 <option>All Statuses</option>
                 <option>New</option>
@@ -63,19 +47,9 @@
                 <option>Rejected</option>
             </select>
         </div>
-        
-        <!-- Date Filter -->
-        <div>
-            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Date Applied</label>
-            <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                <option>All Dates</option>
-                <option>Today</option>
-                <option>Last 7 Days</option>
-                <option>Last 30 Days</option>
-                <option>Last 3 Months</option>
-            </select>
-        </div>
     </div>
+    
+   
 </div>
             
            <!-- Applicants List Table -->

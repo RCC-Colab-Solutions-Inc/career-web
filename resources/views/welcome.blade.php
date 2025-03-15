@@ -27,9 +27,10 @@
                 
                 
                 
-                <form class="p-8 space-y-6 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
+                <form action="/login" method="POST" class="p-8 space-y-6 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
                     <!-- Email Address -->
                     <div>
+                        @csrf
                         <label for="email" class="block text-sm font-medium text-blue-100 mb-2 uppercase tracking-wider">Email Address</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
