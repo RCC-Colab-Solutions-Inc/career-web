@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobPosting extends Model
 {
-    use HasFactory;
+   
     protected $fillable = [
         'jobtitle',
         'jobdescription',
