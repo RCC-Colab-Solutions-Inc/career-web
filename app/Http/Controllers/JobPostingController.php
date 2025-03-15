@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\JobPosting;
-
+use App\Models\ApplicantsApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -17,63 +17,71 @@ class JobPostingController extends Controller
 
     public function jobListing()
     {
-        $jobs = JobPosting::orderBy('created_at', 'desc')->paginate(6); // Latest first
+        $jobs = JobPosting::withCount('applicants')
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+    
         return view('job-listing', compact('jobs'));
     }
 
-   public function addjob(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'jobtitle' => 'required',
-        'jobdescription' => 'required',
-        'workplace' => 'required',
-        'joblocation' => 'required',
-        'jobtype' => 'required',
-        'department' => 'required',
-        'jobStatus' => 'required',
-        'others' => 'required',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 'error',
-            'code' => 422,
-            'message' => 'Validation failed',
-            'errors' => $validator->errors(),
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 422);
+    public function addJobForm()
+    {
+        return view('add-job');
     }
 
-    // Generate a unique job code
-    $jobcode = $this->generateJobCode();
+   public function addjob(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jobtitle' => 'required',
+            'jobdescription' => 'required',
+            'workplace' => 'required',
+            'joblocation' => 'required',
+            'jobtype' => 'required',
+            'department' => 'required',
+            'jobStatus' => 'required',
+            'others' => 'required',
+        ]);
 
-    $job = new JobPosting();
-    $job->jobtitle = $request->jobtitle;
-    $job->jobcode = $jobcode;
-    $job->jobdescription = $request->jobdescription;
-    $job->workplace = $request->workplace;
-    $job->joblocation = $request->joblocation;
-    $job->jobtype = $request->jobtype;
-    $job->department = $request->department;
-    $job->jobstatus = $request->jobStatus;
-    $job->others = $request->others;
-    $job->joburgency = $request->has('urgency') ? 'urgent' : 'normal';
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
 
-    $job->save();
+        // Generate a unique job code
+        $jobcode = $this->generateJobCode();
 
-    
+        $job = new JobPosting();
+        $job->jobtitle = $request->jobtitle;
+        $job->jobcode = $jobcode;
+        $job->jobdescription = $request->jobdescription;
+        $job->workplace = $request->workplace;
+        $job->joblocation = $request->joblocation;
+        $job->jobtype = $request->jobtype;
+        $job->department = $request->department;
+        $job->jobstatus = $request->jobStatus;
+        $job->others = $request->others;
+        $job->joburgency = $request->has('urgency') ? 'urgent' : 'normal';
 
-    //return to job-listing with return message
-    return redirect()->route('job-listing')->with([
-        'status' => 'success',
-        'code' => 201,
-        'message' => 'Job posting created',
-        'jobcode' => $jobcode,
-        'timestamp' => Carbon::now()->toDateTimeString()
-    ], 201);
+        $job->save();
 
-    
-}
+        
+
+        //return to job-listing with return message
+        return redirect()->route('job-listing')->with([
+            'status' => 'success',
+            'code' => 201,
+            'message' => 'Job posting created',
+            'jobcode' => $jobcode,
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 201);
+
+        
+    }
 
     /**
      * Generate a unique job code
