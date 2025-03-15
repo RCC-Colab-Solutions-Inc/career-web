@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\FrontAPIControllers;
+use App\Http\Middleware\LoginAuthorization;
+use App\Http\Middleware\ApiAuthMiddleware;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,22 +18,24 @@ use App\Http\Controllers\JobPostingController;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // });
 
-Route::get('/dashboard', [JobPostingController::class, 'index'])->name('dashboard');
-Route::get('/job-listing', [JobPostingController::class, 'jobListing'])->name('job-listing');
-Route::post('/add-job', [JobPostingController::class, 'addjob'])->name('add-job');
 
-Route::get('/add-job', function () {
-    return view('add-job');
+    
+Route::controller(JobPostingController::class)->group(function () {
+    Route::get('/dashboard', 'index');
+    Route::get('/job-listing', 'jobListing');
+    Route::post('/add-job', 'addjob');
+    Route::get('/applicants', 'applicants');
+    Route::get('/', 'welcome');
+   
 });
 
-Route::get('/applicants', function () {
-    return view('applicants');
-});
+
+
+
+
+// This route for API
