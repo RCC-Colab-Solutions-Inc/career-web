@@ -14,7 +14,7 @@ class JobPostingsSeeder extends Seeder
         $statuses = ['open', 'closed'];
         $urgencies = ['urgent', 'normal'];
         $jobTypes = ['Full-Time', 'Part-Time', 'Contract', 'Freelance'];
-
+        $companyid = ['1', '2', '3', '4', '5'];
         $jobs = [
             ['DEV001', 'Software Engineer', 'Develop and maintain web applications.', 'IT'],
             ['DEV002', 'Frontend Developer', 'Build user-friendly UI for web applications.', 'IT'],
@@ -34,6 +34,7 @@ class JobPostingsSeeder extends Seeder
                 'department' => $job[3],
                 'jobstatus' => $statuses[array_rand($statuses)],
                 'joburgency' => $urgencies[array_rand($urgencies)],
+                'companyid' => $companyid[array_rand($companyid)],
                 'others' => "
                     <h3><strong>Responsibilities:</strong></h3>
                     <ul>

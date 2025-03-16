@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('secondary_job_id');
             $table->string('third_job_id');
             $table->string('source');
+            $table->enum('clientview', ['Yes','No'])->default('No');
             $table->timestamps();
         });
     }

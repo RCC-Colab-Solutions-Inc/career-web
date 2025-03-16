@@ -13,7 +13,8 @@ class JobPosting extends Model
         'jobtypes',
         'joblocation',
         'jobstatus',
-        'others'
+        'others',
+        'companyid',
     ];
 
     public function jobdescription()
