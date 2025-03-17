@@ -45,8 +45,9 @@
                                     required
                                 >
                             </div>
-                            
                         </div>
+
+                        <!-- Company -->
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company <span class="text-red-500">*</span></label>
                             <div class="relative">
@@ -61,13 +62,18 @@
                             
                         </div>
                         
-                        <!-- Company Name -->
-                        <div>
+                        <!-- Job Description -->
+                        <div class="col-span-1 md:col-span-2">
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Description <span class="text-red-500">*</span></label>
                             <div class="relative">
-                                    <textarea name="jobdescription" id="" ></textarea>
+                                <textarea 
+                                    name="jobdescription" 
+                                    placeholder="Enter job description"
+                                    rows="5"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    required
+                                ></textarea>
                             </div>
-                            
                         </div>
                         
                     </div>
@@ -113,17 +119,13 @@
                         <!-- Department -->
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Department <span class="text-red-500">*</span></label>
-                            <select name="department" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" required>
-                                <option value="">Select department</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="design">Design</option>
-                                <option value="marketing">Marketing</option>
-                                <option value="sales">Sales</option>
-                                <option value="customer-support">Customer Support</option>
-                                <option value="hr">Human Resources</option>
-                                <option value="finance">Finance</option>
-                                <option value="it">IT</option>
-                            </select>
+                            <input
+                                type="text"
+                                placeholder="Enter department"
+                                name="department"
+                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                required
+                            >
                         </div>
                         
                         <!-- Hiring Urgency -->
@@ -146,7 +148,7 @@
                         </div>
                     </div>
                     
-                    <!-- Job Description Editor Section -->
+                    <!-- Other Details Section -->
                     <div class="mb-8">
                         <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Other Details<span class="text-red-500">*</span></label>
                         

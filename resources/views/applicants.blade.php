@@ -55,12 +55,14 @@
             <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
                 <option>All Statuses</option>
                 <option>New</option>
-                <option>Screening</option>
-                <option>Interview</option>
-                <option>Assessment</option>
-                <option>Offered</option>
+                <option>Shortlisted</option>
+                <option>For Interview</option>
+                <option>For Assessment</option>
+                <option>Waiting for Feedback</option>
+                <option>Waiting for Job Offer</option>
                 <option>Hired</option>
                 <option>Rejected</option>
+                <option>Decline</option>
             </select>
         </div>
         
