@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\JobPosting;
 use App\Models\ApplicantsApplication;
+use App\Models\CompanyDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -105,9 +106,12 @@ class JobPostingController extends Controller
         return $jobcode;
     }
 
-    public function company(){
-
-        return view('company');
+    public function company()
+    {
+        // Select all companies and paginate with 10 records per page
+        $companies = CompanyDatabase::orderBy('created_at', 'desc')->paginate(10);
+    
+        return view('company', compact('companies'));
     }
-
+    
 }
