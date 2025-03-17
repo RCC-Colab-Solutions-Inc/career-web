@@ -26,6 +26,9 @@ class LoginMainController extends Controller
         // Attempt login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            $user = Auth::user();
+
             return redirect()->route('dashboard'); // Redirect to dashboard after login
         }
 
