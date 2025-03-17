@@ -39,8 +39,13 @@
                         <span class="font-semibold text-sm">A</span>
                     </div>
                     <div class="hidden md:flex flex-col items-start">
-                        <span class="text-sm font-medium text-slate-700 dark:text-white">Admin User</span>
-                        <span class="text-xs text-slate-500 dark:text-slate-400">admin@rcccolab.com</span>
+                        <span class="text-sm font-medium text-slate-700 dark:text-white">
+                        {{Auth::user()->name}}
+
+                        </span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">
+                        {{Auth::user()->email}}
+                        </span>
                     </div>
                     <!-- Dropdown arrow -->
                     <svg class="h-4 w-4 text-slate-700 dark:text-white hidden md:block transition-transform duration-200" :class="open ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
