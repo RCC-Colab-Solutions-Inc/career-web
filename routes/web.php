@@ -36,7 +36,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/job-listing', 'jobListing')->name('job-listing');
     Route::get('/add-job', 'addjobform');
     Route::post('/addjob', 'addjob');
-    
+    Route::get('/companies', 'company');
 });
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {

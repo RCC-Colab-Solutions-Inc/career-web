@@ -219,6 +219,4 @@
     </div>
 </div>
 
-@include('includes.script')
-
 @include('includes.footer')

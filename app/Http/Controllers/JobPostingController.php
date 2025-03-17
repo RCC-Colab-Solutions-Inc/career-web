@@ -105,5 +105,9 @@ class JobPostingController extends Controller
         return $jobcode;
     }
 
+    public function company(){
+
+        return view('company');
+    }
 
 }

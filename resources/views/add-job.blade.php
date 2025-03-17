@@ -51,13 +51,10 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company <span class="text-red-500">*</span></label>
                             <div class="relative">
-                                <input 
-                                    type="text" 
-                                    placeholder="Enter job title"
-                                    name="company" 
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    required
-                                >
+                            <select name="company" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" required>
+                                <option value="">Select company</option>
+                
+                            </select>
                             </div>
                             
                         </div>
@@ -346,50 +343,6 @@
                 setTimeout(updateQuillTheme, 100);
             });
         }
-    });
-</script>
-
-<!-- JavaScript for Sidebar Toggle -->
-<script>
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('translate-x-0');
-        sidebar.classList.toggle('-translate-x-full');
-    });
-    
-    // Show/hide schedule date
-    document.querySelectorAll('input[name="jobStatus"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const scheduleDateContainer = this.closest('.bg-white.dark\\:bg-slate-800').querySelector('.mt-4');
-            if (this.value === 'scheduled') {
-                scheduleDateContainer.classList.remove('hidden');
-            } else {
-                scheduleDateContainer.classList.add('hidden');
-            }
-        });
-    });
-    
-    // Theme Toggle Function
-    document.addEventListener('DOMContentLoaded', function() {
-        const themeToggle = document.getElementById('themeToggle');
-        const htmlElement = document.documentElement;
-        
-        if (localStorage.getItem('theme') === 'dark' || 
-            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            htmlElement.classList.add('dark');
-        } else {
-            htmlElement.classList.remove('dark');
-        }
-        
-        themeToggle.addEventListener('click', function() {
-            htmlElement.classList.toggle('dark');
-            
-            if (htmlElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
     });
 </script>
 

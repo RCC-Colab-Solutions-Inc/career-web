@@ -22,7 +22,7 @@
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <!-- Search Box -->
-        <div class="relative flex-grow md:max-w-md">
+        <div class="relative flex-grow w-full">
             <input 
                 type="text" 
                 placeholder="Search applicants..." 
@@ -246,7 +246,5 @@
         </main>
     </div>
 </div>
-
-@include('includes.script')
 
 @include('includes.footer')

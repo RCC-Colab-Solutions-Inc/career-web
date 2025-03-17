@@ -13,24 +13,26 @@
         <!-- Job Listing Content -->
         <main class="p-6">
             <!-- Page Title -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Job Listing</h1>
-                <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Manage and post job opportunities</p>
-            </div>
-            
-            <!-- Action Buttons and Filters Section -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    <!-- Add New Job Button -->
-                    <a href="/add-job" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
+            <div class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Job Listing</h1>
+                    <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Manage and post job opportunities</p>
+                </div>
+                <!-- Add New Job Button -->
+                <a href="/add-job" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                         Add New Job
                     </a>
+            </div>
+            
+            <!-- Filters Section -->
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     
                     <!-- Search Box -->
-                    <div class="relative flex-grow md:max-w-md">
+                    <div class="relative flex-grow w-full">
                         <input 
                             type="text" 
                             placeholder="Search jobs..." 
@@ -182,7 +184,5 @@
         </main>
     </div>
 </div>
-
-@include('includes.script')
 
 @include('includes.footer')
