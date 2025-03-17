@@ -73,37 +73,38 @@
                                         Contact
                                     </div>
                                 </th>
+                               
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-slate-700">
-                            <!-- Company 1 - Active -->
+                            @foreach($companies as $company)
                             <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-400 flex items-center justify-center text-white font-medium">
-                                            A
+                                            {{ substr($company->company_name, 0, 2) }}
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                                Acme Corporation
+                                                {{ $company->company_name }}
                                             </div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                    info@acme.com
+                                        {{ $company->representative_email }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                        John Smith
+                                        {{ $company->representative_name }}
                                     </div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                        +63 912 345 6789
+                                        {{ $company->representative_contact_number }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -113,142 +114,50 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
-                                        <div class="relative" x-data="{ open: false }">
-                                            <button @click="open = !open" class="p-1.5 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200" title="More Options">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                                                </svg>
-                                            </button>
-
-                                        </div>
                                     </div>
                                 </td>
                             </tr>
-                            <!-- Company 2 - Active -->
-                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-medium">
-                                            T
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                                TechHub Solutions
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                    hr@techhub.com
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                        Maria Santos
-                                    </div>
-                                    <div class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                        +63 998 765 4321
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex items-center justify-center space-x-3">
-                                        <a href="#" class="p-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors duration-200" title="Edit">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </a>
-                                        <div class="relative" x-data="{ open: false }">
-                                            <button @click="open = !open" class="p-1.5 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200" title="More Options">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                                                </svg>
-                                            </button>
-                                            
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Company 3 - Inactive -->
-                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-green-400 to-emerald-400 flex items-center justify-center text-white font-medium">
-                                            G
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                                Global Finance Inc
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                    careers@globalfinance.com
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                        Robert Johnson
-                                    </div>
-                                    <div class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                        +63 917 555 1234
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex items-center justify-center space-x-3">
-                                        <a href="#" class="p-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors duration-200" title="Edit">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </a>
-                                        <div class="relative" x-data="{ open: false }">
-                                            <button @click="open = !open" class="p-1.5 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200" title="More Options">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                                                </svg>
-                                            </button>
-                                            
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- Pagination (Static) -->
-            <div class="flex justify-between items-center">
-                <!-- Pagination Info -->
-                <div class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
-                    Showing 
-                    <span class="font-medium text-gray-900 dark:text-white">1</span> 
-                    to 
-                    <span class="font-medium text-gray-900 dark:text-white">3</span> 
-                    of 
-                    <span class="font-medium text-gray-900 dark:text-white">3</span> results
-                </div>
-
-                <!-- Pagination Links -->
-                <div class="flex justify-center">
-                    <nav class="flex items-center space-x-1">
-                        <!-- Previous Page (Disabled) -->
+            <div class="flex justify-center mt-4">
+                <nav class="flex items-center space-x-1">
+                    <!-- Previous Page -->
+                    @if ($companies->onFirstPage())
                         <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
                             &laquo;
                         </span>
+                    @else
+                        <a href="{{ $companies->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                            &laquo;
+                        </a>
+                    @endif
 
-                        <!-- Current Page -->
-                        <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">1</span>
-                        
-                        <!-- Next Page (Disabled) -->
+                    <!-- Page Numbers -->
+                    @foreach ($companies->getUrlRange(1, $companies->lastPage()) as $page => $url)
+                        @if ($page == $companies->currentPage())
+                            <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">{{ $page }}</a>
+                        @endif
+                    @endforeach
+
+                    <!-- Next Page -->
+                    @if ($companies->hasMorePages())
+                        <a href="{{ $companies->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                            &raquo;
+                        </a>
+                    @else
                         <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
                             &raquo;
                         </span>
-                    </nav>
-                </div>
+                    @endif
+                </nav>
             </div>
+
         </main>
         <div
     x-data="{ 
