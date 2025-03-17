@@ -125,28 +125,28 @@
                         </div>
                         
                         <!-- Chart Grid Lines -->
-<div class="absolute left-12 right-4 top-4 bottom-6 flex flex-col justify-between">
-    <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
-    <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
-    <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
-    <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
-    <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
-</div>
+                        <div class="absolute left-12 right-4 top-4 bottom-6 flex flex-col justify-between">
+                            <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
+                            <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
+                            <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
+                            <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
+                            <div class="border-b border-slate-200 dark:border-slate-600/50 w-full h-0 transition-colors duration-300"></div>
+                        </div>
                         
                         <!-- Bar Chart Elements -->
-                        <div class="absolute left-16 right-8 bottom-6 flex justify-between items-end h-64">
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
-    <div class="w-4 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="absolute left-12 right-4 bottom-6 flex justify-between items-end h-64">
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
+                        <div class="w-10 h-20 bg-blue-400 dark:bg-blue-500 rounded-t hover:bg-blue-500 dark:hover:bg-blue-400 transition-all duration-200 cursor-pointer"></div>
                         </div>
                         
                         <!-- Line Chart -->

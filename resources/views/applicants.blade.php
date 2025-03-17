@@ -36,7 +36,7 @@
         </div>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-3 w-full gap-4">
         <!-- Job Position Filter -->
         <div>
             <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Position</label>
