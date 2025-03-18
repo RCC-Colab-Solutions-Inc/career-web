@@ -120,6 +120,16 @@ class JobPostingController extends Controller
         return view('users');
     }
 
+    public function applicantlogin()
+    {
+        return view('applicant-login');
+    }
+
+    public function applicantform()
+    {
+        return view('applicant-form');
+    }
+
 
     
 }
