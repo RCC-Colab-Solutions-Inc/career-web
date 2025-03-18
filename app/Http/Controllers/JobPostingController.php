@@ -113,5 +113,13 @@ class JobPostingController extends Controller
     
         return view('company', compact('companies'));
     }
+
+    public function user()
+    {
+
+        return view('users');
+    }
+
+
     
 }

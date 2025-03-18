@@ -37,6 +37,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/add-job', 'addjobform');
     Route::post('/addjob', 'addjob');
     Route::get('/companies', 'company');
+    Route::get('/users', 'user');
 });
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {

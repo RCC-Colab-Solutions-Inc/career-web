@@ -77,7 +77,7 @@
             <!-- Job Cards Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 @foreach($jobs as $job)
-                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group hover:shadow-lg transition-all duration-300">
+                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 group hover:shadow-lg transition-all duration-300">
                         <div class="p-6">
                             <div class="flex justify-between items-center">
                                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
@@ -128,13 +128,130 @@
                                     </div>
                                 </a>
                                 
-
-                                <div class="flex space-x-2">
-                                    <button class="p-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                                <div class="relative" x-data="jobActions">
+                                    <!-- Edit Button -->
+                                    <button 
+                                        @click="toggleMenu()"
+                                        class="p-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200"
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </button>
+                                    
+                                    <!-- Main Dropdown Menu -->
+                                    <div 
+                                        x-show="isMainMenuOpen()"
+                                        @click.away="closeAll()"
+                                        x-transition:enter="transition ease-out duration-100" 
+                                        x-transition:enter-start="transform opacity-0 scale-95" 
+                                        x-transition:enter-end="transform opacity-100 scale-100" 
+                                        class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-slate-700"
+                                        style="z-index: 100; display: none;"
+                                    >
+                                        <div class="py-1">
+                                            <!-- Make It Urgent -->
+                                            <button 
+                                                @click="showUrgentDialog()"
+                                                class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                </svg>
+                                                Make It Urgent
+                                            </button>
+                                            
+                                            <!-- Open/Close Toggle -->
+                                            <button 
+                                                @click="showStatusDialog()"
+                                                class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                                </svg>
+                                                {{ $job->jobstatus == 'open' ? 'Close Job' : 'Open Job' }}
+                                            </button>
+                                            
+                                            <!-- Delete -->
+                                            <button 
+                                                @click="showDeleteDialog()"
+                                                class="w-full text-left flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Make Urgent Confirmation -->
+                                    <div 
+                                        x-show="showUrgentConfirm"
+                                        @click.away="closeAll()" 
+                                        x-transition:enter="transition ease-out duration-100" 
+                                        x-transition:enter-start="transform opacity-0 scale-95" 
+                                        x-transition:enter-end="transform opacity-100 scale-100"
+                                        class="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-slate-700 p-4"
+                                        style="z-index: 100; display: none;"
+                                    >
+                                        <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">Mark as Urgent?</h4>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">This job will be highlighted and appear at the top of listings.</p>
+                                        <div class="flex justify-end space-x-2">
+                                            <button @click="closeAll()" class="px-3 py-1.5 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 text-xs rounded hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors duration-200">
+                                                Cancel
+                                            </button>
+                                            <a href="/make-urgent/{{ $job->id }}" class="px-3 py-1.5 bg-yellow-500 text-white text-xs rounded hover:bg-yellow-600 transition-colors duration-200">
+                                                Confirm
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Status Change Confirmation -->
+                                    <div 
+                                        x-show="showStatusConfirm"
+                                        @click.away="closeAll()" 
+                                        x-transition:enter="transition ease-out duration-100" 
+                                        x-transition:enter-start="transform opacity-0 scale-95" 
+                                        x-transition:enter-end="transform opacity-100 scale-100"
+                                        class="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-slate-700 p-4"
+                                        style="z-index: 100; display: none;"
+                                    >
+                                        <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">{{ $job->jobstatus == 'open' ? 'Close' : 'Open' }} this job?</h4>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">
+                                            {{ $job->jobstatus == 'open' ? 'This will prevent new applications from being submitted.' : 'This will allow new applications to be submitted.' }}
+                                        </p>
+                                        <div class="flex justify-end space-x-2">
+                                            <button @click="closeAll()" class="px-3 py-1.5 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 text-xs rounded hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors duration-200">
+                                                Cancel
+                                            </button>
+                                            <a href="/toggle-status/{{ $job->id }}" class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors duration-200">
+                                                Confirm
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Delete Confirmation -->
+                                    <div 
+                                        x-show="showDeleteConfirm"
+                                        @click.away="closeAll()" 
+                                        x-transition:enter="transition ease-out duration-100" 
+                                        x-transition:enter-start="transform opacity-0 scale-95" 
+                                        x-transition:enter-end="transform opacity-100 scale-100"
+                                        class="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-slate-700 p-4"
+                                        style="z-index: 100; display: none;"
+                                    >
+                                        <h4 class="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Delete this job?</h4>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">This action cannot be undone. All associated applications will also be removed.</p>
+                                        <div class="flex justify-end space-x-2">
+                                            <button @click="closeAll()" class="px-3 py-1.5 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 text-xs rounded hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors duration-200">
+                                                Cancel
+                                            </button>
+                                            <a href="/delete-job/{{ $job->id }}" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors duration-200">
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -186,3 +303,53 @@
 </div>
 
 @include('includes.footer')
+
+            <script>
+                document.addEventListener('alpine:init', () => {
+                    Alpine.data('jobActions', () => ({
+                        open: false,
+                        showUrgentConfirm: false,
+                        showStatusConfirm: false,
+                        showDeleteConfirm: false,
+                        
+                        toggleMenu() {
+                            this.open = !this.open;
+                            this.showUrgentConfirm = false;
+                            this.showStatusConfirm = false;
+                            this.showDeleteConfirm = false;
+                        },
+                        
+                        isMainMenuOpen() {
+                            return this.open && !this.showUrgentConfirm && !this.showStatusConfirm && !this.showDeleteConfirm;
+                        },
+                        
+                        closeAll() {
+                            this.open = false;
+                            this.showUrgentConfirm = false;
+                            this.showStatusConfirm = false;
+                            this.showDeleteConfirm = false;
+                        },
+                        
+                        showUrgentDialog() {
+                            this.open = false;
+                            this.showUrgentConfirm = true;
+                            this.showStatusConfirm = false;
+                            this.showDeleteConfirm = false;
+                        },
+                        
+                        showStatusDialog() {
+                            this.open = false;
+                            this.showUrgentConfirm = false;
+                            this.showStatusConfirm = true;
+                            this.showDeleteConfirm = false;
+                        },
+                        
+                        showDeleteDialog() {
+                            this.open = false;
+                            this.showUrgentConfirm = false;
+                            this.showStatusConfirm = false;
+                            this.showDeleteConfirm = true;
+                        }
+                    }));
+                });
+            </script>
