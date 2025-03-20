@@ -105,8 +105,8 @@
                                     </div>
                                 </th>
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                        Status
-                    </th>
+                                    Status
+                                </th>
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                     Actions
                                 </th>
@@ -205,8 +205,11 @@
                                         <div class="py-1">
                                             <!-- Send Email -->
                                             <a 
-                                                href="" 
-                                                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                href="#" 
+                                                class="send-email-link flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                data-id="{{ $applicant->id }}"
+                                                data-name="@if($applicant->middlename){{ $applicant->firstname }} {{ $applicant->middlename }} {{ $applicant->lastname }}{{ $applicant->suffix }}@else{{ $applicant->firstname }} {{ $applicant->lastname }}{{ $applicant->suffix }}@endif"
+                                                data-email="{{ $applicant->email }}"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -216,8 +219,10 @@
                                             
                                             <!-- Forward to Client -->
                                             <a 
-                                                href="" 
-                                                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                href="#" 
+                                                class="forward-client-link flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                data-id="{{ $applicant->id }}"
+                                                data-name="@if($applicant->middlename){{ $applicant->firstname }} {{ $applicant->middlename }} {{ $applicant->lastname }}{{ $applicant->suffix }}@else{{ $applicant->firstname }} {{ $applicant->lastname }}{{ $applicant->suffix }}@endif"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -227,8 +232,11 @@
                                             
                                             <!-- Update Status -->
                                             <a 
-                                                href="" 
-                                                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                href="#" 
+                                                class="update-status-link flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                data-id="{{ $applicant->id }}"
+                                                data-name="@if($applicant->middlename){{ $applicant->firstname }} {{ $applicant->middlename }} {{ $applicant->lastname }}{{ $applicant->suffix }}@else{{ $applicant->firstname }} {{ $applicant->lastname }}{{ $applicant->suffix }}@endif"
+                                                data-status="{{ $applicant->applicant_status }}"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -249,57 +257,754 @@
             
             <!-- Pagination -->
             <div class="flex justify-between items-center">
-    <!-- Pagination Info -->
-    <div class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
-        Showing 
-        <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->firstItem() }}</span> 
-        to 
-        <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->lastItem() }}</span> 
-        of 
-        <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->total() }}</span> results
-    </div>
+            <!-- Pagination Info -->
+            <div class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                Showing 
+                <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->firstItem() }}</span> 
+                to 
+                <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->lastItem() }}</span> 
+                of 
+                <span class="font-medium text-gray-900 dark:text-white">{{ $applicants->total() }}</span> results
+            </div>
 
-    <!-- Pagination Links -->
-        <div class="flex justify-center">
-            <nav class="flex items-center space-x-1">
-                <!-- Previous Page -->
-                @if ($applicants->onFirstPage())
-                    <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                        &laquo;
-                    </span>
-                @else
-                    <a href="{{ $applicants->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                        &laquo;
-                    </a>
-                @endif
+            <!-- Pagination Links -->
+                <div class="flex justify-center">
+                    <nav class="flex items-center space-x-1">
+                        <!-- Previous Page -->
+                        @if ($applicants->onFirstPage())
+                            <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
+                                &laquo;
+                            </span>
+                        @else
+                            <a href="{{ $applicants->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                                &laquo;
+                            </a>
+                        @endif
 
-                <!-- Page Numbers -->
-                @foreach ($applicants->getUrlRange(1, $applicants->lastPage()) as $page => $url)
-                    @if ($page == $applicants->currentPage())
-                        <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">{{ $page }}</a>
-                    @endif
-                @endforeach
+                        <!-- Page Numbers -->
+                        @foreach ($applicants->getUrlRange(1, $applicants->lastPage()) as $page => $url)
+                            @if ($page == $applicants->currentPage())
+                                <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">{{ $page }}</a>
+                            @endif
+                        @endforeach
 
-                <!-- Next Page -->
-                @if ($applicants->hasMorePages())
-                    <a href="{{ $applicants->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                        &raquo;
-                    </a>
-                @else
-                    <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                        &raquo;
-                    </span>
-                @endif
-            </nav>
-        </div>
-    </div>
-
-
-
+                        <!-- Next Page -->
+                        @if ($applicants->hasMorePages())
+                            <a href="{{ $applicants->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                                &raquo;
+                            </a>
+                        @else
+                            <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
+                                &raquo;
+                            </span>
+                        @endif
+                    </nav>
+                </div>
+            </div>
         </main>
+
+        <!-- Status Update Modal -->
+        <div 
+            x-data="{ isOpen: false, applicantId: null, applicantName: '', currentStatus: '', newStatus: '', notes: '', showSuccessMessage: false, 
+                updateStatus() {
+                    
+                    // Update UI to show the status is updating
+                    const statusElements = document.querySelectorAll(`[data-applicant-id='${this.applicantId}']`);
+                    if (statusElements.length) {
+                        statusElements.forEach(el => {
+                            // Remove old status classes
+                            el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'text-blue-800', 'dark:text-blue-300');
+                            el.classList.remove('bg-yellow-100', 'dark:bg-yellow-900', 'text-yellow-800', 'dark:text-yellow-300');
+                            el.classList.remove('bg-green-100', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-300');
+                            el.classList.remove('bg-red-100', 'dark:bg-red-900', 'text-red-800', 'dark:text-red-300');
+                            
+                            // Add new status classes
+                            if (this.newStatus === 'New') {
+                                el.classList.add('bg-blue-100', 'dark:bg-blue-900', 'text-blue-800', 'dark:text-blue-300');
+                            } else if (this.newStatus === 'Hired') {
+                                el.classList.add('bg-green-100', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-300');
+                            } else if (this.newStatus === 'Rejected' || this.newStatus === 'Decline') {
+                                el.classList.add('bg-red-100', 'dark:bg-red-900', 'text-red-800', 'dark:text-red-300');
+                            } else {
+                                el.classList.add('bg-yellow-100', 'dark:bg-yellow-900', 'text-yellow-800', 'dark:text-yellow-300');
+                            }
+                            
+                            // Update text content
+                            el.textContent = this.newStatus;
+                        });
+                    }
+                    
+                    // Show success message
+                    this.showSuccessMessage = true;
+                    
+                    // Auto-hide success message after 2 seconds
+                    setTimeout(() => {
+                        this.showSuccessMessage = false;
+                        // Close the modal after showing success
+                        setTimeout(() => {
+                            this.isOpen = false;
+                            // Reset form
+                            this.newStatus = '';
+                            this.notes = '';
+                        }, 500);
+                    }, 2000);
+                    
+                    // Update current status for next time modal opens
+                    const linkElement = document.querySelector(`[data-id='${this.applicantId}']`);
+                    if (linkElement) {
+                        linkElement.setAttribute('data-status', this.newStatus);
+                    }
+                }
+            }"
+            x-show="isOpen"
+            @open-status-modal.window="
+                isOpen = true; 
+                applicantId = $event.detail.id;
+                applicantName = $event.detail.name;
+                currentStatus = $event.detail.status;
+            "
+            @keydown.escape.window="isOpen = false"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            style="display: none;"
+            >
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <!-- Overlay -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    @click="isOpen = false" 
+                    class="fixed inset-0 bg-black bg-opacity-50"
+                ></div>
+                
+                <!-- Modal -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="relative bg-white dark:bg-slate-800 rounded-lg max-w-md w-full mx-auto shadow-xl transition-colors duration-300"
+                >
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 transition-colors duration-300">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                            Update Applicant Status
+                        </h3>
+                        <button 
+                            @click="isOpen = false" 
+                            class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Modal Body -->
+                    <div class="px-6 py-4">
+                        <form x-on:submit.prevent="updateStatus">
+                            <input type="hidden" x-model="applicantId">
+                            
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                                    Updating status for: <span x-text="applicantName" class="font-medium text-gray-900 dark:text-white transition-colors duration-300"></span>
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300 mt-1">
+                                    Current status: 
+                                    <span x-show="currentStatus == 'New'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 transition-colors duration-300">New</span>
+                                    <span x-show="currentStatus == 'Shortlisted'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 transition-colors duration-300">Shortlisted</span>
+                                    <span x-show="currentStatus == 'For Interview'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 transition-colors duration-300">For Interview</span>
+                                    <span x-show="currentStatus == 'For Assessment'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 transition-colors duration-300">For Assessment</span>
+                                    <span x-show="currentStatus == 'Waiting for Feedback'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 transition-colors duration-300">Waiting for Feedback</span>
+                                    <span x-show="currentStatus == 'Waiting for Job Offer'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 transition-colors duration-300">Waiting for Job Offer</span>
+                                    <span x-show="currentStatus == 'Hired'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 transition-colors duration-300">Hired</span>
+                                    <span x-show="currentStatus == 'Rejected'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 transition-colors duration-300">Rejected</span>
+                                    <span x-show="currentStatus == 'Decline'" class="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 transition-colors duration-300">Decline</span>
+                                </p>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div 
+                                x-show="showSuccessMessage" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
+                                style="display: none;"
+                            >
+                                Status updated successfully!
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                    New Status
+                                </label>
+                                <select 
+                                    id="status" 
+                                    x-model="newStatus" 
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    required
+                                >
+                                    <option value="">Select Status</option>
+                                    <option value="New">New</option>
+                                    <option value="Shortlisted">Shortlisted</option>
+                                    <option value="For Interview">For Interview</option>
+                                    <option value="For Assessment">For Assessment</option>
+                                    <option value="Waiting for Feedback">Waiting for Feedback</option>
+                                    <option value="Waiting for Job Offer">Waiting for Job Offer</option>
+                                    <option value="Hired">Hired</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Decline">Decline</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                    Notes (Optional)
+                                </label>
+                                <textarea 
+                                    id="notes" 
+                                    x-model="notes" 
+                                    rows="3" 
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="Add any relevant notes about this status change..."
+                                ></textarea>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button 
+                                    type="button" 
+                                    @click="isOpen = false"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-200"
+                                    :disabled="!newStatus"
+                                >
+                                    Update Status
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Send Email Modal -->
+        <div 
+            x-data="{ 
+                isOpen: false, 
+                applicantId: null, 
+                applicantName: '', 
+                applicantEmail: '',
+                emailSubject: '',
+                emailBody: '',
+                showSuccessMessage: false,
+                sendEmail() {                  
+                    // Show success message
+                    this.showSuccessMessage = true;
+                    
+                    // Auto-hide success message after 2 seconds
+                    setTimeout(() => {
+                        this.showSuccessMessage = false;
+                        // Close the modal after showing success
+                        setTimeout(() => {
+                            this.isOpen = false;
+                            // Reset form
+                            this.emailSubject = '';
+                            this.emailBody = '';
+                        }, 500);
+                    }, 2000);
+                }
+            }"
+            x-show="isOpen"
+            @open-email-modal.window="
+                isOpen = true; 
+                applicantId = $event.detail.id;
+                applicantName = $event.detail.name;
+                applicantEmail = $event.detail.email;
+            "
+            @keydown.escape.window="isOpen = false"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            style="display: none;"
+            >
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <!-- Overlay -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    @click="isOpen = false" 
+                    class="fixed inset-0 bg-black bg-opacity-50"
+                ></div>
+                
+                <!-- Modal -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="relative bg-white dark:bg-slate-800 rounded-lg max-w-2xl w-full mx-auto shadow-xl transition-colors duration-300"
+                >
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 transition-colors duration-300">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                            Send Email
+                        </h3>
+                        <button 
+                            @click="isOpen = false" 
+                            class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Modal Body -->
+                    <div class="px-6 py-4">
+                        <form x-on:submit.prevent="sendEmail">
+                            <input type="hidden" x-model="applicantId">
+                            
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                                    Sending email to: <span x-text="applicantName" class="font-medium text-gray-900 dark:text-white transition-colors duration-300"></span>
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300 mt-1">
+                                    Email address: <span x-text="applicantEmail" class="font-medium text-gray-900 dark:text-white transition-colors duration-300"></span>
+                                </p>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div 
+                                x-show="showSuccessMessage" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
+                                style="display: none;"
+                            >
+                                Email sent successfully!
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="email-subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                    Subject
+                                </label>
+                                <input 
+                                    id="email-subject" 
+                                    x-model="emailSubject" 
+                                    type="text"
+                                    placeholder="Enter subject"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    required
+                                >
+                            </div>
+                            
+                            <div class="mb-6">
+                                <!-- Email Body -->
+                                <label for="email-body" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
+                                    Message
+                                </label>
+                                
+                                <!-- Editor container -->
+                                <div class="border border-gray-300 dark:border-slate-600 rounded-lg overflow-hidden transition-colors duration-300 mb-2">
+                                    <!-- Toolbar -->
+                                    <div id="email-toolbar" class="bg-gray-50 dark:bg-slate-700 border-b border-gray-300 dark:border-slate-600 p-2 flex flex-wrap gap-1 transition-colors duration-300">
+                                        <!-- Text formatting -->
+                                        <span class="ql-formats border-r border-gray-300 dark:border-slate-500 pr-2 mr-2">
+                                            <button class="ql-bold text-gray-700 dark:text-white" title="Bold"></button>
+                                            <button class="ql-italic text-gray-700 dark:text-white" title="Italic"></button>
+                                            <button class="ql-underline text-gray-700 dark:text-white" title="Underline"></button>
+                                        </span>
+
+                                         <!-- Headers -->
+                                        <span class="ql-formats border-r border-gray-300 dark:border-slate-500 pr-2 mr-2">
+                                            <select class="ql-header bg-gray-100 dark:bg-slate-600 text-gray-800 dark:text-white border-gray-300 dark:border-slate-500">
+                                                <option value="" selected>Normal</option>
+                                                <option value="2">Heading</option>
+                                                <option value="3">Subheading</option>
+                                            </select>
+                                        </span>
+                                        
+                                        <!-- Lists -->
+                                        <span class="ql-formats border-r border-gray-300 dark:border-slate-500 pr-2 mr-2">
+                                            <button class="ql-list text-gray-700 dark:text-white" value="ordered" title="Numbered List"></button>
+                                            <button class="ql-list text-gray-700 dark:text-white" value="bullet" title="Bullet List"></button>
+                                        </span>
+                                        
+                                        <!-- Alignment -->
+                                        <span class="ql-formats border-r border-gray-300 dark:border-slate-500 pr-2 mr-2">
+                                            <button class="ql-align text-gray-700 dark:text-white" value="" title="Align Left"></button>
+                                            <button class="ql-align text-gray-700 dark:text-white" value="center" title="Align Center"></button>
+                                            <button class="ql-align text-gray-700 dark:text-white" value="right" title="Align Right"></button>
+                                        </span>
+                                    </div>
+
+                                    <!-- Quill Editor -->
+                                    <div id="email-editor" class="bg-white dark:bg-slate-800 min-h-[200px] transition-colors duration-300"></div>
+                                </div>
+                                
+                                <!-- Hidden textarea to store data -->
+                                <input type="hidden" id="email-body-input" x-model="emailBody">
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button 
+                                    type="button" 
+                                    @click="isOpen = false"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-200"
+                                    :disabled="!emailSubject || !emailBody"
+                                >
+                                    Send Email
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forward to Client Confirmation Modal -->
+        <div 
+            x-data="{ 
+                isOpen: false, 
+                applicantId: null, 
+                applicantName: '', 
+                showSuccessMessage: false,
+                forwardToClient() {
+                    // Show success message
+                    this.showSuccessMessage = true;
+                    
+                    // Auto-hide success message after 2 seconds
+                    setTimeout(() => {
+                        this.showSuccessMessage = false;
+                        // Close the modal after showing success
+                        setTimeout(() => {
+                            this.isOpen = false;
+                        }, 500);
+                    }, 2000);
+                }
+            }"
+            x-show="isOpen"
+            @open-forward-modal.window="
+                isOpen = true; 
+                applicantId = $event.detail.id;
+                applicantName = $event.detail.name;
+            "
+            @keydown.escape.window="isOpen = false"
+            class="fixed inset-0 z-50 overflow-y-auto"
+            style="display: none;"
+        >
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <!-- Overlay -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    @click="isOpen = false" 
+                    class="fixed inset-0 bg-black bg-opacity-50"
+                ></div>
+                
+                <!-- Modal -->
+                <div 
+                    x-show="isOpen" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="relative bg-white dark:bg-slate-800 rounded-lg max-w-md w-full mx-auto shadow-xl transition-colors duration-300"
+                >
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 transition-colors duration-300">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                            Confirm Forward to Client
+                        </h3>
+                        <button 
+                            @click="isOpen = false" 
+                            class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Modal Body -->
+                    <div class="px-6 py-4">
+                        <form x-on:submit.prevent="forwardToClient">
+                            <input type="hidden" x-model="applicantId">
+                            
+                            <div class="mb-6">
+                                <div class="flex items-center mb-4 text-amber-600 dark:text-amber-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p class="font-medium">Confirmation Required</p>
+                                </div>
+                                
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300 mb-4">
+                                    Are you sure you want to forward <span x-text="applicantName" class="font-medium text-gray-900 dark:text-white transition-colors duration-300"></span>'s application to the client? 
+                                </p>
+                                
+                                <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+                                    <strong>This action cannot be undone.</strong>
+                                </p>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div 
+                                x-show="showSuccessMessage" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
+                                style="display: none;"
+                            >
+                                Application forwarded successfully!
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button 
+                                    type="button" 
+                                    @click="isOpen = false"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-colors duration-200"
+                                >
+                                    Forward Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @include('includes.footer')
+
+<!-- Update Status script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const updateStatusLinks = document.querySelectorAll('.update-status-link');
+        
+        updateStatusLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get applicant data
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const status = this.getAttribute('data-status');
+                
+                window.dispatchEvent(new CustomEvent('open-status-modal', {
+                    detail: {
+                        id: id,
+                        name: name,
+                        status: status
+                    }
+                }));
+            });
+        });
+        
+        document.querySelectorAll('tr').forEach(row => {
+            const idElement = row.querySelector('.update-status-link');
+            const statusElement = row.querySelector('[class*="rounded-full"]');
+            
+            if (idElement && statusElement) {
+                const applicantId = idElement.getAttribute('data-id');
+                if (applicantId) {
+                    statusElement.setAttribute('data-applicant-id', applicantId);
+                }
+            }
+        });
+    });
+</script>
+
+<!-- Email modal script -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quill Editor for Email Body
+        var quillEmail = new Quill('#email-editor', {
+            theme: 'snow',
+            placeholder: 'Enter your message here...',
+            modules: {
+                toolbar: '#email-toolbar'
+            }
+        });
+
+        // Store content in hidden input field on text change
+        quillEmail.on('text-change', function() {
+            const content = quillEmail.root.innerHTML;
+            document.getElementById('email-body-input').value = content;
+            
+            const event = new Event('input', { bubbles: true });
+            document.getElementById('email-body-input').dispatchEvent(event);
+        });
+        
+        // Get all send email links
+        const sendEmailLinks = document.querySelectorAll('.send-email-link');
+        
+        // Add click event to each link
+        sendEmailLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get applicant data
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const email = this.getAttribute('data-email');
+                
+                window.dispatchEvent(new CustomEvent('open-email-modal', {
+                    detail: {
+                        id: id,
+                        name: name,
+                        email: email
+                    }
+                }));
+            });
+        });
+        
+        // Apply dark mode styling for Quill if needed
+        function updateEmailQuillTheme() {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const editorContainer = document.querySelector('#email-editor .ql-editor');
+        
+        if (editorContainer) {
+            if (isDarkMode) {
+                editorContainer.style.color = '#ffffff';
+                editorContainer.style.backgroundColor = '#1e293b';
+                
+                // dark mode colors for toolbar icons
+                const darkModeStyles = document.getElementById('quill-dark-mode-styles');
+                if (!darkModeStyles) {
+                    const stylesheet = document.createElement('style');
+                    stylesheet.id = 'quill-dark-mode-styles';
+                    stylesheet.textContent = `
+                        /* Toolbar icons */
+                        .ql-snow .ql-stroke {
+                            stroke: white !important;
+                        }
+                        .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+                            fill: white !important;
+                        }
+                        .ql-snow .ql-picker {
+                            color: white !important;
+                        }
+                        .ql-snow .ql-picker-options {
+                            background-color: #1e293b !important;
+                            color: white !important;
+                        }
+                        .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+                            border-color: #475569 !important;
+                        }
+                        .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+                            border-color: #475569 !important;
+                        }
+                        .ql-container.ql-snow {
+                            border-color: #475569 !important;
+                        }
+                        .ql-toolbar.ql-snow {
+                            border-color: #475569 !important;
+                        }
+                        .ql-editor.ql-blank::before {
+                            color: rgba(255, 255, 255, 0.6) !important;
+                        }
+                    `;
+                    document.head.appendChild(stylesheet);
+                }
+            } else {
+                editorContainer.style.color = '#1e293b';
+                editorContainer.style.backgroundColor = '#ffffff';
+                
+                // Remove dark mode styles
+                const darkModeStyles = document.getElementById('quill-dark-mode-styles');
+                if (darkModeStyles) {
+                    darkModeStyles.remove();
+                }
+            }
+        }
+    }
+        
+        setTimeout(updateEmailQuillTheme, 100);
+        
+        // Update theme when dark mode toggle is clicked
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                setTimeout(updateEmailQuillTheme, 100);
+            });
+        }
+    });
+</script>
+
+<!-- Forward to Client script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forwardClientLinks = document.querySelectorAll('.forward-client-link');
+        
+        forwardClientLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                
+                window.dispatchEvent(new CustomEvent('open-forward-modal', {
+                    detail: {
+                        id: id,
+                        name: name
+                    }
+                }));
+            });
+        });
+    });
+</script>

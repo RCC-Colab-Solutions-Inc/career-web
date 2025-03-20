@@ -130,6 +130,11 @@ class JobPostingController extends Controller
         return view('applicant-form');
     }
 
+    public function myprofile()
+    {
+        return view('profile');
+    }
+
 
     public function makeurgent($jobid)
     {

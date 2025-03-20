@@ -24,7 +24,38 @@
                     <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Create a new job listing for potential applicants</p>
                 </div>
             </div>
+
+            <button type="button" id="testSuccessBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 mb-4">
+                Test Success Message
+            </button>
             
+            <!-- Success Message Notification (hidden by default) -->
+            <div id="successNotification" class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg p-4 transition-all duration-300 transform hidden">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <!-- Success Icon -->
+                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <p id="successMessage" class="text-sm font-medium text-green-800 dark:text-green-300">
+                            Job added successfully!
+                        </p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <div class="-mx-1.5 -my-1.5">
+                            <button id="closeNotification" type="button" class="inline-flex rounded-md p-1.5 text-green-500 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-800/40 transition-colors duration-200 focus:outline-none">
+                                <span class="sr-only">Dismiss</span>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Job Form -->
             <form action="addjob" method="POST">
                 @csrf
@@ -342,6 +373,77 @@
                 
                 setTimeout(updateQuillTheme, 100);
             });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jobForm = document.querySelector('form[action="addjob"]');
+        const successNotification = document.getElementById('successNotification');
+        const closeNotification = document.getElementById('closeNotification');
+        const successMessage = document.getElementById('successMessage');
+        
+        // For the test button
+        const testSuccessBtn = document.getElementById('testSuccessBtn');
+        if (testSuccessBtn) {
+            testSuccessBtn.addEventListener('click', function() {
+                showSuccessMessage('Job added successfully!');
+            });
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            showSuccessMessage('Job added successfully!');
+            
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+        
+        // Add form submission handler
+        if (jobForm) {
+            jobForm.addEventListener('submit', function() {
+                localStorage.setItem('jobAdded', 'true');
+            });
+        }
+        
+        if (localStorage.getItem('jobAdded') === 'true') {
+            showSuccessMessage('Job added successfully!');
+            localStorage.removeItem('jobAdded');
+        }
+        
+        if (closeNotification) {
+            closeNotification.addEventListener('click', function() {
+                hideSuccessMessage();
+            });
+        }
+        
+        // Function to show success message
+        function showSuccessMessage(message) {
+            if (successMessage && successNotification) {
+                successMessage.textContent = message;
+                successNotification.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('animate-fade-in-down');
+                }, 10);
+                
+                // Auto-hide after 5 seconds
+                setTimeout(function() {
+                    hideSuccessMessage();
+                }, 5000);
+            }
+        }
+        
+        // Function to hide success message
+        function hideSuccessMessage() {
+            if (successNotification) {
+                successNotification.classList.add('opacity-0');
+                setTimeout(function() {
+                    successNotification.classList.add('hidden');
+                    successNotification.classList.remove('opacity-0', 'animate-fade-in-down');
+                }, 300);
+            }
         }
     });
 </script>
