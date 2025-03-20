@@ -1,2 +1,3 @@
+{!! ToastMagic::scripts() !!}
 </body>
 </html>

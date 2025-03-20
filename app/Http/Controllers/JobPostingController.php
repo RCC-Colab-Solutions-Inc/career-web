@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 
 class JobPostingController extends Controller
 {
@@ -47,13 +48,9 @@ class JobPostingController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-                'timestamp' => Carbon::now()->toDateTimeString()
-            ], 422);
+            ToastMagic::error("Error!", implode(", ", $validator->errors()->all()));
+            return back();
+            
         }
 
         // Generate a unique job code
@@ -76,8 +73,8 @@ class JobPostingController extends Controller
 
         
 
-        //return to job-listing with return message
-        return redirect()->route('job-listing')->with('success','Job added successfully');
+        ToastMagic::success('Success','Successfully Added');
+        return redirect()->route('job-listing');
 
         
     }
@@ -104,13 +101,7 @@ class JobPostingController extends Controller
         return $jobcode;
     }
 
-    public function company()
-    {
-        // Select all companies and paginate with 10 records per page
-        $companies = CompanyDatabase::orderBy('created_at', 'desc')->paginate(10);
-    
-        return view('company', compact('companies'));
-    }
+
 
     public function user()
     {
@@ -140,18 +131,15 @@ class JobPostingController extends Controller
         $job = JobPosting::find($jobid);
         if ($job->joburgency == 'normal') {
             $job->joburgency = 'urgent';
+            $mess = 'Job urgency updated to urgent';
             $job->save();
         }else{
             $job->joburgency = 'normal';
+            $mess = 'Job urgency updated to normal';
             $job->save();
         }
-        //return to job-listing with return message of success
-        return redirect()->route('job-listing')->with([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Job urgency updated',
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
+        ToastMagic::success('Success',$mess);
+        return back();
     }
     public function jobstatus($jobid)
     {
@@ -159,28 +147,22 @@ class JobPostingController extends Controller
         $job = JobPosting::find($jobid);
         if ($job->jobstatus == 'open') {
             $job->jobstatus = 'closed';
+            $message = 'Job status updated to closed';
             $job->save();
         }else{
             $job->jobstatus = 'open';
+            $message = 'Job status updated to open';
             $job->save();
         }
-        return redirect()->route('job-listing')->with([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Job status updated',
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
+        ToastMagic::success('Success',$message);
+        return back();
     }
     public function jobdelete($jobid)
     {
         //delete job
         $job = JobPosting::find($jobid);
         $job->delete();
-        return redirect()->route('job-listing')->with([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Job deleted',
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
+        ToastMagic::success('Success','Successfully Deleted');
+        return back();
     }
 }

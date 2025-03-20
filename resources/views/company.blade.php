@@ -245,101 +245,90 @@
                     </div>
                     
                     <!-- Modal Body -->
-                    <div class="px-6 py-4">
-                        <form>
-                            <!-- Company Name Field -->
-                            <div class="mb-4">
-                                <label for="company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Company Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="company_name" 
-                                    name="company_name" 
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    placeholder="Enter company name"
-                                    required
-                                >
-                            </div>
+                    <form action="add-company" method="POST">
+                        <div class="px-6 py-4">
                             
-                            <!-- Email Field -->
-                            <div class="mb-4">
-                                <label for="company_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Email
-                                </label>
-                                <input 
-                                    type="email" 
-                                    id="company_email" 
-                                    name="company_email" 
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    placeholder="Enter company email"
-                                    required
-                                >
-                            </div>
-                            
-                            <!-- Contact Name Field -->
-                            <div class="mb-4">
-                                <label for="contact_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Contact Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="contact_name" 
-                                    name="contact_name" 
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    placeholder="Enter contact person's name"
-                                    required
-                                >
-                            </div>
-                            
-                            <!-- Contact Phone Field -->
-                            <div class="mb-4">
-                                <label for="contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Contact Phone
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    id="contact_phone" 
-                                    name="contact_phone" 
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    placeholder="+63 XXX XXX XXXX"
-                                >
-                            </div>
+                                @csrf
+                                <!-- Company Name Field -->
+                                <div class="mb-4">
+                                    <label for="company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Company Name
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="company_name" 
+                                        name="company_name" 
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        placeholder="Enter company name"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Email Field -->
+                                <div class="mb-4">
+                                    <label for="company_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Email
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="company_email" 
+                                        name="company_email" 
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        placeholder="Enter company email"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Contact Name Field -->
+                                <div class="mb-4">
+                                    <label for="contact_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Contact Name
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="contact_name" 
+                                        name="contact_name" 
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        placeholder="Enter contact person's name"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Contact Phone Field -->
+                                <div class="mb-4">
+                                    <label for="contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Contact Phone
+                                    </label>
+                                    <input 
+                                        type="tel" 
+                                        id="contact_phone" 
+                                        name="contact_phone" 
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        placeholder="+63 XXX XXX XXXX"
+                                    >
+                                </div>
 
-                            <!-- Success Message -->
-                            <div 
-                                x-show="showSuccessMessage" 
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg flex items-center"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Company added successfully!
-                            </div>
-                        </form>
-                    </div>
+                                <!-- Success Message -->
+                            
+                            
+                        </div>
                     
-                    <!-- Modal Footer -->
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
-                        <button 
-                            @click="close()" 
-                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            @click="saveCompany()"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
-                        >
-                            Save Company
-                        </button>
-                    </div>
+                        <!-- Modal Footer -->
+                        <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
+                            <button 
+                                @click="close()" 
+                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                @click="saveCompany()"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
+                            >
+                                Save Company
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -418,101 +407,86 @@
                     </div>
                     
                     <!-- Modal Body -->
-                    <div class="px-6 py-4">
-                        <form>
-                            <!-- Company Name Field -->
-                            <div class="mb-4">
-                                <label for="edit_company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Company Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="edit_company_name" 
-                                    name="company_name" 
-                                    x-model="company.name"
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    required
-                                >
-                            </div>
+                    <form action="edit-company" method="POST">
+                        <div class="px-6 py-4">
                             
-                            <!-- Email Field -->
-                            <div class="mb-4">
-                                <label for="edit_company_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Email
-                                </label>
-                                <input 
-                                    type="email" 
-                                    id="edit_company_email" 
-                                    name="company_email" 
-                                    x-model="company.email"
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    required
-                                >
-                            </div>
-                            
-                            <!-- Contact Name Field -->
-                            <div class="mb-4">
-                                <label for="edit_contact_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Contact Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="edit_contact_name" 
-                                    name="contact_name" 
-                                    x-model="company.contact_name"
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    required
-                                >
-                            </div>
-                            
-                            <!-- Contact Phone Field -->
-                            <div class="mb-4">
-                                <label for="edit_contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                    Contact Phone
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    id="edit_contact_phone" 
-                                    name="contact_phone" 
-                                    x-model="company.contact_phone"
-                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                >
-                            </div>
+                                @csrf
+                                <input type="hidden" name="company_id" x-model="company.id">
+                                <!-- Company Name Field -->
+                                <div class="mb-4">
+                                    <label for="edit_company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Company Name
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="edit_company_name" 
+                                        name="company_name" 
+                                        x-model="company.name"
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Email Field -->
+                                <div class="mb-4">
+                                    <label for="edit_company_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Email
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="edit_company_email" 
+                                        name="company_email" 
+                                        x-model="company.email"
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Contact Name Field -->
+                                <div class="mb-4">
+                                    <label for="edit_contact_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Contact Name
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="edit_contact_name" 
+                                        name="contact_name" 
+                                        x-model="company.contact_name"
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                        required
+                                    >
+                                </div>
+                                
+                                <!-- Contact Phone Field -->
+                                <div class="mb-4">
+                                    <label for="edit_contact_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
+                                        Contact Phone
+                                    </label>
+                                    <input 
+                                        type="tel" 
+                                        id="edit_contact_phone" 
+                                        name="contact_phone" 
+                                        x-model="company.contact_phone"
+                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    >
+                                </div>
 
-                            <!-- Success Message -->
-                            <div 
-                                x-show="showSuccessMessage" 
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg flex items-center"
+                                <!-- Success Message -->
+                            
+                            
+                        </div>
+                        
+                        <!-- Modal Footer -->
+                        <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
+                            
+                            <button 
+                                @click="updateCompany()"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Company updated successfully!
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- Modal Footer -->
-                    <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
-                        <button 
-                            @click="close()" 
-                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            @click="updateCompany()"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
-                        >
-                            Update Company
-                        </button>
-                    </div>
+                                Update Company
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 

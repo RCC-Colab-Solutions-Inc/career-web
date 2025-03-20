@@ -7,6 +7,7 @@ use App\Http\Middleware\LoginAuthorization;
 use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Controllers\LoginMainController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/job-listing', 'jobListing')->name('job-listing');
     Route::get('/add-job', 'addjobform');
     Route::post('/addjob', 'addjob');
-    Route::get('/companies', 'company');
+    
     Route::get('/users', 'user');
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
@@ -47,6 +48,12 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/make-urgent/{jobid}', 'makeurgent');
     Route::get('/job-status/{jobid}', 'jobstatus');
     Route::get('/delete-job/{jobid}', 'jobdelete');
+});
+
+Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(function () {
+    Route::get('/companies', 'company');
+    Route::post('/add-company', 'addcompanyform');
+    Route::post('/edit-company', 'updatecompany');
 });
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {

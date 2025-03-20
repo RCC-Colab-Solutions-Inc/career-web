@@ -21,5 +21,6 @@
             font-family: 'Poppins', sans-serif;
         }
     </style>
+    {!! ToastMagic::styles() !!}
 </head>
 <body class="bg-gray-100">
