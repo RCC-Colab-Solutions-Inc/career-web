@@ -131,5 +131,53 @@ class JobPostingController extends Controller
     }
 
 
-    
+    public function makeurgent($jobid)
+    {
+        //check if the joburgency is normal then update to urgent 
+        $job = JobPosting::find($jobid);
+        if ($job->joburgency == 'normal') {
+            $job->joburgency = 'urgent';
+            $job->save();
+        }else{
+            $job->joburgency = 'normal';
+            $job->save();
+        }
+        //return to job-listing with return message of success
+        return redirect()->route('job-listing')->with([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Job urgency updated',
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 200);
+    }
+    public function jobstatus($jobid)
+    {
+        //check if the jobstatus is open then update to closed 
+        $job = JobPosting::find($jobid);
+        if ($job->jobstatus == 'open') {
+            $job->jobstatus = 'closed';
+            $job->save();
+        }else{
+            $job->jobstatus = 'open';
+            $job->save();
+        }
+        return redirect()->route('job-listing')->with([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Job status updated',
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 200);
+    }
+    public function jobdelete($jobid)
+    {
+        //delete job
+        $job = JobPosting::find($jobid);
+        $job->delete();
+        return redirect()->route('job-listing')->with([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Job deleted',
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 200);
+    }
 }

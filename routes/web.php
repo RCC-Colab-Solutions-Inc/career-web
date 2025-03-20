@@ -40,6 +40,12 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/users', 'user');
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
+
+
+    //make urgent
+    Route::get('/make-urgent/{jobid}', 'makeurgent');
+    Route::get('/job-status/{jobid}', 'jobstatus');
+    Route::get('/delete-job/{jobid}', 'jobdelete');
 });
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {

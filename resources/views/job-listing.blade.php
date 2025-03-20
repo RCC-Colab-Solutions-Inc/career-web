@@ -81,7 +81,10 @@
                         <div class="p-6">
                             <div class="flex justify-between items-center">
                                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
-                                    {{ $job->jobtitle }}
+                                    @if($job->joburgency == 'urgent')
+                                        [URGENT]
+                                    @endif
+                                    {{ $job->jobtitle }} 
                                 </h3>
                                 @if($job->jobstatus == 'open')
                                     <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 transition-colors duration-300">
@@ -158,7 +161,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                                 </svg>
-                                                Make It Urgent
+                                                {{ $job->joburgency == 'urgent' ? 'Remove Urgency' : 'Make Urgent' }}
                                             </button>
                                             
                                             <!-- Open/Close Toggle -->
@@ -225,7 +228,7 @@
                                             <button @click="closeAll()" class="px-3 py-1.5 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 text-xs rounded hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors duration-200">
                                                 Cancel
                                             </button>
-                                            <a href="/toggle-status/{{ $job->id }}" class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors duration-200">
+                                            <a href="/job-status/{{ $job->id }}" class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors duration-200">
                                                 Confirm
                                             </a>
                                         </div>
