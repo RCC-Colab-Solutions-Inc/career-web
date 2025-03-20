@@ -269,6 +269,7 @@
         </main>
     </div>
 </div>
+
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -388,11 +389,12 @@
             window.history.replaceState({}, document.title, newUrl);
         }
         
-        // Add form submission handler
         if (jobForm) {
-            jobForm.addEventListener('submit', function() {
-                localStorage.setItem('jobAdded', 'true');
-            });
+        jobForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            localStorage.setItem('jobAdded', 'true');
+            this.submit();
+        });
         }
         
         if (localStorage.getItem('jobAdded') === 'true') {
