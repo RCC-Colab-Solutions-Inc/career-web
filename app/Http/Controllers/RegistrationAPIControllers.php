@@ -11,6 +11,10 @@ use App\Models\User;
 class RegistrationAPIControllers extends Controller
 {
     public function register(Request $request){
+        $mail = new MailSettingController();
+        
+
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -25,12 +29,32 @@ class RegistrationAPIControllers extends Controller
         $newuser->name = $request->name;
         $newuser->email = $request->email;
         $newuser->password = $this->encryptPassword($request->password);
-        $newuser->save();
+        
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'user' => $newuser
-        ], 201);
+        $email = $request->email;
+        $subject = "Your account has been created";
+        $cc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
+    $bcc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
+        //get the blade for the body
+        $body = view('emails.registration', [
+            'email' => $request->email,
+            'password' => $request->password
+        ])->render();
+
+        $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
+
+        if ($sendMail === true) {
+            $newuser->save();
+            return response()->json(['message' => 'User created successfully'], 201);
+            
+        } else {
+            return response()->json([
+                'message' => 'User created successfully but email not sent',
+                'error' => $sendMail
+            ], 201);
+        }
+
+        
         
 
 
