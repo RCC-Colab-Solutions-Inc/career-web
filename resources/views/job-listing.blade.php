@@ -12,7 +12,38 @@
         
         <!-- Job Listing Content -->
         <main class="p-6">
-        
+
+
+            <!-- Copy Success Toast -->
+            <div id="copyToast" class="fixed top-15 right-6 z-50 p-4 max-w-xs bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800/30 rounded-lg shadow-lg transform transition-all duration-300 flex items-start opacity-0 translate-y-[-20px]">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <p class="text-sm font-medium text-green-800 dark:text-green-300">
+                    Job details copied to clipboard!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Add Job Success Toast -->
+        @if (session('success'))
+            <div id="successToast" class="fixed top-15 right-6 z-50 p-4 max-w-xs bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800/30 rounded-lg shadow-lg transform transition-all duration-300 flex items-start opacity-0 translate-y-[-20px]">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <p class="text-sm font-medium text-green-800 dark:text-green-300">
+                    Job added successfully!
+                    </p>
+                </div>
+            </div>
+        @endif
+>>>>>>> 8443b8d0bd29ac5ad234f9cfc5d8f95412544c0c
            
             <!-- Page Title -->
             <div class="mb-8 flex justify-between items-center">
@@ -134,6 +165,17 @@
                                 </a>
                                 
                                 <div class="relative" x-data="jobActions">
+                                    <!-- Copy Button -->
+                                    <button 
+                                        @click="copyJobDetails()"
+                                        class="p-2 mr-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200"
+                                        title="Copy job details"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </button>
+
                                     <!-- Edit Button -->
                                     <button 
                                         @click="toggleMenu()"
@@ -327,51 +369,120 @@
                     }, 4000);
                 }
             });
-                document.addEventListener('alpine:init', () => {
-                    Alpine.data('jobActions', () => ({
-                        open: false,
-                        showUrgentConfirm: false,
-                        showStatusConfirm: false,
-                        showDeleteConfirm: false,
-                        
-                        toggleMenu() {
-                            this.open = !this.open;
-                            this.showUrgentConfirm = false;
-                            this.showStatusConfirm = false;
-                            this.showDeleteConfirm = false;
-                        },
-                        
-                        isMainMenuOpen() {
-                            return this.open && !this.showUrgentConfirm && !this.showStatusConfirm && !this.showDeleteConfirm;
-                        },
-                        
-                        closeAll() {
-                            this.open = false;
-                            this.showUrgentConfirm = false;
-                            this.showStatusConfirm = false;
-                            this.showDeleteConfirm = false;
-                        },
-                        
-                        showUrgentDialog() {
-                            this.open = false;
-                            this.showUrgentConfirm = true;
-                            this.showStatusConfirm = false;
-                            this.showDeleteConfirm = false;
-                        },
-                        
-                        showStatusDialog() {
-                            this.open = false;
-                            this.showUrgentConfirm = false;
-                            this.showStatusConfirm = true;
-                            this.showDeleteConfirm = false;
-                        },
-                        
-                        showDeleteDialog() {
-                            this.open = false;
-                            this.showUrgentConfirm = false;
-                            this.showStatusConfirm = false;
-                            this.showDeleteConfirm = true;
+            document.addEventListener('alpine:init', () => {
+            Alpine.data('jobActions', () => ({
+                open: false,
+                showUrgentConfirm: false,
+                showStatusConfirm: false,
+                showDeleteConfirm: false,
+                
+                toggleMenu() {
+                    this.open = !this.open;
+                    this.showUrgentConfirm = false;
+                    this.showStatusConfirm = false;
+                    this.showDeleteConfirm = false;
+                },
+                
+                isMainMenuOpen() {
+                    return this.open && !this.showUrgentConfirm && !this.showStatusConfirm && !this.showDeleteConfirm;
+                },
+                
+                closeAll() {
+                    this.open = false;
+                    this.showUrgentConfirm = false;
+                    this.showStatusConfirm = false;
+                    this.showDeleteConfirm = false;
+                },
+                
+                showUrgentDialog() {
+                    this.open = false;
+                    this.showUrgentConfirm = true;
+                    this.showStatusConfirm = false;
+                    this.showDeleteConfirm = false;
+                },
+                
+                showStatusDialog() {
+                    this.open = false;
+                    this.showUrgentConfirm = false;
+                    this.showStatusConfirm = true;
+                    this.showDeleteConfirm = false;
+                },
+                
+                showDeleteDialog() {
+                    this.open = false;
+                    this.showUrgentConfirm = false;
+                    this.showStatusConfirm = false;
+                    this.showDeleteConfirm = true;
+                },
+                
+                // copy function
+                copyJobDetails() {
+                        try {
+                            // Get job details with error handling
+                            const title = this.$root.querySelector('h3')?.innerText || 'No title';
+                            const description = this.$root.querySelector('p')?.innerText || 'No description';
+                            const tags = this.$root.querySelectorAll('.rounded-full');
+                            const location = tags.length > 0 ? tags[0].innerText.trim() : 'No location';
+                            const jobType = tags.length > 1 ? tags[1].innerText.trim() : 'No job type';
+                            
+                            // Format text to copy
+                            const textToCopy = `Job Title: ${title}\nLocation: ${location}\nJob Type: ${jobType}\nDescription: ${description}`;
+                            
+                            const copyToast = document.getElementById('copyToast');
+                            
+                            if (!navigator.clipboard) {
+                                const textArea = document.createElement('textarea');
+                                textArea.value = textToCopy;
+                                textArea.style.position = 'fixed';
+                                document.body.appendChild(textArea);
+                                textArea.focus();
+                                textArea.select();
+                                
+                                try {
+                                    const successful = document.execCommand('copy');
+                                    if (successful) {
+                                        this.showCopyToast(copyToast);
+                                    } else {
+                                        console.error('Failed to copy text');
+                                    }
+                                } catch (err) {
+                                    console.error('Error copying text: ', err);
+                                }
+                                
+                                document.body.removeChild(textArea);
+                                return;
+                            }
+                            
+                            navigator.clipboard.writeText(textToCopy)
+                                .then(() => {
+                                    this.showCopyToast(copyToast);
+                                })
+                                .catch(err => {
+                                    console.error('Could not copy text: ', err);
+                                    alert('Failed to copy job details. Please try again.');
+                                });
+                        } catch (error) {
+                            console.error('Error in copyJobDetails: ', error);
+                            alert('An error occurred while copying job details.');
                         }
-                    }));
-                });
+                    },
+
+                    // Separate function to show toast
+                    showCopyToast(copyToast) {
+                        if (copyToast) {
+                            copyToast.classList.remove('opacity-0', 'translate-y-[-20px]');
+                            copyToast.classList.add('opacity-100', 'translate-y-0');
+                            
+                            // Hide toast after 4 seconds
+                            setTimeout(function() {
+                                copyToast.classList.remove('opacity-100', 'translate-y-0');
+                                copyToast.classList.add('opacity-0', 'translate-y-[-20px]');
+                            }, 4000);
+                        } else {
+                            console.error('Copy toast element not found');
+                            alert('Job details copied to clipboard!');
+                        }
+                    }
+                }));
+            });
             </script>

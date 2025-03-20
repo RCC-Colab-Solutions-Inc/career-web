@@ -145,7 +145,7 @@
                                     <label for="urgentHiring" class="ml-2 text-sm text-gray-700 dark:text-gray-200 transition-colors duration-300">Mark as urgent hiring</label>
                                 </div>
                                 <div class="text-xs text-gray-500 dark:text-gray-400 ml-2 transition-colors duration-300">
-                                    (Shows "Urgent Hiring" banner on job listing)
+                                    (Shows [URGENT] on job listing)
                                 </div>
                             </div>
                         </div>
