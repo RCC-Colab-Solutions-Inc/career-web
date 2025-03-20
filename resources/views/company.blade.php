@@ -174,9 +174,10 @@
 
         <!-- Add Modal -->
             <div
-                x-data="{ 
+            x-data="{ 
                     show: false,
                     id: null,
+                    showSuccessMessage: false,
                     init() {
                         window.addEventListener('open-modal', (e) => {
                             if (e.detail.id === 'add-company-modal') {
@@ -188,6 +189,24 @@
                     close() {
                         this.show = false;
                         document.body.classList.remove('overflow-hidden');
+                    },
+                    saveCompany() {
+                        // Show success message
+                        this.showSuccessMessage = true;
+                        
+                        // Auto-hide success message after 2 seconds
+                        setTimeout(() => {
+                            this.showSuccessMessage = false;
+                            // Close the modal after showing success
+                            setTimeout(() => {
+                                this.close();
+                                // Reset form (if needed)
+                                document.getElementById('company_name').value = '';
+                                document.getElementById('company_email').value = '';
+                                document.getElementById('contact_name').value = '';
+                                document.getElementById('contact_phone').value = '';
+                            }, 300);
+                        }, 2000);
                     }
                 }"
                 x-show="show"
@@ -286,6 +305,23 @@
                                     placeholder="+63 XXX XXX XXXX"
                                 >
                             </div>
+
+                            <!-- Success Message -->
+                            <div 
+                                x-show="showSuccessMessage" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg flex items-center"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Company added successfully!
+                            </div>
                         </form>
                     </div>
                     
@@ -298,6 +334,7 @@
                             Cancel
                         </button>
                         <button 
+                            @click="saveCompany()"
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
                         >
                             Save Company
@@ -308,8 +345,9 @@
 
         <!-- Edit Modal -->
             <div
-                x-data="{ 
+            x-data="{ 
                     show: false,
+                    showSuccessMessage: false,
                     company: {
                         id: null,
                         name: '',
@@ -329,6 +367,19 @@
                     close() {
                         this.show = false;
                         document.body.classList.remove('overflow-hidden');
+                    },
+                    updateCompany() {
+                        // Show success message
+                        this.showSuccessMessage = true;
+                        
+                        // Auto-hide success message after 2 seconds
+                        setTimeout(() => {
+                            this.showSuccessMessage = false;
+                            // Close the modal after showing success
+                            setTimeout(() => {
+                                this.close();
+                            }, 300);
+                        }, 2000);
                     }
                 }"
                 x-show="show"
@@ -427,6 +478,23 @@
                                     class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                                 >
                             </div>
+
+                            <!-- Success Message -->
+                            <div 
+                                x-show="showSuccessMessage" 
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg flex items-center"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Company updated successfully!
+                            </div>
                         </form>
                     </div>
                     
@@ -439,6 +507,7 @@
                             Cancel
                         </button>
                         <button 
+                            @click="updateCompany()"
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
                         >
                             Update Company

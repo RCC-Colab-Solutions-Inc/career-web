@@ -24,10 +24,6 @@
                     <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Create a new job listing for potential applicants</p>
                 </div>
             </div>
-
-            <button type="button" id="testSuccessBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 mb-4">
-                Test Success Message
-            </button>
             
             <!-- Success Message Notification (hidden by default) -->
             <div id="successNotification" class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg p-4 transition-all duration-300 transform hidden">
@@ -383,14 +379,6 @@
         const successNotification = document.getElementById('successNotification');
         const closeNotification = document.getElementById('closeNotification');
         const successMessage = document.getElementById('successMessage');
-        
-        // For the test button
-        const testSuccessBtn = document.getElementById('testSuccessBtn');
-        if (testSuccessBtn) {
-            testSuccessBtn.addEventListener('click', function() {
-                showSuccessMessage('Job added successfully!');
-            });
-        }
         
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('success')) {

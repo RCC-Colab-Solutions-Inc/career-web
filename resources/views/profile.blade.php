@@ -32,28 +32,6 @@
                             <h2 class="text-xl font-semibold text-slate-800 dark:text-white mb-1 transition-colors duration-300">{{ Auth::user()->name }}</h2>
                             <p class="text-slate-500 dark:text-blue-200/70 mb-4 transition-colors duration-300">{{ Auth::user()->email }}</p>
                             
-                            <!-- Upload Photo Button -->
-                            <button class="w-full mb-4 flex items-center justify-center px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-lg border border-blue-100 dark:border-blue-800/50 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Change Photo
-                            </button>
-                            
-                            <!-- Account Stats -->
-                            <div class="w-full">
-                                <div class="grid grid-cols-2 gap-4 mt-2">
-                                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3 text-center transition-colors duration-300">
-                                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">24</p>
-                                        <p class="text-sm text-slate-500 dark:text-blue-200/70">Applications</p>
-                                    </div>
-                                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3 text-center transition-colors duration-300">
-                                        <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">6</p>
-                                        <p class="text-sm text-slate-500 dark:text-blue-200/70">Interviews</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <!-- Account Status -->
                             <div class="w-full mt-4 py-3 px-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-lg border border-green-100 dark:border-green-800/30 transition-colors duration-300">
                                 <div class="flex items-center">
@@ -73,7 +51,7 @@
                     <div class="bg-white dark:bg-gradient-to-br dark:from-slate-800/80 dark:to-slate-900/90 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-4 transition-colors duration-300">Personal Information</h3>
                         
-                        <form>
+                        <form id="personalInfoForm">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label for="firstName" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">First Name</label>
@@ -94,7 +72,17 @@
                             </div>
                             
                             <div class="flex justify-end">
-                                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors duration-300">Save Changes</button>
+                                <button id="savePersonalInfo" type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors duration-300">Save Changes</button>
+                            </div>
+
+                            <!-- Success Message -->
+                            <div id="personalInfoSuccess" class="hidden mt-4 py-3 px-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-lg border border-green-100 dark:border-green-800/30 transition-colors duration-300">
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="font-medium">Information updated successfully!</span>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -103,7 +91,7 @@
                     <div class="bg-white dark:bg-gradient-to-br dark:from-slate-800/80 dark:to-slate-900/90 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-4 transition-colors duration-300">Update Password</h3>
                         
-                        <form>
+                        <form id="passwordUpdateForm">
                             <div class="grid grid-cols-1 gap-6 mb-6">
                                 <div>
                                     <label for="currentPassword" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">Current Password</label>
@@ -120,7 +108,17 @@
                             </div>
                             
                             <div class="flex justify-end">
-                                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors duration-300">Update Password</button>
+                                <button id="updatePassword" type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors duration-300">Update Password</button>
+                            </div>
+
+                            <!-- Success Message -->
+                            <div id="passwordSuccess" class="hidden mt-4 py-3 px-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-lg border border-green-100 dark:border-green-800/30 transition-colors duration-300">
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="font-medium">Password updated successfully!</span>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -132,3 +130,21 @@
 </div>
 
 @include('includes.footer')
+
+<script>
+    document.getElementById('savePersonalInfo').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('personalInfoSuccess').classList.remove('hidden');
+        setTimeout(function() {
+            document.getElementById('personalInfoSuccess').classList.add('hidden');
+        }, 3000);
+    });
+    
+    document.getElementById('updatePassword').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('passwordSuccess').classList.remove('hidden');
+        setTimeout(function() {
+            document.getElementById('passwordSuccess').classList.add('hidden');
+        }, 3000);
+    });
+</script>
