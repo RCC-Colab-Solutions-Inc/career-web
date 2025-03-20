@@ -21,13 +21,16 @@ class JobPostingController extends Controller
         $jobs = JobPosting::withCount('applicants')
             ->orderBy('created_at', 'desc')
             ->paginate(6);
-    
+        
+
+            
         return view('job-listing', compact('jobs'));
     }
 
     public function addJobForm()
     {
-        return view('add-job');
+        $companies = CompanyDatabase::all();
+        return view('add-job', compact('companies'));
     }
 
    public function addjob(Request $request)
@@ -59,6 +62,7 @@ class JobPostingController extends Controller
         $job = new JobPosting();
         $job->jobtitle = $request->jobtitle;
         $job->jobcode = $jobcode;
+        $job->companyid = $request->company;
         $job->jobdescription = $request->jobdescription;
         $job->workplace = $request->workplace;
         $job->joblocation = $request->joblocation;
@@ -73,13 +77,7 @@ class JobPostingController extends Controller
         
 
         //return to job-listing with return message
-        return redirect()->route('job-listing')->with([
-            'status' => 'success',
-            'code' => 201,
-            'message' => 'Job posting created',
-            'jobcode' => $jobcode,
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 201);
+        return redirect()->route('job-listing')->with('success','Job added successfully');
 
         
     }

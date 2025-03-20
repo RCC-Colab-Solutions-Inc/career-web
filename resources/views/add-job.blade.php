@@ -79,7 +79,10 @@
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company <span class="text-red-500">*</span></label>
                             <div class="relative">
                             <select name="company" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-3 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" required>
-                                <option value="">Select company</option>
+                                <option value="" selected disabled>Select company</option>
+                                @foreach($companies as $company)
+                                    <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                @endforeach
                 
                             </select>
                             </div>

@@ -12,7 +12,7 @@
         
         <!-- Job Listing Content -->
         <main class="p-6">
-
+        @if (session('success'))
             <div id="successToast" class="fixed top-15 right-6 z-50 p-4 max-w-xs bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800/30 rounded-lg shadow-lg transform transition-all duration-300 flex items-start opacity-0 translate-y-[-20px]">
                 <div class="flex-shrink-0">
                     <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -25,6 +25,8 @@
                     </p>
                 </div>
             </div>
+        @endif
+           
             <!-- Page Title -->
             <div class="mb-8 flex justify-between items-center">
                 <div>
