@@ -8,6 +8,7 @@ use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Controllers\LoginMainController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardControllers;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ use Illuminate\Support\Facades\Auth;
 
 // ✅ Protected Routes (Only Accessible if Logged In)
 Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
+    
     Route::get('/job-listing', 'jobListing')->name('job-listing');
     Route::get('/add-job', 'addjobform');
     Route::post('/addjob', 'addjob');
@@ -49,7 +50,9 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/job-status/{jobid}', 'jobstatus');
     Route::get('/delete-job/{jobid}', 'jobdelete');
 });
-
+Route::middleware(['web', 'auth'])->controller(DashboardControllers::class)->group(function () {
+    Route::get('/dashboard', 'index')->name('dashboard');
+});
 Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'company');
     Route::post('/add-company', 'addcompanyform');

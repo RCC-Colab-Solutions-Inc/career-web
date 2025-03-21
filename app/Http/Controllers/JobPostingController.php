@@ -12,10 +12,7 @@ use Devrabiul\ToastMagic\Facades\ToastMagic;
 
 class JobPostingController extends Controller
 {
-    public function index()
-    {
-        return view('dashboard');
-    }
+    
 
     public function jobListing()
     {

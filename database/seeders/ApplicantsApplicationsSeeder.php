@@ -11,7 +11,7 @@ class ApplicantsApplicationsSeeder extends Seeder
     public function run()
     {
         $statuses = ['New', 'Shortlisted', 'For Interview', 'For Assessment', 'Waiting for Feedback', 'Waiting for Job Offer', 'Hired', 'Rejected'];
-
+        $findus = ['LinkedIn', 'Facebook',  'Google'];
         for ($i = 1; $i <= 20; $i++) {
             DB::table('applicants_applications')->insert([
                 'firstname' => 'Applicant' . $i,
@@ -29,7 +29,7 @@ class ApplicantsApplicationsSeeder extends Seeder
                 'priority_job_id' => rand(1, 10),
                 'secondary_job_id' => rand(1, 10),
                 'third_job_id' => rand(1, 10),
-                'source' => 'LinkedIn',
+                'source' => $findus[array_rand($findus)],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
