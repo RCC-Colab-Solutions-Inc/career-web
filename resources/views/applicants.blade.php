@@ -152,7 +152,7 @@
                                 {{ $applicant->created_at->diffForHumans() }}
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
                             
                                 @if($applicant->applicant_status == 'New')
                                     <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 transition-colors duration-300">

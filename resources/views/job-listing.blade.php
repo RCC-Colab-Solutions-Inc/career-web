@@ -23,7 +23,7 @@
                 </div>
                 <div class="ml-3 flex-1">
                     <p class="text-sm font-medium text-green-800 dark:text-green-300">
-                    Job code copied to clipboard!
+                    Job URL copied to clipboard!
                     </p>
                 </div>
             </div>
@@ -418,7 +418,9 @@
                     // copy function
                     copyJobDetails(jobcode) {
                         try {
-                            const textToCopy = jobcode;
+                            const baseUrl = "{{ config('app.url') }}/job/";
+                            const textToCopy = baseUrl + jobcode;
+                            
                             const copyToast = document.getElementById('copyToast');
                             
                             if (!navigator.clipboard) {
@@ -450,11 +452,11 @@
                                 })
                                 .catch(err => {
                                     console.error('Could not copy text: ', err);
-                                    alert('Failed to copy job code. Please try again.');
+                                    alert('Failed to copy job URL. Please try again.');
                                 });
                         } catch (error) {
                             console.error('Error in copyJobDetails: ', error);
-                            alert('An error occurred while copying job code.');
+                            alert('An error occurred while copying job URL.');
                         }
                     },
 
