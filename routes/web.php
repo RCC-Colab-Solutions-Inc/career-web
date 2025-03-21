@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginMainController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardControllers;
+use App\Http\Controllers\ClientMainController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,10 @@ Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(
     Route::get('/companies', 'company');
     Route::post('/add-company', 'addcompanyform');
     Route::post('/edit-company', 'updatecompany');
+});
+Route::controller(ClientMainController::class)->group(function () {
+    Route::get('/client/login', 'client');
+ 
 });
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {
