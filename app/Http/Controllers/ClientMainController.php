@@ -10,4 +10,14 @@ class ClientMainController extends Controller
     {
         return view('clients.login');
     }
+
+    public function dashboardpage()
+    {
+        return view('clients.dashboard');
+    }
+
+    public function applicantspage()
+    {
+        return view('clients.applicants');
+    }
 }
