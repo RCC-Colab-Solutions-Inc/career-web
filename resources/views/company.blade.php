@@ -73,7 +73,9 @@
                                         Contact
                                     </div>
                                 </th>
-                               
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">                                   
+                                        Status                                 
+                                </th>
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                     Actions
                                 </th>
@@ -108,6 +110,24 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <span 
+                                        x-data="{ 
+                                            status: {{ $company->isActive ? 'true' : 'false' }},
+                                            init() {
+                                                window.addEventListener('status-confirmed', (e) => {
+                                                    if(e.detail.id === {{ $company->id }}) {
+                                                        this.status = e.detail.activate;
+                                                    }
+                                                });
+                                            }
+                                        }"
+                                        :class="status ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'"
+                                        class="px-2.5 py-1 rounded-full text-xs font-medium"
+                                    >
+                                        <span x-text="status ? 'Active' : 'Inactive'"></span>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center space-x-3">
                                         <button 
                                         x-data="{}"
@@ -127,6 +147,47 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
+                                         <!-- Status toggle buttons -->
+                                         <div x-data="{ 
+                                                        isActive: {{ $company->isActive ? 'true' : 'false' }},
+                                                        init() {
+                                                            window.addEventListener('status-confirmed', (e) => {
+                                                                if(e.detail.id === {{ $company->id }}) {
+                                                                    this.isActive = e.detail.activate;
+                                                                }
+                                                            });
+                                                        }
+                                                    }">
+                                             <!-- Activate button -->
+                                            <button 
+                                                x-show="!isActive"
+                                                @click="$dispatch('open-status-confirm', {
+                                                    id: {{ $company->id }},
+                                                    name: {{ json_encode($company->company_name) }},
+                                                    activating: true
+                                                })"
+                                                class="p-1.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors duration-200"
+                                                title="Activate">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </button>
+                                            
+                                            <!-- Deactivate button -->
+                                            <button 
+                                                x-show="isActive"
+                                                @click="$dispatch('open-status-confirm', {
+                                                    id: {{ $company->id }},
+                                                    name: {{ json_encode($company->company_name) }},
+                                                    activating: false
+                                                })"
+                                                class="p-1.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors duration-200"
+                                                title="Deactivate">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -487,6 +548,108 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Status Change Confirmation Modal -->
+            <div
+                x-data="{ 
+                    show: false,
+                    companyId: null,
+                    companyName: '',
+                    activating: false,
+                    init() {
+                        window.addEventListener('open-status-confirm', (e) => {
+                            this.companyId = e.detail.id;
+                            this.companyName = e.detail.name;
+                            this.activating = e.detail.activating;
+                            this.show = true;
+                            document.body.classList.add('overflow-hidden');
+                        });
+                    },
+                    close() {
+                        this.show = false;
+                        document.body.classList.remove('overflow-hidden');
+                    },
+                    confirmStatusChange() {
+                        // Dispatch an event that the status toggle components will listen for
+                        window.dispatchEvent(new CustomEvent('status-confirmed', {
+                            detail: {
+                                id: this.companyId,
+                                activate: this.activating
+                            }
+                        }));
+                        
+                        // Close the modal
+                        this.close();
+                    }
+                }"
+                x-show="show"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+                style="display: none;"
+                @keydown.escape.window="close()"
+            >
+                <div 
+                    @click.away="close()"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform translate-y-4"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform translate-y-4"
+                    class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md mx-auto border border-gray-200 dark:border-slate-700 transition-colors duration-300"
+                >
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                                <span x-text="activating ? 'Activate' : 'Deactivate'"></span> Company
+                            </h3>
+                            <button @click="close()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Body -->
+                    <div class="px-6 py-4">
+                        <p class="text-gray-700 dark:text-gray-300">
+                            Are you sure you want to <span x-text="activating ? 'activate' : 'deactivate'"></span> <span class="font-semibold" x-text="companyName"></span>?
+                        </p>
+                        <div x-show="!activating" class="mt-3 text-sm text-red-600 dark:text-red-400">
+                            <p>This will make the company inactive and hide it from job listings.</p>
+                        </div>
+                        <div x-show="activating" class="mt-3 text-sm text-green-600 dark:text-green-400">
+                            <p>This will make the company active and visible in job listings.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Footer -->
+                    <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
+                        <button 
+                            @click="close()" 
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            @click="confirmStatusChange()"
+                            :class="activating ? 
+                                'bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600' : 
+                                'bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600'"
+                            class="px-4 py-2 text-white rounded-lg transition-colors duration-200 shadow-md"
+                        >
+                            <span x-text="activating ? 'Activate' : 'Deactivate'"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
