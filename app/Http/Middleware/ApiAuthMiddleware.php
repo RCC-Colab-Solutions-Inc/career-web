@@ -20,7 +20,7 @@ class ApiAuthMiddleware
         if (!$apiKey || $apiKey !== env('API_KEY_FRONT')) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized, Invalid API Key',
             ], 401);
         }
 
