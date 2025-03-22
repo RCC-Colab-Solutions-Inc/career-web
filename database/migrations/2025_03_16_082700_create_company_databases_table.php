@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('representative_email');
             $table->string('representative_contact_number');
             $table->string('sigin_code');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
