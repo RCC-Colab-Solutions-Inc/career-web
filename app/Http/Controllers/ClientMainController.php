@@ -20,4 +20,14 @@ class ClientMainController extends Controller
     {
         return view('clients.applicants');
     }
+
+    public function messagepage()
+    {
+        return view('clients.message');
+    }
+
+    public function companyprofile()
+    {
+        return view('clients.company-profile');
+    }
 }

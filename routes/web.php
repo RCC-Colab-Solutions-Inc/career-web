@@ -62,7 +62,10 @@ Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(
 Route::controller(ClientMainController::class)->group(function () {
     Route::get('/client/login', 'client');
     Route::get('/client/dashboard', 'dashboardpage');
-    ROute::get('/client/applicants', 'applicantspage');
+    Route::get('/client/applicants', 'applicantspage');
+    Route::get('/client/message', 'messagepage');
+    Route::get('/client/company-profile', 'companyprofile');
+
  
 });
 

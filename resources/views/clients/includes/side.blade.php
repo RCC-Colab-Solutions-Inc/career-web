@@ -2,9 +2,9 @@
 <div class="bg-[#0A2472] text-white w-70 min-h-screen">
     <!-- Logo -->
     <div class="py-6 px-4 flex items-center justify-center">
-        <img src="{{ asset('assets/RCCLogo-White.png') }}" alt="RCC Logo" class="h-8">
+        <img src="{{ asset('assets/RCCLogo-White.png') }}" alt="RCC Logo" class="h-12">
         <div class="ml-2 font-semibold">
-            <div class="text-sm">RCC COLAB SOLUTIONS INC.</div>
+        <div class=" font-bold">RCC COLAB SOLUTIONS INC.</div>
         </div>
     </div>
 
@@ -25,19 +25,13 @@
             Applicants
         </a>
         
-        <a href="{{ url('/client/companyprofile') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('client/companyprofile*') ? 'text-white bg-blue-800/40 shadow-md' : 'text-blue-100 hover:bg-blue-800/40' }}">
+        <a href="{{ url('/client/company-profile') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('client/company-profile*') ? 'text-white bg-blue-800/40 shadow-md' : 'text-blue-100 hover:bg-blue-800/40' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
             Company Profile
         </a>
         
-            <a href="{{ url('/client/message') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 {{ request()->is('client/message*') ? 'text-white bg-blue-800/40 shadow-md' : 'text-blue-100 hover:bg-blue-800/40' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Message
-            </a>
         </div>
     </nav>
 </div>

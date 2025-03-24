@@ -43,7 +43,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                             <div class="relative">
                             <select style="-webkit-appearance: none; -moz-appearance: none; appearance: none;" class="block w-full bg-white border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    <option>All Status</option>
+                                    <option>All Statuses</option>
                                     <option>New</option>
                                     <option>Waiting for feedback</option>
                                     <option>Rejected</option>
