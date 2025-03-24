@@ -112,7 +112,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <span 
                                         x-data="{ 
-                                            status: {{ $company->isActive ? 'true' : 'false' }},
+                                            status: {{ $company->status ? 'active' : 'inactive' }},
                                             init() {
                                                 window.addEventListener('status-confirmed', (e) => {
                                                     if(e.detail.id === {{ $company->id }}) {
@@ -124,7 +124,7 @@
                                         :class="status ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'"
                                         class="px-2.5 py-1 rounded-full text-xs font-medium"
                                     >
-                                        <span x-text="status ? 'Active' : 'Inactive'"></span>
+                                        <span x-text="status ? 'active' : 'inactive'"></span>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
