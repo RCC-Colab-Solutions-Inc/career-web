@@ -44,6 +44,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
     Route::get('/profile', 'myprofile');
+    Route::get('/application/position', 'positionpage');
 
 
     //make urgent

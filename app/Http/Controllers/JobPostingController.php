@@ -121,6 +121,11 @@ class JobPostingController extends Controller
         return view('profile');
     }
 
+    public function positionpage()
+    {
+        return view('application.position');
+    }
+
 
     public function makeurgent($jobid)
     {
