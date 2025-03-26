@@ -90,7 +90,7 @@
 
                 <!-- Applicants Table -->
                 <div class="bg-white border-t-2 border-b-4 border-l-2 border-r-2 rounded-lg shadow p-6">
-                <div class="overflow-x-auto">
+                <div>
                     <table class="min-w-full">
                         <thead>
                             <tr class="border-b">
@@ -169,12 +169,17 @@
                                 <td class="py-3 px-1 text-center">
                                     <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">New</span>
                                 </td>
-                                <td class="py-3 px-1 text-center">
-                                    <button class="text-gray-400 hover:text-gray-600">
+                                <td class="py-3 px-1 text-center relative">
+                                    <button class="text-gray-400 hover:text-gray-600 focus:outline-none" onclick="toggleDropdown(event, 'dropdown-4')">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                                         </svg>
                                     </button>
+                                    <div id="dropdown-4" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 py-1 text-left">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download Resume</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Change Status</a>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -194,12 +199,17 @@
                                 <td class="py-3 px-1 text-center">
                                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Waiting for feedback</span>
                                 </td>
-                                <td class="py-3 px-1 text-center">
-                                    <button class="text-gray-400 hover:text-gray-600">
+                                <td class="py-3 px-1 text-center relative">
+                                    <button class="text-gray-400 hover:text-gray-600 focus:outline-none" onclick="toggleDropdown(event, 'dropdown-1')">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                                         </svg>
                                     </button>
+                                    <div id="dropdown-1" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1 text-left">
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download Resume</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Change Status</a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -210,3 +220,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleDropdown(event, dropdownId) {
+        event.stopPropagation();
+        
+        document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+            if (dropdown.id !== dropdownId) {
+                dropdown.classList.add('hidden');
+            }
+        });
+        
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.classList.toggle('hidden');
+    }
+    
+    document.addEventListener('click', function() {
+        document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+            dropdown.classList.add('hidden');
+        });
+    });
+</script>
