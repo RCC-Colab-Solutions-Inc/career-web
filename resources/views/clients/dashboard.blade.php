@@ -95,8 +95,6 @@
                                     <th class="text-left py-3 px-4 text-sm font-medium text-blue-500">Department</th>
                                     <th class="text-left py-3 px-4 text-sm font-medium text-blue-500">Location</th>
                                     <th class="text-left py-3 px-4 text-sm font-medium text-blue-500">Applications</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium text-blue-500">Status</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium text-blue-500">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
