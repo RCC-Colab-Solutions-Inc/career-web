@@ -1,4 +1,4 @@
 {!! ToastMagic::scripts() !!}
-@livewireStyles
+@livewireScripts
 </body>
 </html>
