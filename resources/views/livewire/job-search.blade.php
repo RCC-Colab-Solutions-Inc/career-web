@@ -1,72 +1,12 @@
-@include('includes.header')
-
-<!-- Main Container -->
-<div class="flex h-screen overflow-hidden transition-colors duration-300" id="main-container">
-    
-@include('includes.side')
-    
-    <!-- Main Content -->
-    <div class="flex-1 overflow-x-hidden overflow-y-auto transition-colors duration-300 bg-gray-50 dark:bg-slate-900">
-        
-    @include('includes.nav')
-        
-        <!-- Job Listing Content -->
-        <main class="p-6">
-
-
-            <!-- Copy Success Toast -->
-            <div id="copyToast" class="fixed top-15 right-6 z-50 p-4 max-w-xs bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800/30 rounded-lg shadow-lg transform transition-all duration-300 flex items-start opacity-0 translate-y-[-20px]">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3 flex-1">
-                    <p class="text-sm font-medium text-green-800 dark:text-green-300">
-                    Job URL copied to clipboard!
-                    </p>
-                </div>
-            </div>
-
-            <!-- Add Job Success Toast -->
-        @if (session('success'))
-            <div id="successToast" class="fixed top-15 right-6 z-50 p-4 max-w-xs bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800/30 rounded-lg shadow-lg transform transition-all duration-300 flex items-start opacity-0 translate-y-[-20px]">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3 flex-1">
-                    <p class="text-sm font-medium text-green-800 dark:text-green-300">
-                    Job added successfully!
-                    </p>
-                </div>
-            </div>
-        @endif
-
-            <!-- Page Title -->
-            <div class="mb-8 flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Job Listing</h1>
-                    <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Manage and post job opportunities</p>
-                </div>
-                <!-- Add New Job Button -->
-                <a href="/add-job" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Add New Job
-                    </a>
-            </div>
-            
-            <!-- Filters Section -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
+<div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     
                     <!-- Search Box -->
                     <div class="relative flex-grow w-full">
                         <input 
                             type="text" 
+                            wire:model="search"
                             placeholder="Search jobs..." 
                             class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                         >
@@ -104,10 +44,8 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Job Cards Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 @foreach($jobs as $job)
                     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 group hover:shadow-lg transition-all duration-300">
                         <div class="p-6">
@@ -304,178 +242,4 @@
                     </div>
                 @endforeach
             </div>
-
-        <!-- Pagination Links -->
-            <div class="flex justify-center mt-4">
-                <nav class="flex items-center space-x-1">
-                    <!-- Previous Page -->
-                    @if ($jobs->onFirstPage())
-                        <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                            &laquo;
-                        </span>
-                    @else
-                        <a href="{{ $jobs->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                            &laquo;
-                        </a>
-                    @endif
-
-                    <!-- Page Numbers -->
-                    @foreach ($jobs->getUrlRange(1, $jobs->lastPage()) as $page => $url)
-                        @if ($page == $jobs->currentPage())
-                            <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
-                        @else
-                            <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                                {{ $page }}
-                            </a>
-                        @endif
-                    @endforeach
-
-                    <!-- Next Page -->
-                    @if ($jobs->hasMorePages())
-                        <a href="{{ $jobs->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                            &raquo;
-                        </a>
-                    @else
-                        <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                            &raquo;
-                        </span>
-                    @endif
-                </nav>
-            </div>
-
-
-        </main>
-    </div>
 </div>
-
-@include('includes.footer')
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                const successToast = document.getElementById('successToast');
-                
-                showToast();
-                
-                function showToast() {
-                   
-                    successToast.classList.remove('opacity-0', 'translate-y-[-20px]');
-                    successToast.classList.add('opacity-100', 'translate-y-0');
-                    
-                    // Hide toast after 4 seconds
-                    setTimeout(function() {
-                        successToast.classList.remove('opacity-100', 'translate-y-0');
-                        successToast.classList.add('opacity-0', 'translate-y-[-20px]');
-                    }, 4000);
-                }
-            });
-
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('jobActions', () => ({
-                    open: false,
-                    showUrgentConfirm: false,
-                    showStatusConfirm: false,
-                    showDeleteConfirm: false,
-                    
-                    toggleMenu() {
-                        this.open = !this.open;
-                        this.showUrgentConfirm = false;
-                        this.showStatusConfirm = false;
-                        this.showDeleteConfirm = false;
-                    },
-                    
-                    isMainMenuOpen() {
-                        return this.open && !this.showUrgentConfirm && !this.showStatusConfirm && !this.showDeleteConfirm;
-                    },
-                    
-                    closeAll() {
-                        this.open = false;
-                        this.showUrgentConfirm = false;
-                        this.showStatusConfirm = false;
-                        this.showDeleteConfirm = false;
-                    },
-                    
-                    showUrgentDialog() {
-                        this.open = false;
-                        this.showUrgentConfirm = true;
-                        this.showStatusConfirm = false;
-                        this.showDeleteConfirm = false;
-                    },
-                    
-                    showStatusDialog() {
-                        this.open = false;
-                        this.showUrgentConfirm = false;
-                        this.showStatusConfirm = true;
-                        this.showDeleteConfirm = false;
-                    },
-                    
-                    showDeleteDialog() {
-                        this.open = false;
-                        this.showUrgentConfirm = false;
-                        this.showStatusConfirm = false;
-                        this.showDeleteConfirm = true;
-                    },
-                    
-                    // copy function
-                    copyJobDetails(jobcode) {
-                        try {
-                            const baseUrl = "{{ config('app.url') }}/job/";
-                            const textToCopy = baseUrl + jobcode;
-                            
-                            const copyToast = document.getElementById('copyToast');
-                            
-                            if (!navigator.clipboard) {
-                                const textArea = document.createElement('textarea');
-                                textArea.value = textToCopy;
-                                textArea.style.position = 'fixed';
-                                document.body.appendChild(textArea);
-                                textArea.focus();
-                                textArea.select();
-                                
-                                try {
-                                    const successful = document.execCommand('copy');
-                                    if (successful) {
-                                        this.showCopyToast(copyToast);
-                                    } else {
-                                        console.error('Failed to copy text');
-                                    }
-                                } catch (err) {
-                                    console.error('Error copying text: ', err);
-                                }
-                                
-                                document.body.removeChild(textArea);
-                                return;
-                            }
-                            
-                            navigator.clipboard.writeText(textToCopy)
-                                .then(() => {
-                                    this.showCopyToast(copyToast);
-                                })
-                                .catch(err => {
-                                    console.error('Could not copy text: ', err);
-                                    alert('Failed to copy job URL. Please try again.');
-                                });
-                        } catch (error) {
-                            console.error('Error in copyJobDetails: ', error);
-                            alert('An error occurred while copying job URL.');
-                        }
-                    },
-
-                    // Separate function to show toast
-                    showCopyToast(copyToast) {
-                        if (copyToast) {
-                            copyToast.classList.remove('opacity-0', 'translate-y-[-20px]');
-                            copyToast.classList.add('opacity-100', 'translate-y-0');
-                            
-                            // Hide toast after 4 seconds
-                            setTimeout(function() {
-                                copyToast.classList.remove('opacity-100', 'translate-y-0');
-                                copyToast.classList.add('opacity-0', 'translate-y-[-20px]');
-                            }, 4000);
-                        } else {
-                            console.error('Copy toast element not found');
-                            alert('Job code copied to clipboard!');
-                        }
-                    }
-                }));
-            });
-            </script>
