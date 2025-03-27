@@ -67,6 +67,7 @@
                     <div class="relative flex-grow w-full">
                         <input 
                             type="text" 
+                            wire:model="search"
                             placeholder="Search jobs..." 
                             class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                         >
