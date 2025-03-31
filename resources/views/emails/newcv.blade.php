@@ -1,67 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New CV's Arrived - RCC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background-color: #0A2472;
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .logo {
+            height: 40px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #0A2472;
+            font-size: 32px;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #0A2472;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            min-width: 170px;
+            text-align: center;
+        }
+        
+        .note {
+            color: #666;
+            margin-top: 40px;
+        }
+        
+        .footer {
+            background-color: #0A2472;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #232E65;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f4f4f9; padding: 20px;">
-        <tr>
-            <td align="center">
-                <table width="600px" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    
-                    <!-- Header -->
-                    <tr>
-                        <td style="background-color: #232E65; color: #ffffff; padding: 20px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 24px;">New CV Notification</h1>
-                        </td>
-                    </tr>
-
-                    <!-- Body -->
-                    <tr>
-                        <td style="padding: 15px; font-size: 16px; color: #555; text-align: center;">
-                            A new CV has arrived on your dashboard. Please check it now.
-                        </td>
-                    </tr>
-
-                    <!-- Candidate Information Table -->
-                    <tr>
-                        <td style="padding: 15px;">
-                            <table width="100%" style="border-collapse: collapse; margin-top: 10px;">
-                                <tr>
-                                    <td style="padding: 8px; font-weight: bold; border: 1px solid #ddd; color: #232E65;">Name</td>
-                                    <td style="padding: 8px; border: 1px solid #ddd; color: #232E65;">Kent C. Cortiguerra</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px; font-weight: bold; border: 1px solid #ddd; color: #232E65;">Position</td>
-                                    <td style="padding: 8px; border: 1px solid #ddd; color: #232E65;">Mid Java Developer</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- Button -->
-                    <tr>
-                        <td align="center" style="padding: 20px;">
-                            <a href="#" style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block;">View Dashboard</a>
-                        </td>
-                    </tr>
-
-                    <!-- Disclaimer -->
-                    <tr>
-                        <td align="center" style="padding: 10px; font-size: 12px; color: #888;">
-                            This is an automated email. Please do not reply.
-                        </td>
-                    </tr>
-
-                    <!-- Footer -->
-                    <tr>
-                        <td style="background-color: #232E65; color: #ffffff; text-align: center; padding: 10px;">
-                            <p style="margin: 0; font-size: 14px;">&copy; 2025 RCC Colab Solutions Inc., All Rights Reserved.</p>
-                        </td>
-                    </tr>
-
-                </table>
-            </td>
-        </tr>
-    </table>
+<body>
+    <div class="container">
+        <div class="header">
+            <text x="45" y="25" font-size="12" font-weight="bold">RCC Logo</text>
+        </div>
+        
+        <div class="content">
+            <h1>New CV's Arrived on your Dashboard.</h1>
+            <p class="subtitle">Click to view the Dashboard</p>
+            
+            <a href="#" class="button">View Dashboard</a>
+            
+            <p class="note">This is an automatic Email. Please Do not Reply.</p>
+        </div>
+        
+        <div class="footer">
+            ©2025 RCC Colab Solutions Inc., All Right Reserved.
+        </div>
+    </div>
 </body>
 </html>

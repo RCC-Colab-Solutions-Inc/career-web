@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Creation - RCC</title>
+    <title>Application Status Updated - RCC</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -49,34 +49,13 @@
             color: #0A2472;
             font-size: 32px;
             margin-bottom: 10px;
+            line-height: 1.2;
         }
         
         .subtitle {
             color: #666;
             font-size: 18px;
             margin-bottom: 30px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            border: 1px solid #ddd;
-            color: #0A2472;
-        }
-
-        th, td {
-            padding: 15px;
-            border: 2px solid #ddd;
-            width: 50%;
-        }
-
-        th {
-            text-align: left;
-        }
-
-        td {
-            text-align: left;
         }
         
         .button {
@@ -88,18 +67,13 @@
             border-radius: 8px;
             font-weight: bold;
             margin-bottom: 30px;
-	    width: 200px;
-	    text-align: center;
-        }
-        
-        .info-text {
-            color: #0A2472;
-            margin-bottom: 20px;
+            min-width: 170px;
+            text-align: center;
         }
         
         .note {
             color: #666;
-            margin-bottom: 30px;
+            margin-top: 40px;
         }
         
         .footer {
@@ -118,23 +92,10 @@
         </div>
         
         <div class="content">
-            <h1>Account Creation</h1>
-            <p class="subtitle">Your information has been successfully added.</p>
+            <h1>Your application status has been updated</h1>
+            <p class="subtitle">Please check your status by Clicking the Button below.</p>
             
-            <table>
-                <tr>
-                    <th>Email</th>
-                    <td>KentCortiguerra@rcccolabsolutions.com</td>
-                </tr>
-                <tr>
-                    <th>Password</th>
-                    <td>KC-082602-II</td>
-                </tr>
-            </table>
-            
-            <a href="#" class="button">Log In</a>
-            
-            <p class="info-text">You can change your password by log in it in the RCC Web.</p>
+            <a href="#" class="button">Check Status</a>
             
             <p class="note">This is an automatic Email. Please Do not Reply.</p>
         </div>

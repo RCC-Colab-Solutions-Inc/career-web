@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Creation - RCC</title>
+    <title>Application Successfully Submitted - RCC</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -58,26 +58,33 @@
         }
         
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            border: 1px solid #ddd;
-            color: #0A2472;
-        }
+    		width: 100%;
+    		border-collapse: collapse;
+    		margin: 30px 0;
+    		border: 1px solid #ddd;
+		color: #0A2472;
+	}
 
-        th, td {
-            padding: 15px;
-            border: 2px solid #ddd;
-            width: 50%;
-        }
+	th, td {
+    		padding: 15px;
+    		border: 2px solid #ddd;
+	}
 
-        th {
-            text-align: left;
-        }
+	th, td {
+    		width: 50%;
+	}
 
-        td {
-            text-align: left;
-        }
+	th {
+    		text-align: left;
+	}
+
+	td {
+    		text-align: left;
+	}
+
+	td[colspan="2"] {
+    		text-align: center;
+	}
         
         .button {
             display: inline-block;
@@ -88,13 +95,6 @@
             border-radius: 8px;
             font-weight: bold;
             margin-bottom: 30px;
-	    width: 200px;
-	    text-align: center;
-        }
-        
-        .info-text {
-            color: #0A2472;
-            margin-bottom: 20px;
         }
         
         .note {
@@ -114,27 +114,28 @@
 <body>
     <div class="container">
         <div class="header">
-            <text x="45" y="25" font-size="12" font-weight="bold">RCC Logo</text>
+		<text x="45" y="25" font-size="12" font-weight="bold">RCC Logo</text>
         </div>
         
         <div class="content">
-            <h1>Account Creation</h1>
-            <p class="subtitle">Your information has been successfully added.</p>
+            <h1>Application Successfully Submitted</h1>
+            <p class="subtitle">New application has submitted.</p>
             
             <table>
                 <tr>
-                    <th>Email</th>
-                    <td>KentCortiguerra@rcccolabsolutions.com</td>
+                    <td colspan="2" style="text-align: center; font-weight: bold;">20250326-001</td>
                 </tr>
                 <tr>
-                    <th>Password</th>
-                    <td>KC-082602-II</td>
+                    <th>Name</th>
+                    <td>Kent C. Cortiguerra</td>
+                </tr>
+                <tr>
+                    <th>Position</th>
+                    <td>Mid Java Developer</td>
                 </tr>
             </table>
             
-            <a href="#" class="button">Log In</a>
-            
-            <p class="info-text">You can change your password by log in it in the RCC Web.</p>
+            <a href="#" class="button">View Dashboard</a>
             
             <p class="note">This is an automatic Email. Please Do not Reply.</p>
         </div>
