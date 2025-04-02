@@ -5,141 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Creation - RCC</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .header {
-            background-color: #0A2472;
-            padding: 20px;
-            text-align: left;
-        }
-        
-        .logo {
-            height: 40px;
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        h1 {
-            color: #0A2472;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            border: 1px solid #ddd;
-            color: #0A2472;
-        }
-
-        th, td {
-            padding: 15px;
-            border: 2px solid #ddd;
-            width: 50%;
-        }
-
-        th {
-            text-align: left;
-        }
-
-        td {
-            text-align: left;
-        }
-        
-        .button {
-            display: inline-block;
-            background-color: #0A2472;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-bottom: 30px;
-	    width: 200px;
-	    text-align: center;
-        }
-        
-        .info-text {
-            color: #0A2472;
-            margin-bottom: 20px;
-        }
-        
-        .note {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .footer {
-            background-color: #0A2472;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 14px;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <text x="45" y="25" font-size="12" font-weight="bold">RCC Logo</text>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;">
+    <div style="width: 100%; max-width: 800px; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <div style="background-color: #0A2472; padding: 20px; text-align: left;">
+            <span style="color: white; font-size: 12px; font-weight: bold;">RCC Logo</span>
         </div>
         
-        <div class="content">
-            <h1>Account Creation</h1>
-            <p class="subtitle">Your information has been successfully added.</p>
+        <div style="padding: 40px;">
+            <h1 style="color: #0A2472; font-size: 32px; margin-bottom: 10px;">Account Creation</h1>
+            <p style="color: #666; font-size: 18px; margin-bottom: 30px;">Your information has been successfully added.</p>
             
-            <table>
+            <table style="width: 100%; border-collapse: collapse; margin: 30px 0; border: 1px solid #ddd; color: #0A2472;">
                 <tr>
-                    <th>Email</th>
-                    <td>KentCortiguerra@rcccolabsolutions.com</td>
+                    <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Email</th>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">KentCortiguerra@rcccolabsolutions.com</td>
                 </tr>
                 <tr>
-                    <th>Password</th>
-                    <td>KC-082602-II</td>
+                    <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Password</th>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">KC-082602-II</td>
                 </tr>
             </table>
             
-            <a href="#" class="button">Log In</a>
+            <a href="#" style="display: inline-block; background-color: #0A2472; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-bottom: 30px; width: 200px; text-align: center;">Log In</a>
             
-            <p class="info-text">You can change your password by log in it in the RCC Web.</p>
+            <p style="color: #0A2472; margin-bottom: 20px;">You can change your password by log in it in the RCC Web.</p>
             
-            <p class="note">This is an automatic Email. Please Do not Reply.</p>
+            <p style="color: #666; margin-bottom: 30px;">This is an automatic Email. Please Do not Reply.</p>
         </div>
         
-        <div class="footer">
+        <div style="background-color: #0A2472; color: white; padding: 15px; text-align: center; font-size: 14px;">
             ©2025 RCC Colab Solutions Inc., All Right Reserved.
         </div>
     </div>

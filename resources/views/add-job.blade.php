@@ -1,7 +1,7 @@
 @include('includes.header')
 
 <!-- Main Container -->
-<div class="flex h-screen overflow-hidden bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+<div class="flex">
     
 @include('includes.side')
     

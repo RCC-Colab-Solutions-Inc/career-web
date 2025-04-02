@@ -18,7 +18,7 @@
                 
                     
                     <!-- Company Email -->
-                    <div class="relative h-14 mb-2">
+                    <div class="relative h-14 mb-2 shadow-lg">
                     <input 
                         type="email"
                         placeholder="example@gmail.com"
@@ -36,7 +36,7 @@
                     </div>
                     
                     <!-- Sign in code -->
-                    <div class="relative h-14 mt-6">
+                    <div class="relative h-14 mt-6 shadow-lg">
                     <input 
                         type="password"
                         placeholder="Sign In Code" 
@@ -55,7 +55,7 @@
                     
                     <!-- reCAPTCHA -->
                     <div class="my-4">
-                        <div class="border border-gray-300 rounded-md bg-white p-3 h-[78px] w-full flex items-center">
+                        <div class="shadow-lg border border-gray-300 rounded-md bg-white p-3 h-[78px] w-full flex items-center">
                             <div class="flex items-center">
                                 <input 
                                     type="checkbox" 

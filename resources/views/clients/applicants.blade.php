@@ -89,7 +89,7 @@
                 </div>
 
                 <!-- Applicants Table -->
-                <div class="bg-white border-t-2 border-b-4 border-l-2 border-r-2 rounded-lg shadow p-6">
+                <div class="bg-white shadow-lg border border-gray-300 rounded-lg shadow p-6">
                 <div>
                     <table class="min-w-full">
                         <thead>

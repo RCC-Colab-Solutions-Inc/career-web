@@ -22,6 +22,6 @@
         }
     </style>
     {!! ToastMagic::styles() !!}
-    @livewireStyles
+    
 </head>
 <body class="bg-gray-100">

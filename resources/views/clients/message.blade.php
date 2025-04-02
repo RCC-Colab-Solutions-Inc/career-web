@@ -6,7 +6,7 @@
     <div class="flex flex-1 flex-col overflow-hidden">
         
         <!-- Top Nav with Message Icon and Company Dropdown -->
-        <div class="border-b-4 h-20 flex items-center justify-between px-4">
+        <div class="shadow-lg h-20 flex items-center justify-between px-4">
             <!-- Company Logo and Name -->
             <div class="flex items-center">
                 <img src="{{ asset('assets/RCCLogo-Blue.png') }}" alt="RCC Logo" class="h-12 mr-2">
