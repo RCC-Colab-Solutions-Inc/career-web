@@ -95,11 +95,11 @@
             
             <!-- Enhanced Application Trends Chart (Full Width) -->
             <div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
-    <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">Application Trends</h3>
-    <div class="relative h-96">
-        <canvas id="applicationTrendsChart"></canvas>
-    </div>
-</div>
+                <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">Application Trends</h3>
+                <div class="relative h-96">
+                    <canvas id="applicationTrendsChart"></canvas>
+                </div>
+            </div>
 
             <!-- Referral Sources Section -->
             <div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
@@ -360,14 +360,12 @@
   // Application Trends Chart
 const appCtx = document.getElementById('applicationTrendsChart').getContext('2d');
 
-// Sample data - replace with your actual data
 const monthlyData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     barData: [120, 135, 110, 125, 145, 160, 150, 140, 170, 155, 165, 180],
     lineData: [100, 115, 95, 110, 125, 135, 130, 120, 150, 140, 145, 160]
 };
 
-// Create gradient for the line chart area
 const areaGradient = appCtx.createLinearGradient(0, 0, 0, 400);
 areaGradient.addColorStop(0, 'rgba(99, 102, 241, 0.6)');
 areaGradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
@@ -382,8 +380,8 @@ const applicationChart = new Chart(appCtx, {
                 label: 'Applications',
                 data: monthlyData.barData,
                 backgroundColor: document.querySelector('html').classList.contains('dark') 
-                    ? 'rgb(59, 130, 246)' // dark mode
-                    : 'rgb(96, 165, 250)', // light mode
+                    ? 'rgb(59, 130, 246)'
+                    : 'rgb(96, 165, 250)',
                 borderRadius: 4,
                 order: 2
             },
@@ -463,11 +461,9 @@ const applicationChart = new Chart(appCtx, {
     }
 });
 
-// Handle theme changes
 const updateChartTheme = () => {
     const isDarkMode = document.querySelector('html').classList.contains('dark');
     
-    // Update colors based on theme
     applicationChart.data.datasets[0].backgroundColor = isDarkMode ? 'rgb(59, 130, 246)' : 'rgb(96, 165, 250)';
     
     applicationChart.options.scales.y.grid.color = isDarkMode 
@@ -489,7 +485,6 @@ const updateChartTheme = () => {
     applicationChart.update();
 };
 
-// Watch for theme changes if you have a theme toggle
 document.addEventListener('themeChanged', updateChartTheme);
 </script>
 
