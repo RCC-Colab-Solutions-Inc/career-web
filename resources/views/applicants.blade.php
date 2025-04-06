@@ -68,13 +68,10 @@
         
                     <!-- Date Filter -->
                     <div>
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Date Applied</label>
+                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company</label>
                         <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                            <option>All Dates</option>
-                            <option>Today</option>
-                            <option>Last 7 Days</option>
-                            <option>Last 30 Days</option>
-                            <option>Last 3 Months</option>
+                            <option>All</option>
+                           
                         </select>
                     </div>
                 </div>
@@ -97,6 +94,11 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                     <div class="flex items-center">
                                         Job Position
+                                    </div>
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                                    <div class="flex items-center">
+                                        Client View
                                     </div>
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
@@ -143,6 +145,18 @@
                             <div class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                                 {{ $applicant->department }}
                             </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if($applicant->clientview == 'Yes')
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 transition-colors duration-300">
+                                {{ $applicant->clientview }}
+                            </span>
+                            @else
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 transition-colors duration-300">
+                                {{ $applicant->clientview }}
+                            </span>
+                            @endif
+                           
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-500 dark:text-gray-300 transition-colors duration-300">
