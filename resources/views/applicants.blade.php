@@ -232,17 +232,21 @@
                                             </a>
                                             
                                             <!-- Forward to Client -->
-                                            <a 
-                                                href="#" 
-                                                class="forward-client-link flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
-                                                data-id="{{ $applicant->id }}"
-                                                data-name="@if($applicant->middlename){{ $applicant->firstname }} {{ $applicant->middlename }} {{ $applicant->lastname }}{{ $applicant->suffix }}@else{{ $applicant->firstname }} {{ $applicant->lastname }}{{ $applicant->suffix }}@endif"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                                                </svg>
-                                                Forward to Client
-                                            </a>
+                                             @if($applicant->clientview == 'No')
+                                                <a 
+                                                    href="#" 
+                                                    class="forward-client-link flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                                                    data-id="{{ $applicant->id }}"
+                                                    data-name="@if($applicant->middlename){{ $applicant->firstname }} {{ $applicant->middlename }} {{ $applicant->lastname }}{{ $applicant->suffix }}@else{{ $applicant->firstname }} {{ $applicant->lastname }}{{ $applicant->suffix }}@endif"
+                                                    disabled
+                                                    >
+                                                    
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                                                    </svg>
+                                                    Forward to Client
+                                                </a>
+                                            @endif
                                             
                                             <!-- Update Status -->
                                             <a 
@@ -425,9 +429,9 @@
                     
                     <!-- Modal Body -->
                     <div class="px-6 py-4">
-                        <form x-on:submit.prevent="updateStatus">
-                            <input type="hidden" x-model="applicantId">
-                            
+                        <form action="updateapplicantstatus" method="POST">
+                            <input type="hidden" name="applicantid" x-model="applicantId">
+                            @csrf
                             <div class="mb-4">
                                 <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                     Updating status for: <span x-text="applicantName" class="font-medium text-gray-900 dark:text-white transition-colors duration-300"></span>
@@ -446,27 +450,15 @@
                                 </p>
                             </div>
                             
-                            <!-- Success Message -->
-                            <div 
-                                x-show="showSuccessMessage" 
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
-                                style="display: none;"
-                            >
-                                Status updated successfully!
-                            </div>
+                          
                             
                             <div class="mb-6">
                                 <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                     New Status
                                 </label>
                                 <select 
-                                    id="status" 
+                                    id="status"
+                                    name="status" 
                                     x-model="newStatus" 
                                     class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                                     required
@@ -599,7 +591,7 @@
                     
                     <!-- Modal Body -->
                     <div class="px-6 py-4">
-                        <form x-on:submit.prevent="sendEmail">
+                        <form action="sendemailtoapplicant" method="POST">
                             <input type="hidden" x-model="applicantId">
                             
                             <div class="mb-4">
@@ -611,21 +603,7 @@
                                 </p>
                             </div>
                             
-                            <!-- Success Message -->
-                            <div 
-                                x-show="showSuccessMessage" 
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
-                                style="display: none;"
-                            >
-                                Email sent successfully!
-                            </div>
-                            
+                           
                             <div class="mb-6">
                                 <label for="email-subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
                                     Subject
@@ -783,8 +761,9 @@
                     
                     <!-- Modal Body -->
                     <div class="px-6 py-4">
-                        <form x-on:submit.prevent="forwardToClient">
-                            <input type="hidden" x-model="applicantId">
+                        <form action="forwardtoclient" method="POST">
+                            @csrf
+                            <input type="hidden" name="applicantid" x-model="applicantId">
                             
                             <div class="mb-6">
                                 <div class="flex items-center mb-4 text-amber-600 dark:text-amber-500">
@@ -803,20 +782,7 @@
                                 </p>
                             </div>
                             
-                            <!-- Success Message -->
-                            <div 
-                                x-show="showSuccessMessage" 
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                class="mb-4 p-3 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg"
-                                style="display: none;"
-                            >
-                                Application forwarded successfully!
-                            </div>
+                           
                             
                             <div class="flex justify-end space-x-3">
                                 <button 

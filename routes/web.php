@@ -73,6 +73,8 @@ Route::controller(ClientMainController::class)->group(function () {
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {
     Route::get('/applicants', 'applicants');
     Route::get('/selectapplicants/{jobid}', 'selectapplicant');
+    Route::post('/updateapplicantstatus', 'updateapplicantstatus');
+    Route::post('/forwardtoclient', 'forwardtoclient');
 });
 
 // ✅ Public Routes (Login & Logout)
