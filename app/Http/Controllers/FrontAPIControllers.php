@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class FrontAPIControllers extends Controller
 {
@@ -76,5 +77,37 @@ class FrontAPIControllers extends Controller
             'data' => $request->all(),
             'timestamp' => Carbon::now()->toDateTimeString()
         ], 200);
+    }
+    public function uploadcv(Request $request){
+        $validator = Validator::make($request->all(), [
+            'cv' => 'required|mimes:pdf|max:2048',
+        ]);
+       //upload it to cloudinary
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+        //upload it to cloudinary
+        $file = $request->file('cv');
+        $path = $file->store('cv', 'cloudinary');
+        
+        //get the url of the file
+        $url = Storage::disk('cloudinary')->url($path);
+        //return the url
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'CV uploaded successfully',
+            'data' => [
+                'url' => $url
+            ],
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 200);
+
     }
 }

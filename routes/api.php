@@ -9,6 +9,7 @@ Route::middleware(['api.auth'])->group(function () {
     Route::controller(FrontAPIControllers::class)->group(function () {
         Route::get('/getjob', 'getjob');
         Route::post('/applyjob', 'apply');
+        Route::post('/uploadcv', 'uploadcv');
        
     });
     
