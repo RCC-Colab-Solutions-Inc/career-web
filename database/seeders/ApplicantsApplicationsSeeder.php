@@ -25,7 +25,6 @@ class ApplicantsApplicationsSeeder extends Seeder
                 'github_profile' => 'https://github.com/applicant' . $i,
                 'portfolio' => 'https://portfolio.com/applicant' . $i,
                 'resume' => 'resume' . $i . '.pdf',
-                'applicant_status' => $statuses[array_rand($statuses)],
                 'priority_job_id' => rand(1, 10),
                 'secondary_job_id' => rand(1, 10),
                 'third_job_id' => rand(1, 10),

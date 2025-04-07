@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ApplicantsApplication;
 use App\Models\JobPosting;
 use App\Models\CompanyDatabase;
+use App\Models\ApplicantStatus;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 class ApplicantController extends Controller
 {
@@ -13,8 +14,15 @@ class ApplicantController extends Controller
     {
         //get all applicants and concat the jobposting.id to the applicants_application.priority_job_id and paginate 10
         $applicants = ApplicantsApplication::join('job_postings', 'applicants_applications.priority_job_id', '=', 'job_postings.id')
-        ->select('applicants_applications.*', 'job_postings.jobtitle', 'job_postings.department')
+        ->join('applicant_statuses', 'applicants_applications.id', '=', 'applicant_statuses.applicant_id')
+        ->select(
+            'applicants_applications.*',
+            'job_postings.jobtitle',
+            'job_postings.department',
+            'applicant_statuses.applicant_status', // Add any specific column you need from applicant_statuses
+        )
         ->paginate(10);
+
       
             
         return view('applicants', compact('applicants'));
@@ -38,10 +46,14 @@ class ApplicantController extends Controller
         if($request->has('applicantid')){
             //update the status of the applicant
             $applicant = ApplicantsApplication::find($request->input('applicantid'));
-            $applicant->applicant_status = $request->input('status');
-           
+            
             //get the email of the applicant
             $email = $applicant->email;
+
+            //insert new status to the applicant_statuses table
+            $applicantstatus = new ApplicantStatus();
+            $applicantstatus->applicant_id = $request->input('applicantid');
+            $applicantstatus->applicant_status = $request->input('status');
 
             $subject = "Your application status has been updated";
             $cc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
@@ -50,7 +62,8 @@ class ApplicantController extends Controller
             $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
             //if the mail is sent successfully
             if ($sendMail === true) {
-                $applicant->save();
+                //save the status
+                $applicantstatus->save();
                 //return success message
                 ToastMagic::success("Success!", "Applicant status updated successfully.");
                 return redirect()->back();
