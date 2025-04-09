@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('priority_job_id');
             $table->string('secondary_job_id');
             $table->string('third_job_id');
+            $table->enum('applicant_status', ['New','Shortlisted','For Interview','For Assessment','Waiting for Feedback','Waiting for Job Offer','Hired','Rejected'])->default('New');
             $table->string('source');
             $table->enum('clientview', ['Yes','No'])->default('No');
             $table->timestamps();
