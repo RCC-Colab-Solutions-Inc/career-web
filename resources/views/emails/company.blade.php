@@ -18,7 +18,7 @@
                     <!-- Body -->
                     <tr>
                         <td style="padding: 15px; font-size: 16px; color: #555; text-align: center;">
-                            {{$company}} has been successfully added to the Career Management System of <strong>RCC Colab Solutions Inc.</strong>. Please check it now. <br>
+                            {{$company_name}} has been successfully added to the Career Management System of <strong>RCC Colab Solutions Inc.</strong>. Please check it now. <br>
                             
                             Please see the attached User Manual for more information.
                         
@@ -32,13 +32,13 @@
                                 <tr>
                                     <td style="padding: 8px; font-weight: bold; border: 1px solid #ddd; color: #232E65;">Email</td>
                                     <td style="padding: 8px; border: 1px solid #ddd; color: #232E65;">
-                                        {{$email}}
+                                        {{$company_email}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 8px; font-weight: bold; border: 1px solid #ddd; color: #232E65;">SignIn Code</td>
                                     <td style="padding: 8px; border: 1px solid #ddd; color: #232E65;">
-                                        {{$password}}
+                                        {{$sigin_code}}
                                     </td>
                                 </tr>
                             </table>
