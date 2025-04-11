@@ -19,11 +19,11 @@
             <table style="width: 100%; border-collapse: collapse; margin: 30px 0; border: 1px solid #ddd; color: #0A2472;">
                 <tr>
                     <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Email</th>
-                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">KentCortiguerra@rcccolabsolutions.com</td>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">{{$email}}</td>
                 </tr>
                 <tr>
                     <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Password</th>
-                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">KC-082602-II</td>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">{{$password}}</td>
                 </tr>
             </table>
             
