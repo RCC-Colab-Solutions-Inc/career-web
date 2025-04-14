@@ -7,12 +7,7 @@ use App\Http\Controllers\ClientMainController;
 use App\Http\Controllers\ApplicantFrontEndClient;
   
 Route::middleware(['api.auth'])->group(function () {
-    Route::controller(FrontAPIControllers::class)->group(function () {
-        Route::get('/getjob', 'getjob');
-        Route::post('/applyjob', 'apply');
-        Route::post('/uploadcv', 'uploadcv');
-       
-    });
+    
     
     Route::controller(RegistrationAPIControllers::class)->group(function(){
         Route::post('/register', 'register');
@@ -32,7 +27,13 @@ Route::middleware(['api.auth'])->group(function () {
     });
 
     // Route for Applicant Checking
-    Route::post('client/checkapplicant', [ApplicantFrontEndClient::class, 'checkapplicant']);
+    Route::prefix('client')->controller(ApplicantFrontEndClient::class)->group(function () {
+        Route::get('getjob', 'getjob');
+        Route::post('applyjob', 'apply');
+        Route::post('uploadcv', 'uploadcv');
+        Route::post('checkapplicant', 'checkapplicant');
+    });
+    
     
 });
 
