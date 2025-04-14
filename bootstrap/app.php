@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.auth' => ApiAuthMiddleware::class,
         ]);
-       
+        $middleware->statefulApi();
     })
     
     ->withExceptions(function (Exceptions $exceptions) {

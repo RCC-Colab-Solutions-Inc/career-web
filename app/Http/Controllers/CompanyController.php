@@ -20,6 +20,8 @@ class CompanyController extends Controller
 
     public function addCompanyForm(Request $request)
     {
+        $codes = $this->generateSignCode();
+        $mail = new MailSettingController();
         $validator = Validator::make($request->all(), [
             'company_name' => 'required',
             'company_email' => 'required',
@@ -37,11 +39,23 @@ class CompanyController extends Controller
         $company->representative_name = $request->contact_name;
         $company->representative_email = $request->company_email;
         $company->representative_contact_number = $request->contact_phone;
-        $company->sigin_code  =$this->generateSignCode();
+        $company->sigin_code  = $codes['hashed_sigin_code'];
         $company->save();
 
+        $subject = "Account has been created";
+        $cc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
+        $bcc = ['automatic-message@rcccolabsolutions.com'];
+        $body  = view('emails.company', [
+            'company_name' => $request->company_name,
+            'company_email' => $request->company_email,
+            'sigin_code' => $codes['sigin_code'],
+        ])->render();
+        
+        $mail->sendMail($request->company_email, $subject, $body, $cc, $bcc);
         ToastMagic::success("Success!", "Company added successfully.");
         return back();
+
+
     }
 
     public function updateCompany(Request $request)
@@ -82,7 +96,10 @@ class CompanyController extends Controller
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         $encrypted = password_hash($randomString, PASSWORD_DEFAULT);
-        return $encrypted;
+        return [
+            'sigin_code' => $randomString,          // plain string
+            'hashed_sigin_code' => $encrypted    // hashed version
+        ];
 
     }
 }

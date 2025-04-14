@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('company_name');
             $table->string('representative_name');
             $table->string('representative_email');
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('representative_contact_number');
             $table->string('sigin_code');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
