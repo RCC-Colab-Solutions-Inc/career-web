@@ -24,20 +24,9 @@ class ClientMainController extends Controller
                 ]
             ], 401);
         }
-        $company = Auth::guard('company')->user();
-        if ($company->status !== 'active') {
-            return response()->json([
-              $data = [
-                'status' => 'error',
-                'message' => 'Inactive account',
-                'data' => null,
-                'code' => 403,
-                'error' => 'Inactive account',
-                'error_description' => 'Your account is inactive. Please contact support.',
-              ]
-            ], 403);
-        }
         
+        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Dashboard data retrieved successfully',
@@ -76,17 +65,27 @@ class ClientMainController extends Controller
             ], 401);
         }
 
-        Auth::guard('company')->login($company, $field['remember'] ?? false);
-        session()->regenerate();
+        //create a remember me token and store it in the session
+        if ($request->remember) {
+            $rememberToken = bin2hex(random_bytes(16));
+            Session::put('remember_token', $rememberToken);
+            $company->update(['remember_token' => $rememberToken]);
+        }
+        //login the user
+        Auth::guard('company')->login($company, $request->remember);
+        //update the remember token in the database
+        $company->update(['remember_token' => Session::get('remember_token')]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Login successful',
             'data' => [
                 'user' => Auth::guard('company')->user(),
-                'company_id' => $company->id,
+                'remember_token' => Session::get('remember_token'),
             ],
         ]);
+        
+
     }
 
     private function verifycaptcha($captchaResponse)
