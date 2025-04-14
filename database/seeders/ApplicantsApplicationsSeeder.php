@@ -14,6 +14,7 @@ class ApplicantsApplicationsSeeder extends Seeder
         $findus = ['LinkedIn', 'Facebook',  'Google'];
         for ($i = 1; $i <= 20; $i++) {
             DB::table('applicants_applications')->insert([
+                'reference_code' => 'REF' . Str::random(8),
                 'firstname' => 'Applicant' . $i,
                 'middlename' => 'M' . $i,
                 'lastname' => 'Lastname' . $i,

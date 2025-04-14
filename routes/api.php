@@ -4,6 +4,7 @@ use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Controllers\FrontAPIControllers;
 use App\Http\Controllers\RegistrationAPIControllers;
 use App\Http\Controllers\ClientMainController;
+use App\Http\Controllers\ApplicantFrontEndClient;
   
 Route::middleware(['api.auth'])->group(function () {
     Route::controller(FrontAPIControllers::class)->group(function () {
@@ -29,6 +30,9 @@ Route::middleware(['api.auth'])->group(function () {
     ->group(function () {
         Route::get('dashboard', 'dashboardpage');
     });
+
+    // Route for Applicant Checking
+    Route::post('client/checkapplicant', [ApplicantFrontEndClient::class, 'checkapplicant']);
     
 });
 

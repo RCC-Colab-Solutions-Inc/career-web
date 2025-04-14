@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('applicants_applications', function (Blueprint $table) {
             $table->id();
+            $table->string('reference_code')->unique();
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
