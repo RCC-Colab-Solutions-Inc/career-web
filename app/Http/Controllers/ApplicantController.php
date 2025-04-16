@@ -8,6 +8,9 @@ use App\Models\JobPosting;
 use App\Models\CompanyDatabase;
 use App\Models\ApplicantStatus;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
+
+//use validate
+use Illuminate\Support\Facades\Validator;
 class ApplicantController extends Controller
 {
     public function applicants()
@@ -43,44 +46,36 @@ class ApplicantController extends Controller
     {
         $mail = new MailSettingController();
         //check if there applicantid is in the request
-        if($request->has('applicantid')){
-            //update the status of the applicant
-            $applicant = ApplicantsApplication::find($request->input('applicantid'));
-            
-            //get the email of the applicant
-            $email = $applicant->email;
+       
+           
+        $validation = Validator::make($request->all(), [
+            'applicantid' => 'required|exists:applicants_applications,id',
+            'status' => 'required',
+        ]);
 
-            //insert new status to the applicant_statuses table
-            $applicantstatus = new ApplicantStatus();
-            $applicantstatus->applicant_id = $request->input('applicantid');
-            $applicantstatus->applicant_status = $request->input('status');
-
-            $subject = "Your application status has been updated";
-            $cc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
-            $bcc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
-            $body = view('emails.status')->render();
-            $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
-            //if the mail is sent successfully
-            if ($sendMail === true) {
-                //save the status
-                $applicantstatus->save();
-                //return success message
-                ToastMagic::success("Success!", "Applicant status updated successfully.");
-                return redirect()->back();
-            } else {
-                //if not return error
-                ToastMagic::error("Error!", "Something went wrong.");
-                return redirect()->back();
+        //return the validation error if there is any
+        if ($validation->fails()) {
+            foreach ($validation->errors()->all() as $error) {
+                ToastMagic::error("Error!", $error);
             }
+            return redirect()->back();
+        }
+
+        // //update the status of the applicant
+        // $applicant = ApplicantsApplication::where('id', $request->input('applicantid'))
+        // $applicant->applicant_status = $request->input('status');
+        
+        // $app = $applicant->save();
+        // if($app){
+            
+        // }
+
+
+
 
 
             
-        }else{
-            //if not return error
-            ToastMagic::error("Error!", "Something went wrong.");
-            return redirect()->back();
-
-        }
+        
 
     }
     public function forwardtoclient(Request $request)

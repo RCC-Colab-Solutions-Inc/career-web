@@ -5,7 +5,7 @@ use App\Http\Controllers\FrontAPIControllers;
 use App\Http\Controllers\RegistrationAPIControllers;
 use App\Http\Controllers\ClientMainController;
 use App\Http\Controllers\ApplicantFrontEndClient;
-  
+use App\Http\Controllers\ApplicantController;
 Route::middleware(['api.auth'])->group(function () {
     
     
@@ -32,7 +32,9 @@ Route::middleware(['api.auth'])->group(function () {
         Route::post('applyjob', 'apply');
         Route::post('uploadcv', 'uploadcv');
         Route::post('checkapplicant', 'checkapplicant');
+        
     });
+   
     
     
 });
