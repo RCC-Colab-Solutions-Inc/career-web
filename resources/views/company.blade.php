@@ -11,7 +11,7 @@
         @include('includes.nav')
         
         <!-- Companies Content -->
-        <main class="p-6">
+        <main class="min-h-screen p-6">
             <!-- Page Title with Add New Company Button -->
             <div class="mb-8 flex justify-between items-center">
                 <div>
@@ -50,39 +50,40 @@
             </div>
             
             <!-- Companies List Table -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden transition-colors duration-300 mb-8">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-600 transition-colors duration-300">
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                    <div class="flex items-center">
-                                        Company Name
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                    <div class="flex items-center">
-                                        Email
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                    <div class="flex items-center">
-                                        Contact
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">                                   
-                                        Status                                 
-                                </th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-slate-700">
-                            @foreach($companies as $company)
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden transition-colors duration-300 mb-8">
+    @if(count($companies) > 0)
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-600 transition-colors duration-300">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                            <div class="flex items-center">
+                                Company Name
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                            <div class="flex items-center">
+                                Email
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                            <div class="flex items-center">
+                                Contact
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">                                   
+                                Status                                 
+                        </th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-slate-700">
+                    @foreach($companies as $company)
                             <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -195,42 +196,64 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+                @else
             
-            <div class="flex justify-center mt-4">
-                <nav class="flex items-center space-x-1">
-                    <!-- Previous Page -->
-                    @if ($companies->onFirstPage())
-                        <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                            &laquo;
-                        </span>
-                    @else
-                        <a href="{{ $companies->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                            &laquo;
-                        </a>
-                    @endif
-
-                    <!-- Page Numbers -->
-                    @foreach ($companies->getUrlRange(1, $companies->lastPage()) as $page => $url)
-                        @if ($page == $companies->currentPage())
-                            <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
-                        @else
-                            <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">{{ $page }}</a>
-                        @endif
-                    @endforeach
-
-                    <!-- Next Page -->
-                    @if ($companies->hasMorePages())
-                        <a href="{{ $companies->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
-                            &raquo;
-                        </a>
-                    @else
-                        <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
-                            &raquo;
-                        </span>
-                    @endif
-                </nav>
+            <!-- Empty State - No Companies Found -->
+        <div class="p-8 text-center">
+            <div class="flex flex-col items-center justify-center">
+                <!-- Empty illustration -->
+                <div class="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Companies Yet</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
+                    You haven't added any companies to the system yet. Click the "Add New Company" button to add your first company.
+                </p>
             </div>
+        </div>
+    @endif
+</div>
+
+<!-- Pagination -->
+@if(count($companies) > 0)
+<div class="flex justify-center mt-4">
+    <nav class="flex items-center space-x-1">
+        <!-- Previous Page -->
+        @if ($companies->onFirstPage())
+            <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
+                &laquo;
+            </span>
+        @else
+            <a href="{{ $companies->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                &laquo;
+            </a>
+        @endif
+
+        <!-- Page Numbers -->
+        @foreach ($companies->getUrlRange(1, $companies->lastPage()) as $page => $url)
+            @if ($page == $companies->currentPage())
+                <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
+            @else
+                <a href="{{ $url }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">{{ $page }}</a>
+            @endif
+        @endforeach
+
+        <!-- Next Page -->
+        @if ($companies->hasMorePages())
+            <a href="{{ $companies->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                &raquo;
+            </a>
+        @else
+            <span class="px-3 py-2 rounded-lg bg-gray-300 dark:bg-slate-600 text-gray-500 cursor-not-allowed">
+                &raquo;
+            </span>
+        @endif
+    </nav>
+</div>
+@endif
         </main>
 
  

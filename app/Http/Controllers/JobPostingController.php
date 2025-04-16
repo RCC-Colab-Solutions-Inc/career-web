@@ -126,6 +126,11 @@ class JobPostingController extends Controller
         return view('application.position');
     }
 
+    public function ipaddress()
+    {
+        return view('ip-address');
+    }
+
 
     public function makeurgent($jobid)
     {

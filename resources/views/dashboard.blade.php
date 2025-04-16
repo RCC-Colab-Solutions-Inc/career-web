@@ -11,7 +11,7 @@
     @include('includes.nav')
         
         <!-- Dashboard Content -->
-        <main class="p-6 transition-colors duration-300">
+        <main class="min-h-screen p-6 transition-colors duration-300">
             <!-- Page Title -->
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-white transition-colors duration-300">Dashboard</h1>

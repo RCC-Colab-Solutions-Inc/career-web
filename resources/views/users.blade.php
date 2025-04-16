@@ -11,7 +11,7 @@
         @include('includes.nav')
         
         <!-- Users Content -->
-        <main class="p-6">
+        <main class="min-h-screen p-6">
             <!-- Page Title with Add New User Button -->
             <div class="mb-8 flex justify-between items-center">
                 <div>
