@@ -157,7 +157,8 @@
                                 </label>
                                 <textarea 
                                     id="notes" 
-                                    x-model="notes" 
+                                    x-model="notes"
+                                    name ="notes" 
                                     rows="3" 
                                     class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                                     placeholder="Add any relevant notes about this status change..."
