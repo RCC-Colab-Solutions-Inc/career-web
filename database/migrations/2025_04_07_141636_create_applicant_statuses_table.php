@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('applicant_id')->unsigned();
             $table->integer('job_posting_id')->unsigned();
-            $table->enum('applicant_status', ['New','Shortlisted','For Interview','For Assessment','Waiting for Feedback','Waiting for Job Offer','Hired','Rejected'])->default('New');
+            $table->enum('applicant_status', ['New','Shortlisted','For Interview','For Assessment','Waiting for Feedback','Waiting for Job Offer','Hired','Rejected','Decline'])->default('New');
             $table->text('remarks')->nullable();
             $table->timestamps();
         });
