@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             JobPostingsSeeder::class,
         ]);
+        $this->call([
+            EmailAdditionalsSeeder::class,
+        ]);
 
        
 

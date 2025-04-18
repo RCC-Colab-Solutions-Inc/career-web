@@ -5,7 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Middleware\LoginMainController;
-
+use App\Http\Middleware\TokenizedCompany;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.auth' => ApiAuthMiddleware::class,
         ]);
+       
         $middleware->statefulApi();
     })
     
