@@ -25,7 +25,9 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Total Jobs</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">128</h2>
+                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
+                            {{ $totalJob }}
+                            </h2>
                         </div>
                         <div class="bg-blue-100 dark:bg-blue-600/30 p-3 rounded-full transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +45,9 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Active Applicants</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">256</h2>
+                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
+                                {{ $totalApplicant }}
+                            </h2>
                         </div>
                         <div class="bg-indigo-100 dark:bg-indigo-600/30 p-3 rounded-full transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,7 +65,9 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">New Applications</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">64</h2>
+                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
+                            {{ $totalNewApplicant }}
+                            </h2>
                         </div>
                         <div class="bg-purple-100 dark:bg-purple-600/30 p-3 rounded-full transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -79,7 +85,9 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Hired Candidates</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">42</h2>
+                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
+                            {{ $hiredCount }}
+                            </h2>
                         </div>
                         <div class="bg-cyan-100 dark:bg-cyan-600/30 p-3 rounded-full transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,213 +110,67 @@
             </div>
 
             <!-- Referral Sources Section -->
-            <div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">Where Candidates Found Us</h3>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Chart -->
-                    <div class="lg:col-span-2">
-                        <div class="relative h-96">
-                            <!-- Simple donut chart representation -->
-                            <canvas id="referralChart" class="w-full max-w-xs mx-auto"></canvas>
-                            
-                            
-                            <div class="flex flex-wrap justify-center gap-4 mt-6">
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-[#0A66C2] rounded-sm mr-2"></div>
-                                    <span class="text-sm text-slate-700 dark:text-blue-200 transition-colors duration-300">LinkedIn (45%)</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-[#1877F2] rounded-sm mr-2"></div>
-                                    <span class="text-sm text-slate-700 dark:text-blue-200 transition-colors duration-300">Facebook (30%)</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-[#EA4335] rounded-sm mr-2"></div>
-                                    <span class="text-sm text-slate-700 dark:text-blue-200 transition-colors duration-300">Google (15%)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Stats/Details -->
-                    <div class="space-y-4">
-                        <div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors duration-300">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-2 bg-[#0A66C2]/10 rounded-lg mr-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.454C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-800 dark:text-white font-medium transition-colors duration-300">LinkedIn</h4>
-                                        <p class="text-slate-500 dark:text-blue-200/70 text-sm transition-colors duration-300">115 candidates</p>
-                                    </div>
-                                </div>
-                                <span class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">45%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors duration-300">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-2 bg-[#1877F2]/10 rounded-lg mr-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-800 dark:text-white font-medium transition-colors duration-300">Facebook</h4>
-                                        <p class="text-slate-500 dark:text-blue-200/70 text-sm transition-colors duration-300">77 candidates</p>
-                                    </div>
-                                </div>
-                                <span class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">30%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors duration-300">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-2 bg-[#EA4335]/10 rounded-lg mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
-                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-slate-800 dark:text-white font-medium transition-colors duration-300">Google</h4>
-                                        <p class="text-slate-500 dark:text-blue-200/70 text-sm transition-colors duration-300">38 candidates</p>
-                                    </div>
-                                </div>
-                                <span class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">15%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
+  <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">
+    Where Candidates Found Us
+  </h3>
+  
+  @php
+    // Map each source to its Chart.js color & badge bg
+    $colorMap = [
+      'LinkedIn' => '#0A66C2',
+      'Facebook' => '#1877F2',
+      'Google'   => '#EA4335',
+      // add more sources here…
+    ];
+  @endphp
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Chart -->
+    <div class="lg:col-span-2">
+      <div class="relative h-96">
+        <canvas id="referralChart" class="w-full max-w-xs mx-auto"></canvas>
+        
+        <div class="flex flex-wrap justify-center gap-4 mt-6">
+        
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stats/Details -->
+    <div class="space-y-4">
+      @foreach($sources as $i => $source)
+        @php
+          $color = $colorMap[$source] ?? '#888';
+          $count = $counts[$i];     // raw candidate count
+          $pct   = $data[$i];       // percentage
+        @endphp
+
+        <div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors duration-300">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              
+              <div>
+                <h4 class="text-slate-800 dark:text-white font-medium transition-colors duration-300">
+                  {{ $source }}
+                </h4>
+                <p class="text-slate-500 dark:text-blue-200/70 text-sm transition-colors duration-300">
+                  {{ $count }} candidates
+                </p>
+              </div>
             </div>
+            <span class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">
+              {{ $pct }}%
+            </span>
+          </div>
+        </div>
+      @endforeach
+    </div>
+  </div>
+</div>
+
             
-            <!-- Recent Jobs Section -->
-            <div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">Recent Job Listings</h3>
-                    <a href="#" class="text-blue-600 dark:text-blue-400 text-sm hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300">View All</a>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-slate-200 dark:border-slate-700 text-left transition-colors duration-300">
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm transition-colors duration-300">Position</th>
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm text-center transition-colors duration-300">Department</th>
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm text-center transition-colors duration-300">Location</th>
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm text-center transition-colors duration-300">Applications</th>
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm text-center transition-colors duration-300">Status</th>
-                                <th class="pb-3 text-slate-500 dark:text-blue-200 font-medium text-sm text-center transition-colors duration-300">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-slate-200 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors duration-200">
-                                <td class="py-3 text-slate-800 dark:text-white transition-colors duration-300">Senior Frontend Developer</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Project Management</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Remote</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">18</td>
-                                <td class="py-3 text-center">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400 transition-colors duration-300">Active</span>
-                                </td>
-                                <td class="py-3 text-center">
-                                    <div class="flex space-x-2 justify-center">
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </button>
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-slate-200 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors duration-200">
-                                <td class="py-3 text-slate-800 dark:text-white transition-colors duration-300">UX/UI Designer</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Project Management</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Remote</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">24</td>
-                                <td class="py-3 text-center">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400 transition-colors duration-300">Active</span>
-                                </td>
-                                <td class="py-3 text-center">
-                                    <div class="flex space-x-2 justify-center">
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </button>
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-slate-200 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors duration-200">
-                                <td class="py-3 text-slate-800 dark:text-white transition-colors duration-300">IT Support</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Project Management</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Remote</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">12</td>
-                                <td class="py-3 text-center">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-400 transition-colors duration-300">Reviewing</span>
-                                </td>
-                                <td class="py-3 text-center">
-                                    <div class="flex space-x-2 justify-center">
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </button>
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition-colors duration-200">
-                                <td class="py-3 text-slate-800 dark:text-white transition-colors duration-300">Backend Developer</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Project Management</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">Remote</td>
-                                <td class="py-3 text-slate-600 dark:text-blue-200 text-center transition-colors duration-300">9</td>
-                                <td class="py-3 text-center">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-400 transition-colors duration-300">Closed</span>
-                                </td>
-                                <td class="py-3 text-center">
-                                    <div class="flex space-x-2 justify-center">
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </button>
-                                        <button class="p-1 text-slate-500 dark:text-blue-300 hover:text-slate-700 dark:hover:text-blue-100 transition-colors duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            
         </main>
     </div>
 </div>
@@ -316,55 +178,53 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('referralChart').getContext('2d');
-    
-    const referralChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['LinkedIn', 'Facebook', 'Google'],
-        datasets: [{
-          data: [45, 30, 15],
-          backgroundColor: [
-            '#0A66C2',
-            '#1877F2',
-            '#EA4335'
-          ],
-          borderWidth: 0,
-          borderRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        cutout: '70%',
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            padding: 10,
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            displayColors: true,
-            callbacks: {
-              label: function(context) {
-                return context.label + ': ' + context.parsed + '%';
+        const labels = @json($sources);  // ['Facebook','LinkedIn','Google',…]
+        const data   = @json($data);     // [48.0,32.0,20.0,…]
+        const backgroundColors = labels.map((_, i) => {
+            // spread hues evenly around the 360° color wheel
+            const hue = Math.round((360 * i) / labels.length);
+            return `hsl(${hue}, 65%, 50%)`;
+        });
+        new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: backgroundColors,
+            borderWidth: 0,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          cutout: '70%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              padding: 10,
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              displayColors: true,
+              callbacks: {
+                label: ctx => `${ctx.label}: ${ctx.parsed}%`
               }
             }
           }
         }
-      }
-    });
+      });
   });
 
   // Application Trends Chart
 const appCtx = document.getElementById('applicationTrendsChart').getContext('2d');
 
 const monthlyData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    barData: [120, 135, 110, 125, 145, 160, 150, 140, 170, 155, 165, 180],
-    lineData: [100, 115, 95, 110, 125, 135, 130, 120, 150, 140, 145, 160]
-};
+        labels: @json($labels),
+        barData: @json($barData),
+        
+    };
 
 const areaGradient = appCtx.createLinearGradient(0, 0, 0, 400);
 areaGradient.addColorStop(0, 'rgba(99, 102, 241, 0.6)');
@@ -385,19 +245,7 @@ const applicationChart = new Chart(appCtx, {
                 borderRadius: 4,
                 order: 2
             },
-            {
-                type: 'line',
-                label: 'Trend',
-                data: monthlyData.lineData,
-                borderColor: 'rgb(99, 102, 241)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgb(99, 102, 241)',
-                pointRadius: 3,
-                tension: 0.3,
-                fill: true,
-                backgroundColor: areaGradient,
-                order: 1
-            }
+            
         ]
     },
     options: {
