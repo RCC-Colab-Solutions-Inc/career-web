@@ -32,6 +32,7 @@ Route::middleware(['api.auth'])->group(function () {
     // Route for Applicant Checking
     Route::prefix('client')->controller(ApplicantFrontEndClient::class)->group(function () {
         Route::get('getjob', 'getjob');
+        Route::get('getjob/{id}', 'getSpecificJob');
         Route::post('applyjob', 'apply');
         Route::post('uploadcv', 'uploadcv');
         Route::post('checkapplicant', 'checkapplicant');
