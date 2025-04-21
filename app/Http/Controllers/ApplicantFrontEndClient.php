@@ -10,8 +10,70 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+// usse validator
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 class ApplicantFrontEndClient extends Controller
 {
+    public function uploadcv(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cv' => 'required|mimes:pdf|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $file = $request->file('cv');
+
+        if (!$file->isValid() || $file->getClientOriginalExtension() !== 'pdf') {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => 'Invalid file type. Only PDF files are allowed.',
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        // Create uploads directory if it doesn't exist
+        $destinationPath = public_path('uploads');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Generate unique name
+        $unique = Str::random(8); // e.g., "X8f92Kf1"
+        $originalName = $file->getClientOriginalName(); // e.g., "my_cv.pdf"
+        $fileName = $unique . '_' . $originalName;
+
+        // Move file to public/uploads
+        $file->move($destinationPath, $fileName);
+
+        $url = asset("uploads/$fileName");
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'CV uploaded successfully',
+            'data' => [
+                'url' => "$fileName",
+            ],
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 200);
+    }
+
+
+
+
     public function getjob(){
         //get all the job where the status is open order by created_at
         $jobs = JobPosting::where('jobstatus', 'open')->orderBy('created_at', 'desc')->get();
@@ -26,93 +88,34 @@ class ApplicantFrontEndClient extends Controller
         );
 
     }
+    public function getSpecificJob($id){
+        //get the job where the id is the same as the id in the url
+        $job = JobPosting::where('jobcode', $id)->first();
+        if (!$job) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Job not found',
+                'timestamp' => now()->toDateTimeString()
+            ], 404);
+        }
+        return response()->json(
+            [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Job details',
+                'data' => $job,
+                'timestamp' => now()->toDateTimeString()
+            ]
+        );
+    }
     
     public function apply(Request $request){
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone_number' => 'required',
-            'address' => 'required',
-            'job_id_1' => 'required|exists:jobpostings,id',
-            'job_id_2' => 'nullable|exists:jobpostings,id',
-            'job_id_3' => 'nullable|exists:jobpostings,id',
-            'linkedin' => 'nullable|url',
-            'github' => 'nullable|url',
-            'link_portfolio' => 'nullable|url',
-            'captcha' => 'required'
-        ]);
-            // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-                'timestamp' => Carbon::now()->toDateTimeString()
-            ], 422);
-        }
-        // Verify reCAPTCHA
-        $recaptchaSecret = env('RECAPTCHA_SECRET');
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => $recaptchaSecret,
-            'response' => $request->captcha,
-            'remoteip' => $request->ip(),
-        ]);
-
-        $result = $response->json();
-
-        if (!$result['success']) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => 'reCAPTCHA verification failed.',
-                'timestamp' => Carbon::now()->toDateTimeString()
-            ], 422);
-        }
-
-        // Success response (You can add your database saving logic here)
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Application submitted successfully',
-            'data' => $request->all(),
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
+       //apply here 
+       
     }
 
-    public function uploadcv(Request $request){
-        $validator = Validator::make($request->all(), [
-            'cv' => 'required|mimes:pdf|max:2048',
-        ]);
-       //upload it to cloudinary
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-                'timestamp' => Carbon::now()->toDateTimeString()
-            ], 422);
-        }
-        //upload it to cloudinary
-        $file = $request->file('cv');
-        $path = $file->store('cv', 'cloudinary');
-        
-        //get the url of the file
-        $url = Storage::disk('cloudinary')->url($path);
-        //return the url
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'CV uploaded successfully',
-            'data' => [
-                'url' => $url
-            ],
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
-
-    }
+   
 
 
     public function checkapplicant(Request $request)
