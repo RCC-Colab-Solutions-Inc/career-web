@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 // ✅ Protected Routes (Only Accessible if Logged In)
-Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->group(function () {
+Route::controller(JobPostingController::class)->group(function () {
     
     Route::get('/job-listing', 'jobListing')->name('job-listing');
     Route::get('/add-job', 'addjobform');
@@ -53,10 +53,10 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/job-status/{jobid}', 'jobstatus');
     Route::get('/delete-job/{jobid}', 'jobdelete');
 });
-Route::middleware(['web', 'auth'])->controller(DashboardControllers::class)->group(function () {
+Route::controller(DashboardControllers::class)->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard');
 });
-Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(function () {
+Route::controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'company');
     Route::post('/add-company', 'addcompanyform');
     Route::post('/edit-company', 'updatecompany');
@@ -71,7 +71,7 @@ Route::controller(ClientMainController::class)->group(function () {
  
 });
 
-Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {
+Route::controller(ApplicantController::class)->group(function () {
     Route::get('/applicants', 'applicants');
     Route::get('/selectapplicants/{jobid}', 'selectapplicant');
     Route::post('/updateapplicantstatus', 'updateapplicantstatus');
