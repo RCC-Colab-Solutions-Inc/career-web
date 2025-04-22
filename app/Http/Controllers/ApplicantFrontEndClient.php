@@ -110,12 +110,96 @@ class ApplicantFrontEndClient extends Controller
         );
     }
     
-    public function apply(Request $request){
-       //apply here 
-       
+    public function apply(Request $request)
+{
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'firstName' => 'required|string|max:255',
+        'lastName' => 'required|string|max:255',
+        'middleName' => 'nullable|string|max:255',
+        'suffix' => 'nullable|string|max:10',
+        'email' => 'required|email|max:255',
+        'phone' => 'required|string|max:20',
+        'address' => 'required|string|max:255',
+        'linkedin' => 'nullable|url|max:255',
+        'portfolio' => 'nullable|url|max:255',
+        'github' => 'nullable|url|max:255',
+        'secondChoice' => 'nullable|string',
+        'thirdChoice' => 'nullable|string',
+        'findSource' => 'required|string|max:50',
+        'priority' => 'required|exists:job_postings,jobcode',
+        'cv_url' => 'required|string',
+        'recaptchaToken' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'code' => 422,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 422);
     }
 
-   
+    if (!$this->verifycaptcha($request->recaptchaToken)) {
+        return response()->json([
+            'status' => 'error',
+            'code' => 422,
+            'message' => 'reCAPTCHA verification failed',
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 422);
+    }
+
+    $referenceCode = 'APP-' . strtoupper(Str::random(8));
+
+    $job = JobPosting::where('jobcode', $request->priority)->first();
+    
+    if (!$job) {
+        return response()->json([
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'Job not found',
+            'timestamp' => Carbon::now()->toDateTimeString()
+        ], 404);
+    }
+
+    $application = new ApplicantsApplication();
+    $application->reference_code = $referenceCode;
+    $application->firstname = $request->firstName;
+    $application->lastname = $request->lastName;
+    $application->middlename = $request->middleName ?? '';
+    $application->suffix = $request->suffix ?? '';
+    $application->email = $request->email;
+    $application->contact_number = $request->phone;
+    $application->address = $request->address;
+    $application->linkedin_profile = $request->linkedin ?? '';
+    $application->portfolio = $request->portfolio ?? '';
+    $application->github_profile = $request->github ?? '';
+    $application->secondary_job_id = $request->secondChoice ? $request->secondChoice : 0;
+    $application->third_job_id = $request->thirdChoice ? $request->thirdChoice : 0;
+    $application->source = $request->findSource;
+    $application->priority_job_id = $job->id;
+    $application->resume = $request->cv_url;
+    $application->applicant_status = 'New';
+    $application->save();
+
+    $status = new ApplicantStatus();
+    $status->applicant_id = $application->id;
+    $status->applicant_status = 'New';
+    $status->job_posting_id = $job->id;
+    $status->save();
+
+    return response()->json([
+        'status' => 'success',
+        'code' => 200,
+        'message' => 'Application submitted successfully',
+        'data' => [
+            'reference_code' => $referenceCode
+        ],
+        'timestamp' => Carbon::now()->toDateTimeString()
+    ], 200);
+}
 
 
     public function checkapplicant(Request $request)
