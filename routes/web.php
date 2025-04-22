@@ -53,7 +53,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/job-status/{jobid}', 'jobstatus');
     Route::get('/delete-job/{jobid}', 'jobdelete');
 });
-Route::middleware(['web', 'auth'])->controller(DashboardControllers::class)->group(function () {
+Route::controller(DashboardControllers::class)->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard');
 });
 Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(function () {
