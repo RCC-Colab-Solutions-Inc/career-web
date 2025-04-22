@@ -18,33 +18,25 @@ class LoginMainController extends Controller
     public function login(Request $request)
     {
        
-
         $credentials = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
-        try {
-             // Attempt login
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
+        // Attempt login
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-                $user = Auth::user();
+            $user = Auth::user();
 
-                return redirect()->route('dashboard'); // Redirect to dashboard after login
-            }
-
-        } catch (\Throwable $th) {
-            dd($th);
+            return redirect()->route('dashboard'); // Redirect to dashboard after login
         }
-       
-        // If login fails, redirect back with error
-        // return back()->withErrors([
-        //     'email' => 'Invalid credentials.',
-        // ])->onlyInput('email');
 
-        //echo the error
-        
+        // If login fails, redirect back with error
+        return back()->withErrors([
+            'email' => 'Invalid credentials.',
+        ])->onlyInput('email');
+
         
     }
 

@@ -25,6 +25,16 @@
                     
                 </div>
                 
+                <!-- display the return error -->
+                @if ($errors->any())
+                    <div class="bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg mb-4">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 
                 
                 <form action="/login" method="POST" class="p-8 space-y-6 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
