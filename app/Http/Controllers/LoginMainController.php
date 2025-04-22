@@ -22,19 +22,18 @@ class LoginMainController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-
+    
         // Attempt login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            $user = Auth::user();
-
-            return redirect()->route('dashboard'); // Redirect to dashboard after login
+    
+            // Redirect user to their intended destination or the dashboard if none is found
+            return redirect()->intended(route('dashboard'));
         }
-
+    
         // If login fails, redirect back with error
         return back()->withErrors([
-            'email' => 'Invalid credentials.',
+            'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
 
         
