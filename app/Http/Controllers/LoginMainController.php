@@ -28,6 +28,16 @@ class LoginMainController extends Controller
             return redirect()->route('dashboard'); // Redirect to dashboard if already logged in
         }
         
+        // Attempt to authenticate the user
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard')); // Redirect to intended page or dashboard
+        }else{
+            // If authentication fails, return back with error message
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
+        }
     
         // // Attempt login
         // try {
