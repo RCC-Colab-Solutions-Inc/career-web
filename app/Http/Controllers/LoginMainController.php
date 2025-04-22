@@ -23,6 +23,10 @@ class LoginMainController extends Controller
             'password' => 'required|string',
         ]);
 
+        // Check if the user is already logged in
+        if (Auth::check()) {
+            return redirect()->route('dashboard'); // Redirect to dashboard if already logged in
+        }
         
     
         // // Attempt login
