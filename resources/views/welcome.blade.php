@@ -37,7 +37,7 @@
                 @endif
                 
                 
-                <form action="/login" method="POST" class="p-8 space-y-6 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
+                <form action="/logins" method="POST" class="p-8 space-y-6 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
                 @csrf
                     <!-- Email Address -->
                     <div>

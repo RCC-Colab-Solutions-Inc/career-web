@@ -80,7 +80,7 @@ Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->grou
 
 // ✅ Public Routes (Login & Logout)
 Route::controller(LoginMainController::class)->group(function () {
-    Route::get('/', 'welcome'); // 🔹 Add 'name' to login for proper redirect
-    Route::post('/login', 'login');
+    Route::get('/', 'welcome')->name('login'); // 🔹 Add 'name' to login for proper redirect
+    Route::post('/logins', 'login');
     Route::get('/logout', 'logout')->name('logout'); // 🔹 Use POST method for security
 });
