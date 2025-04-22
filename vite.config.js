@@ -9,6 +9,10 @@ export default defineConfig({
         hmr: {
             host: '34.87.64.54', // 👈 Use your external IP address here
         },
+        cors: {
+            origin: 'http://34.87.64.54',  // Add this line to allow the frontend domain
+            credentials: true, 
+        },
     },
     plugins: [
         laravel({
