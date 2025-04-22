@@ -24,17 +24,21 @@ class LoginMainController extends Controller
         ]);
     
         // Attempt login
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-    
-            // Redirect user to their intended destination or the dashboard if none is found
-            return redirect()->intended(route('dashboard'));
+        try {
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+        
+                // Redirect user to their intended destination or the dashboard if none is found
+                return redirect()->intended(route('dashboard'));
+            }
+        } catch (\Throwable $th) {
+            // return all error $th
+            return back()->withErrors([
+                'email' => $th,
+            ])->onlyInput('email');
         }
     
-        // If login fails, redirect back with error
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+       
 
         
     }
