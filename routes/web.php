@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 // ✅ Protected Routes (Only Accessible if Logged In)
-Route::controller(JobPostingController::class)->group(function () {
+Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->group(function () {
     
     Route::get('/job-listing', 'jobListing')->name('job-listing');
     Route::get('/add-job', 'addjobform');
@@ -53,10 +53,10 @@ Route::controller(JobPostingController::class)->group(function () {
     Route::get('/job-status/{jobid}', 'jobstatus');
     Route::get('/delete-job/{jobid}', 'jobdelete');
 });
-Route::controller(DashboardControllers::class)->group(function () {
+Route::middleware(['web', 'auth'])->controller(DashboardControllers::class)->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard');
 });
-Route::controller(CompanyController::class)->group(function () {
+Route::middleware(['web', 'auth'])->controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'company');
     Route::post('/add-company', 'addcompanyform');
     Route::post('/edit-company', 'updatecompany');
@@ -71,7 +71,7 @@ Route::controller(ClientMainController::class)->group(function () {
  
 });
 
-Route::controller(ApplicantController::class)->group(function () {
+Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {
     Route::get('/applicants', 'applicants');
     Route::get('/selectapplicants/{jobid}', 'selectapplicant');
     Route::post('/updateapplicantstatus', 'updateapplicantstatus');
@@ -80,7 +80,7 @@ Route::controller(ApplicantController::class)->group(function () {
 
 // ✅ Public Routes (Login & Logout)
 Route::controller(LoginMainController::class)->group(function () {
-    Route::get('/', 'welcome'); // 🔹 Add 'name' to login for proper redirect
+    Route::get('/', 'welcome')->name('login'); // 🔹 Add 'name' to login for proper redirect
     Route::post('/logins', 'login');
     Route::get('/logout', 'logout')->name('logout'); // 🔹 Use POST method for security
 });
