@@ -6,6 +6,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Middleware\LoginMainController;
 use App\Http\Middleware\TokenizedCompany;
+
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -20,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
        
         $middleware->statefulApi();
+        $middleware->validateCsrfTokens(except: [
+            '/login',
+            '/logout',
+        ]);
     })
     
     ->withExceptions(function (Exceptions $exceptions) {
