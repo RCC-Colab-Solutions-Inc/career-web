@@ -17,7 +17,7 @@ class ApiAuthMiddleware
     {
         $apiKey = $request->header('X-API-KEY');
 
-        if (!$apiKey || $apiKey !== '1234567890') {
+        if (!$apiKey || $apiKey !== env('API_KEY_FRONT')) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized, Invalid API Key',
