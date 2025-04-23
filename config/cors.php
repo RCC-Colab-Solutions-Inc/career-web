@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('SANCTUM_STATEFUL_DOMAINS'),'http://localhost:5174'],
+    'allowed_origins' => [env('SANCTUM_STATEFUL_DOMAINS'),'http://localhost:5174','https://test.rcccolabsolutions.com'],
 
     'allowed_origins_patterns' => [],
 
