@@ -263,6 +263,7 @@ class ApplicantFrontEndClient extends Controller
                     'date_applied' => $applicant->created_at->format('Y-m-d'),
                 ],
                 'statuses' => $applicantstatuses,
+                'remarks' => $applicant->remarks,
             ]);
         }
 
