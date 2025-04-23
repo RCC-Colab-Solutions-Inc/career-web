@@ -171,11 +171,7 @@
                                 </div>
 
                                 <div class="flex justify-between items-center">
-                                    <a href="selectapplicants/{{ $job->id }}">
-                                        <div class="text-sm font-medium text-blue-600 dark:text-blue-400 transition-colors duration-300">
-                                        {{ $job->applicants_count }} Applicants
-                                        </div>
-                                    </a>
+                                    
                                     
                                     <div class="relative" x-data="jobActions">
                                         <!-- Copy Button -->
