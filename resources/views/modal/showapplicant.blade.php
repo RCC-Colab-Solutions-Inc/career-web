@@ -39,7 +39,7 @@
     class="fixed inset-0 z-50 overflow-y-auto"
     style="display: none;"
 >
-        <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="flex items-center justify-center min-h-screen min-w-screen px-4">
             <!-- Overlay -->
             <div 
                 x-show="isOpen" 
