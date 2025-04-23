@@ -28,8 +28,8 @@ class ClientMainController extends Controller
         }
 
         $company = CompanyDatabase::find($companyId);
-        $cc = EmailAdditional::where('company', $companyId)->where('email_type', 'cc')->first();
-        $bcc = EmailAdditional::where('company', $companyId)->where('email_type', 'bcc')->first();
+        // $cc = EmailAdditional::where('company', $companyId)->where('email_type', 'cc')->first();
+        // $bcc = EmailAdditional::where('company', $companyId)->where('email_type', 'bcc')->first();
        
         if (!$company) {
             return response()->json([
@@ -49,8 +49,7 @@ class ClientMainController extends Controller
                 'company_phone' => $company->representative_contact_number,
                 'status' => $company->status,
                 'company_description' => $company->description,
-                "cc" => $cc->email,
-                "bcc" => $bcc->email,
+               
             ],
         ]);
 
