@@ -214,4 +214,23 @@
             });
         });
     });
+
+    function loadApplicantResume(applicantId) {
+    fetch(`/applicant-resume/${applicantId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+            
+            // Dispatch an event with the resume data
+            window.dispatchEvent(new CustomEvent('resume-data-loaded', {
+                detail: data
+            }));
+        })
+        .catch(error => {
+            console.error('Error fetching applicant resume:', error);
+        });
+}
 </script>

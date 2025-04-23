@@ -1,18 +1,23 @@
 <div 
-        x-data="{ 
-            isOpen: false, 
-            applicantId: null, 
-            applicantName: '',
-            applicantEmail: '',
-            applicantJobTitle: '',
-            applicantDepartment: '',
-            applicantStatus: '',
-            applicantDate: '',
-            applicantTime: '',
-            statusHistory: []
-        }"
-        x-show="isOpen"
-        @open-applicant-modal.window="
+    x-data="{ 
+        isOpen: false, 
+        applicantId: null, 
+        applicantName: '',
+        applicantEmail: '',
+        applicantJobTitle: '',
+        applicantDepartment: '',
+        applicantStatus: '',
+        applicantDate: '',
+        applicantTime: '',
+        statusHistory: [],
+        resumeInfo: {
+            has_resume: false,
+            resume_path: '',
+            resume_type: ''
+        }
+    }"
+    x-show="isOpen"
+    @open-applicant-modal.window="
         isOpen = true; 
         applicantId = $event.detail.id;
         applicantName = $event.detail.name;
@@ -23,13 +28,17 @@
         applicantDate = $event.detail.date;
         applicantTime = $event.detail.time;
         
-        // Load timeline data AFTER setting the applicantId
+        // Load timeline data
         loadApplicantTimeline(applicantId);
+        
+        // Load resume data
+        loadApplicantResume(applicantId);
     "
-        @keydown.escape.window="isOpen = false"
-        class="fixed inset-0 z-50 overflow-y-auto"
-        style="display: none;"
-    >
+    @resume-data-loaded.window="resumeInfo = $event.detail"
+    @keydown.escape.window="isOpen = false"
+    class="fixed inset-0 z-50 overflow-y-auto"
+    style="display: none;"
+>
         <div class="flex items-center justify-center min-h-screen px-4">
             <!-- Overlay -->
             <div 
@@ -158,17 +167,31 @@
                         <div class="py-4">
                             <!-- Resume Tab -->
                             <div x-show="activeTab === 'resume'" class="space-y-4">
-                                <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                                    Resume content would be loaded here.
-                                </p>
-                                <div class="flex space-x-3">
-                                    <button class="px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-md text-sm font-medium transition-colors duration-200">
-                                        View Resume
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium transition-colors duration-200">
-                                        Download PDF
-                                    </button>
-                                </div>
+                                <template x-if="resumeInfo.has_resume">
+                                    <div class="w-full">
+                                        <!-- PDF Viewer Container -->
+                                        <div class="w-full rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700 shadow-md" style="height: 500px;">
+                                            <!-- Embed PDF directly using an iframe -->
+                                            <iframe
+                                                :src="'/view-resume/' + applicantId"
+                                                class="w-full h-full"
+                                                style="border: none;"
+                                                title="Resume Preview"
+                                            ></iframe>
+                                        </div>
+                                    </div>
+                                </template>
+                                
+                                <template x-if="!resumeInfo.has_resume">
+                                    <div class="flex flex-col items-center justify-center py-8">
+                                        <div class="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-gray-600 dark:text-gray-400 text-center">No resume available for this applicant.</p>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>

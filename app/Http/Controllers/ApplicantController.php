@@ -71,6 +71,95 @@ class ApplicantController extends Controller
         return view('selectapplicants', compact('applicants'));
     }
 
+    public function getApplicantResume($applicantId)
+{
+    // Validate the applicant exists
+    $applicant = ApplicantsApplication::find($applicantId);
+    
+    if (!$applicant) {
+        return response()->json(['error' => 'Applicant not found'], 404);
+    }
+    
+    // Using the correct field name 'resume' instead of 'resume_path'
+    $resumeInfo = [
+        'has_resume' => !empty($applicant->resume),
+        'resume_path' => $applicant->resume,
+        'resume_type' => pathinfo($applicant->resume, PATHINFO_EXTENSION) ?? 'pdf'
+    ];
+    
+    return response()->json($resumeInfo);
+}
+
+public function viewResume($applicantId)
+{
+    $applicant = ApplicantsApplication::find($applicantId);
+    
+    if (!$applicant || empty($applicant->resume)) {
+        return abort(404);
+    }
+    
+    // Point to the public/uploads directory where your files are located
+    $path = public_path('uploads/' . $applicant->resume);
+    
+    if (!file_exists($path)) {
+        // If the exact filename doesn't exist, we can try to find it
+        $files = glob(public_path('uploads/*_Resume_*.pdf'));
+        $found = false;
+        
+        foreach ($files as $file) {
+            if (basename($file) == $applicant->resume) {
+                $path = $file;
+                $found = true;
+                break;
+            }
+        }
+        
+        if (!$found) {
+            return abort(404);
+        }
+    }
+    
+    // Return file with headers optimized for embedding
+    return response()->file($path, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
+        'X-Frame-Options' => 'SAMEORIGIN'
+    ]);
+}
+
+public function downloadResume($applicantId)
+{
+    $applicant = ApplicantsApplication::find($applicantId);
+    
+    if (!$applicant || empty($applicant->resume)) {
+        return abort(404);
+    }
+    
+    // Point to the public/uploads directory where your files are located
+    $path = public_path('uploads/' . $applicant->resume);
+    
+    if (!file_exists($path)) {
+        // If the exact filename doesn't exist, we can try a fuzzy match
+        $files = glob(public_path('uploads/*_Resume_*.pdf'));
+        $found = false;
+        
+        foreach ($files as $file) {
+            if (basename($file) == $applicant->resume) {
+                $path = $file;
+                $found = true;
+                break;
+            }
+        }
+        
+        if (!$found) {
+            return abort(404);
+        }
+    }
+    
+    // Return file as download
+    return response()->download($path, $applicant->resume);
+}
+
     public function getApplicantTimeline($applicantId)
     {
         // Validate the applicant exists
