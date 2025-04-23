@@ -10,13 +10,30 @@ use Devrabiul\ToastMagic\Facades\ToastMagic;
 
 class CompanyController extends Controller
 {
-    public function company()
-    {
-        // Select all companies and paginate with 10 records per page
-        $companies = CompanyDatabase::orderBy('created_at', 'desc')->paginate(10);
+    public function company(Request $request)
+{
+    // Start with the base query
+    $query = CompanyDatabase::query();
     
-        return view('company', compact('companies'));
+    // Apply search filter if provided
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('company_name', 'like', "%{$search}%")
+              ->orWhere('representative_name', 'like', "%{$search}%")
+              ->orWhere('representative_email', 'like', "%{$search}%")
+              ->orWhere('representative_contact_number', 'like', "%{$search}%");
+        });
     }
+    
+    // Get the results with pagination
+    $companies = $query->orderBy('created_at', 'desc')->paginate(10);
+    
+    // Append query parameters to pagination links
+    $companies->appends($request->all());
+    
+    return view('company', compact('companies'));
+}
 
     public function addCompanyForm(Request $request)
     {

@@ -14,16 +14,36 @@ class JobPostingController extends Controller
 {
     
 
-    public function jobListing()
-    {
-        $jobs = JobPosting::withCount('applicants')
-            ->orderBy('created_at', 'desc')
-            ->paginate(6);
-        
-
-            
-        return view('job-listing', compact('jobs'));
+    public function jobListing(Request $request)
+{
+    $query = JobPosting::withCount('applicants');
+    
+    // Search by job title or description
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('jobtitle', 'like', "%{$search}%")
+              ->orWhere('jobdescription', 'like', "%{$search}%");
+        });
     }
+    
+    // Filter by location
+    if ($request->has('location') && !empty($request->location) && $request->location != 'All Locations') {
+        $query->where('workplace', $request->location);
+    }
+    
+    // Filter by status
+    if ($request->has('status') && !empty($request->status) && $request->status != 'All Statuses') {
+        $query->where('jobstatus', strtolower($request->status));
+    }
+    
+    $jobs = $query->orderBy('created_at', 'desc')->paginate(6);
+    
+    // Append query parameters to pagination links
+    $jobs->appends($request->all());
+    
+    return view('job-listing', compact('jobs'));
+}
 
     public function addJobForm()
     {

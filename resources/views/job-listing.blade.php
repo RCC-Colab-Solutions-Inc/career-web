@@ -60,51 +60,60 @@
             </div>
             
             <!-- Filters Section -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    
-                    <!-- Search Box -->
-                    <div class="relative flex-grow w-full">
-                        <input 
-                            type="text" 
-                            placeholder="Search jobs..." 
-                            class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                        >
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+            <form action="{{ route('job-listing') }}" method="GET">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                        
+                        <!-- Search Box -->
+                        <div class="relative flex-grow w-full">
+                            <input 
+                                type="text" 
+                                name="search"
+                                placeholder="Search jobs..." 
+                                value="{{ request('search') }}"
+                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                            >
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Department Filter -->
-                   
                     
-                    <!-- Location Filter -->
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Location</label>
-                        <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                            <option>All Locations</option>
-                            <option>Remote</option>
-                            <option>On-site</option>
-                            <option>Hybrid</option>
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Location Filter -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Location</label>
+                            <select name="location" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
+                                <option>All Locations</option>
+                                <option value="Remote" {{ request('location') == 'Remote' ? 'selected' : '' }}>Remote</option>
+                                <option value="On-site" {{ request('location') == 'On-site' ? 'selected' : '' }}>On-site</option>
+                                <option value="Hybrid" {{ request('location') == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Status Filter -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Status</label>
+                            <select name="status" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
+                                <option>All Statuses</option>
+                                <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
+                                <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <!-- Status Filter -->
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Status</label>
-                        <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                            <option>All Statuses</option>
-                            <option>Active</option>
-                            <option>Reviewing</option>
-                            <option>Closed</option>
-                        </select>
+                    <!-- Add both Clear Filters and Apply Filters buttons -->
+                    <div class="mt-4 flex justify-end space-x-3">
+                        <a href="{{ route('job-listing') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Clear Filters
+                        </a>
                     </div>
                 </div>
-            </div>
+            </form>
             
             <!-- Job Cards Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -305,25 +314,48 @@
             </div>
         @endforeach
     @else
-        <!-- Empty State - No Jobs Found -->
-        <div class="col-span-1 lg:col-span-2">
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-8 text-center">
-                <div class="flex flex-col items-center justify-center">
-                    <!-- Empty illustration -->
-                    <div class="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <!-- Empty State -->
+                <div class="col-span-1 lg:col-span-2">
+                    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-8 text-center">
+                        <div class="flex flex-col items-center justify-center">
+                            <!-- Empty illustration -->
+                            <div class="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                
+                @if(request('search') || request('location') != 'All Locations' || request('status') != 'All Statuses')
+                    <!-- No Results From Filter -->
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Matching Jobs</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
+                        No jobs match your current filters. Try adjusting your search criteria.
+                    </p>
+                    <a href="{{ route('job-listing') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                    </div>
-                    
+                        Clear Filters
+                    </a>
+                @else
+                    <!-- No Jobs At All -->
                     <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Job Listings Yet</h3>
                     <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
                         You haven't added any job opportunities to your listing. Click the button "Add New Job" to create your first job posting.
                     </p>
-                </div>
+                    <a href="/add-job" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add New Job
+                    </a>
+                @endif
             </div>
         </div>
-    @endif
+    </div>
+@endif
+
+
 </div>
 
 <!-- Pagination Links -->
@@ -500,5 +532,23 @@
                         }
                     }
                 }));
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-submit form when select filters change
+                const locationFilter = document.querySelector('select[name="location"]');
+                const statusFilter = document.querySelector('select[name="status"]');
+                
+                if (locationFilter) {
+                    locationFilter.addEventListener('change', function() {
+                        this.closest('form').submit();
+                    });
+                }
+                
+                if (statusFilter) {
+                    statusFilter.addEventListener('change', function() {
+                        this.closest('form').submit();
+                    });
+                }
             });
             </script>

@@ -13,26 +13,51 @@ use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Support\Facades\Validator;
 class ApplicantController extends Controller
 {
-    public function applicants()
-    {
-        //get all applicants and concat the jobposting.id to the applicants_application.priority_job_id and paginate 10
-        $applicants = ApplicantsApplication::join('job_postings', 'applicants_applications.priority_job_id', '=', 'job_postings.id')
-        
+    public function applicants(Request $request)
+{
+    // Start with the base query
+    $query = ApplicantsApplication::join('job_postings', 'applicants_applications.priority_job_id', '=', 'job_postings.id')
         ->select(
-            'applicants_applications.id as applicantid',
+            'applicants_applications.id',
             'applicants_applications.*',
-            'applicants_applications.applicant_status as ap_status',
+            'applicants_applications.applicant_status',
             'job_postings.jobtitle',
-            'job_postings.department',
-            
-        )
-        ->paginate(10);
-
-
-      
-            
-        return view('applicants', compact('applicants'));
+            'job_postings.department'
+        );
+    
+    // Apply search filter if provided
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('applicants_applications.firstname', 'like', "%{$search}%")
+              ->orWhere('applicants_applications.lastname', 'like', "%{$search}%")
+              ->orWhere('applicants_applications.email', 'like', "%{$search}%");
+        });
     }
+    
+    // Filter by job position
+    if ($request->has('position') && !empty($request->position)) {
+        $query->where('job_postings.jobtitle', $request->position);
+    }
+    
+    // Filter by applicant status
+    if ($request->has('status') && !empty($request->status)) {
+        $query->where('applicants_applications.applicant_status', $request->status);
+    }
+    
+    // Filter by company (assuming job_postings has a companyid column)
+    if ($request->has('company') && !empty($request->company)) {
+        $query->where('job_postings.companyid', $request->company);
+    }
+    
+    // Get the results with pagination
+    $applicants = $query->paginate(10);
+    
+    // Append query parameters to pagination links
+    $applicants->appends($request->all());
+    
+    return view('applicants', compact('applicants'));
+}
 
     public function selectapplicant($jobid)
     {

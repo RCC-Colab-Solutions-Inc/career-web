@@ -19,63 +19,75 @@
             </div>
             
             <!-- Action Buttons and Filters Section -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    <!-- Search Box -->
-                    <div class="relative flex-grow w-full">
-                        <input 
-                            type="text" 
-                            placeholder="Search applicants..." 
-                            class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                        >
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+            <form action="{{ route('applicants') }}" method="GET">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 mb-8 transition-colors duration-300">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                        <!-- Search Box -->
+                        <div class="relative flex-grow w-full">
+                            <input 
+                                type="text" 
+                                name="search"
+                                placeholder="Search applicants..." 
+                                value="{{ request('search') }}"
+                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 pl-10 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                            >
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-    
-        <div class="grid grid-cols-3 w-full gap-4">
-        <!-- Job Position Filter -->
-        <div>
-            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Position</label>
-            <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                <option>All Positions</option>
-                <option>Senior .NET Developer</option>
-                <option>UX/UI Designer</option>
-                <option>IT Support Specialist</option>
-                <option>Backend Developer</option>
-            </select>
-        </div>
-        
-        <!-- Status Filter -->
-        <div>
-            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Status</label>
-            <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                <option>All Statuses</option>
-                <option>New</option>
-                <option>Shortlisted</option>
-                <option>For Interview</option>
-                <option>For Assessment</option>
-                <option>Waiting for Feedback</option>
-                <option>Waiting for Job Offer</option>
-                <option>Hired</option>
-                <option>Rejected</option>
-                <option>Decline</option>
-            </select>
-        </div>
-        
-                    <!-- Date Filter -->
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company</label>
-                        <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                            <option>All</option>
-                           
-                        </select>
+
+                    <div class="grid grid-cols-3 w-full gap-4">
+                        <!-- Job Position Filter -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Position</label>
+                            <select name="position" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
+                                <option value="">All Positions</option>
+                                <option value="Senior .NET Developer" {{ request('position') == 'Senior .NET Developer' ? 'selected' : '' }}>Senior .NET Developer</option>
+                                <option value="UX/UI Designer" {{ request('position') == 'UX/UI Designer' ? 'selected' : '' }}>UX/UI Designer</option>
+                                <option value="IT Support Specialist" {{ request('position') == 'IT Support Specialist' ? 'selected' : '' }}>IT Support Specialist</option>
+                                <option value="Backend Developer" {{ request('position') == 'Backend Developer' ? 'selected' : '' }}>Backend Developer</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Status Filter -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Status</label>
+                            <select name="status" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
+                                <option value="">All Statuses</option>
+                                <option value="New" {{ request('status') == 'New' ? 'selected' : '' }}>New</option>
+                                <option value="Shortlisted" {{ request('status') == 'Shortlisted' ? 'selected' : '' }}>Shortlisted</option>
+                                <option value="For Interview" {{ request('status') == 'For Interview' ? 'selected' : '' }}>For Interview</option>
+                                <option value="For Assessment" {{ request('status') == 'For Assessment' ? 'selected' : '' }}>For Assessment</option>
+                                <option value="Waiting for Feedback" {{ request('status') == 'Waiting for Feedback' ? 'selected' : '' }}>Waiting for Feedback</option>
+                                <option value="Waiting for Job Offer" {{ request('status') == 'Waiting for Job Offer' ? 'selected' : '' }}>Waiting for Job Offer</option>
+                                <option value="Hired" {{ request('status') == 'Hired' ? 'selected' : '' }}>Hired</option>
+                                <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option value="Decline" {{ request('status') == 'Decline' ? 'selected' : '' }}>Decline</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Company Filter -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company</label>
+                            <select name="company" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Add both Clear Filters and Apply Filters buttons -->
+                    <div class="mt-4 flex justify-end space-x-3">
+                        <a href="{{ route('applicants') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Clear Filters
+                        </a>
                     </div>
                 </div>
-            </div>
+            </form>
             
            <!-- Applicants List Table -->
             <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden transition-colors duration-300 mb-8">
@@ -270,29 +282,46 @@
                         </table>
                     </div>
                 @else
-                    <!-- Empty State - No Applicants Found -->
-                    <div class="p-8 text-center">
-                        <div class="flex flex-col items-center justify-center">
-                            <!-- Empty illustration -->
-                            <div class="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                @if(count($applicants) == 0)
+                        <!-- Empty State - No Applicants Found -->
+                        <div class="p-8 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <!-- Empty illustration -->
+                                <div class="w-24 h-24 mb-6 flex items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                
+                                @if(request('search') || request('position') || request('status') || request('company'))
+                                    <!-- No Results From Filter -->
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Matching Applicants</h3>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
+                                        No applicants match your current filters. Try adjusting your search criteria.
+                                    </p>
+                                    <a href="{{ route('applicants') }}" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Clear Filters
+                                    </a>
+                                @else
+                                    <!-- No Applicants At All -->
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Applicants Yet</h3>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
+                                        There are no applicants in the system at the moment. Applicants will appear here once they apply for your job positions.
+                                    </p>
+                                    
+                                    <a href="/job-listing" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        View Job Listings
+                                    </a>
+                                @endif
                             </div>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">No Applicants Yet</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md mb-6">
-                                There are no applicants in the system at the moment. Applicants will appear here once they apply for your job positions.
-                            </p>
-                            
-                            <a href="/job-listing" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg flex items-center justify-center transition-colors duration-200 shadow-md">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                View Job Listings
-                            </a>
                         </div>
-                    </div>
+                    @endif
                 @endif
             </div>
 
@@ -318,13 +347,13 @@
                                 &laquo;
                             </span>
                         @else
-                            <a href="{{ $applicants->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                            <a href="{{ $applicants->appends(request()->except('page'))->previousPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
                                 &laquo;
                             </a>
                         @endif
 
                         <!-- Page Numbers -->
-                        @foreach ($applicants->getUrlRange(1, $applicants->lastPage()) as $page => $url)
+                        @foreach ($applicants->appends(request()->except('page'))->getUrlRange(1, $applicants->lastPage()) as $page => $url)
                             @if ($page == $applicants->currentPage())
                                 <span class="px-3 py-2 rounded-lg bg-blue-600 dark:bg-blue-700 text-white">{{ $page }}</span>
                             @else
@@ -334,7 +363,7 @@
 
                         <!-- Next Page -->
                         @if ($applicants->hasMorePages())
-                            <a href="{{ $applicants->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
+                            <a href="{{ $applicants->appends(request()->except('page'))->nextPageUrl() }}" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors duration-200">
                                 &raquo;
                             </a>
                         @else
@@ -356,4 +385,21 @@
 </div>
 @include('scripts.applicantscript')
 @include('includes.footer')
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit form when select filters change
+    const positionFilter = document.querySelector('select[name="position"]');
+    const statusFilter = document.querySelector('select[name="status"]');
+    const companyFilter = document.querySelector('select[name="company"]');
+    
+    [positionFilter, statusFilter, companyFilter].forEach(filter => {
+        if (filter) {
+            filter.addEventListener('change', function() {
+                this.closest('form').submit();
+            });
+        }
+    });
+});
+</script>
 
