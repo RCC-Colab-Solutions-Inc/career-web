@@ -82,20 +82,6 @@
                             >
                         </div>
                         
-                        <!-- Phone Number Field -->
-                        <div class="mb-4">
-                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Phone Number
-                            </label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone" 
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                placeholder="+1 (XXX) XXX-XXXX"
-                            >
-                        </div>
-                        
                         <!-- Password Field -->
                         <div class="mb-4">
                             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
@@ -109,42 +95,6 @@
                                 placeholder="Enter password"
                                 required
                             >
-                        </div>
-                        
-                        <!-- Role Selection -->
-                        <div class="mb-4">
-                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Role
-                            </label>
-                            <select 
-                                id="role" 
-                                name="role" 
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                required
-                            >
-                                <option value="" disabled selected>Select a role</option>
-                                <option value="admin">Administrator</option>
-                                <option value="manager">Manager</option>
-                                <option value="staff">Staff</option>
-                                <option value="user">Regular User</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Status Selection -->
-                        <div class="mb-4">
-                            <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Status
-                            </label>
-                            <select 
-                                id="status" 
-                                name="status" 
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                required
-                            >
-                                <option value="active" selected>Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="pending">Pending</option>
-                            </select>
                         </div>
                     </form>
                 </div>
@@ -174,9 +124,6 @@
                     id: null,
                     name: '',
                     email: '',
-                    phone: '',
-                    role: '',
-                    status: ''
                 },
                 init() {
                     window.addEventListener('open-modal', (e) => {
@@ -258,57 +205,6 @@
                                 class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
                                 required
                             >
-                        </div>
-                        
-                        <!-- Phone Number Field -->
-                        <div class="mb-4">
-                            <label for="edit_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Phone Number
-                            </label>
-                            <input 
-                                type="tel" 
-                                id="edit_phone" 
-                                name="phone" 
-                                x-model="user.phone"
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                            >
-                        </div>
-                        
-                        <!-- Role Selection -->
-                        <div class="mb-4">
-                            <label for="edit_role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Role
-                            </label>
-                            <select 
-                                id="edit_role" 
-                                name="role" 
-                                x-model="user.role"
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                required
-                            >
-                                <option value="Administrator">Administrator</option>
-                                <option value="Manager">Manager</option>
-                                <option value="Staff">Staff</option>
-                                <option value="Regular User">Regular User</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Status Selection -->
-                        <div class="mb-4">
-                            <label for="edit_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
-                                Status
-                            </label>
-                            <select 
-                                id="edit_status" 
-                                name="status" 
-                                x-model="user.status"
-                                class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                required
-                            >
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                                <option value="Pending">Pending</option>
-                            </select>
                         </div>
                     </form>
                 </div>

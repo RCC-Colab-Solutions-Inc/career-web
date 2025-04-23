@@ -37,6 +37,19 @@
                                 </svg>
                             </div>
                         </div>
+                        
+                        <!-- Clear/Apply Filter Buttons -->
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ route('applicants') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Clear
+                            </a>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200">
+                                Search
+                            </button>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-3 w-full gap-4">
@@ -76,15 +89,6 @@
                                 <option value="">All</option>
                             </select>
                         </div>
-                    </div>
-                    <!-- Add both Clear Filters and Apply Filters buttons -->
-                    <div class="mt-4 flex justify-end space-x-3">
-                        <a href="{{ route('applicants') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            Clear Filters
-                        </a>
                     </div>
                 </div>
             </form>
@@ -388,7 +392,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-submit form when select filters change
     const positionFilter = document.querySelector('select[name="position"]');
     const statusFilter = document.querySelector('select[name="status"]');
     const companyFilter = document.querySelector('select[name="company"]');
@@ -399,6 +402,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.closest('form').submit();
             });
         }
+    });
+});
+
+function loadApplicantTimeline(applicantId) {
+    fetch(`/applicant-timeline/${applicantId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+            
+            const timelineContainer = document.getElementById('applicant-timeline');
+            
+            timelineContainer.innerHTML = '';
+            
+            if (data.statusHistory.length === 0) {
+                timelineContainer.innerHTML = `
+                    <div class="flex justify-center items-center p-6">
+                        <p class="text-gray-500 dark:text-gray-400">No status history available</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let timelineHTML = `<div class="space-y-4 p-4">`;
+            
+            data.statusHistory.forEach((status, index) => {
+                const date = new Date(status.created_at);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                const formattedTime = date.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                let statusColorClass = 'bg-blue-500';
+                if (status.applicant_status === 'Hired') {
+                    statusColorClass = 'bg-green-500';
+                } else if (status.applicant_status === 'Rejected') {
+                    statusColorClass = 'bg-red-500';
+                } else if (status.applicant_status === 'For Interview' || status.applicant_status === 'For Assessment') {
+                    statusColorClass = 'bg-yellow-500';
+                }
+                
+                timelineHTML += `
+                    <div class="flex">
+                        <div class="flex flex-col items-center">
+                            <div class="${statusColorClass} w-4 h-4 rounded-full"></div>
+                            ${index !== data.statusHistory.length - 1 ? 
+                                `<div class="h-full border-l-2 border-gray-300 dark:border-gray-700 my-1"></div>` : ''}
+                        </div>
+                        <div class="ml-4 pb-5">
+                            <div class="flex items-center">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">${status.applicant_status}</h3>
+                                <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">${formattedDate} at ${formattedTime}</span>
+                            </div>
+                            ${status.remarks ? `<p class="text-gray-700 dark:text-gray-300 mt-1">${status.remarks}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            timelineHTML += `</div>`;
+            timelineContainer.innerHTML = timelineHTML;
+        })
+        .catch(error => {
+            console.error('Error fetching applicant timeline:', error);
+        });
+}
+
+document.querySelectorAll('.applicant-row').forEach(row => {
+    row.addEventListener('click', function() {
+        const applicantId = this.getAttribute('data-id');
+        loadApplicantTimeline(applicantId);
     });
 });
 </script>

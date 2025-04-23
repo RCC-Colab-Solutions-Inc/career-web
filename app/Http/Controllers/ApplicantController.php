@@ -70,6 +70,27 @@ class ApplicantController extends Controller
             
         return view('selectapplicants', compact('applicants'));
     }
+
+    public function getApplicantTimeline($applicantId)
+    {
+        // Validate the applicant exists
+        $applicant = ApplicantsApplication::find($applicantId);
+        
+        if (!$applicant) {
+            return response()->json(['error' => 'Applicant not found'], 404);
+        }
+        
+        // Get all status changes for this applicant, ordered by date
+        $statusHistory = ApplicantStatus::where('applicant_id', $applicantId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return response()->json([
+            'applicant' => $applicant,
+            'statusHistory' => $statusHistory
+        ]);
+    }
+
     public function updateapplicantstatus(Request $request)
     {
         $mail = new MailSettingController();

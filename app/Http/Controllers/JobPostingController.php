@@ -118,12 +118,24 @@ class JobPostingController extends Controller
         return $jobcode;
     }
 
-
-
-    public function user()
+    public function user(Request $request)
     {
-
-        return view('users');
+        $query = \App\Models\User::query();
+        
+        // Search by name or email
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+        
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
+        
+        $users->appends($request->all());
+        
+        return view('users', compact('users'));
     }
 
     public function applicantlogin()

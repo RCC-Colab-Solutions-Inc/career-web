@@ -13,23 +13,19 @@
         }"
         x-show="isOpen"
         @open-applicant-modal.window="
-            isOpen = true; 
-            applicantId = $event.detail.id;
-            applicantName = $event.detail.name;
-            applicantEmail = $event.detail.email;
-            applicantJobTitle = $event.detail.jobtitle;
-            applicantDepartment = $event.detail.department;
-            applicantStatus = $event.detail.status;
-            applicantDate = $event.detail.date;
-            applicantTime = $event.detail.time;
-            // In a real implementation, you would fetch this data via AJAX
-            statusHistory = [
-                {status: 'New', date: '2 weeks ago', notes: 'Initial application received'},
-                {status: 'Shortlisted', date: '10 days ago', notes: 'CV meets requirements'},
-                {status: 'For Interview', date: '1 week ago', notes: 'Scheduled for interview on Friday'},
-                {status: applicantStatus, date: '2 days ago', notes: ''}
-            ];
-        "
+        isOpen = true; 
+        applicantId = $event.detail.id;
+        applicantName = $event.detail.name;
+        applicantEmail = $event.detail.email;
+        applicantJobTitle = $event.detail.jobtitle;
+        applicantDepartment = $event.detail.department;
+        applicantStatus = $event.detail.status;
+        applicantDate = $event.detail.date;
+        applicantTime = $event.detail.time;
+        
+        // Load timeline data AFTER setting the applicantId
+        loadApplicantTimeline(applicantId);
+    "
         @keydown.escape.window="isOpen = false"
         class="fixed inset-0 z-50 overflow-y-auto"
         style="display: none;"
@@ -128,31 +124,16 @@
                         
                         <!-- Right Column - Status Timeline -->
                         <div class="flex-1">
-                            <h4 class="text-lg font-medium text-gray-900 dark:text-white transition-colors duration-300 mb-4">Application Timeline</h4>
-                            
-                            <div class="relative pl-8 space-y-6 before:absolute before:top-0 before:bottom-0 before:left-[11px] before:w-0.5 before:bg-gray-200 dark:before:bg-slate-600 transition-colors duration-300">
-                                <template x-for="(item, index) in statusHistory" :key="index">
-                                    <div class="relative">
-                                        <!-- Status dot -->
-                                        <div class="absolute top-1 left-[-30px] h-5 w-5 rounded-full border-2 border-white dark:border-slate-800 transition-colors duration-300"
-                                            :class="{
-                                                'bg-blue-500': item.status === 'New',
-                                                'bg-yellow-500': ['Shortlisted', 'For Interview', 'For Assessment', 'Waiting for Feedback', 'Waiting for Job Offer'].includes(item.status),
-                                                'bg-green-500': item.status === 'Hired',
-                                                'bg-red-500': ['Rejected', 'Decline'].includes(item.status)
-                                            }">
-                                        </div>
-                                        
-                                        <!-- Status content -->
-                                        <div>
-                                            <div class="flex justify-between items-center">
-                                                <h5 class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300" x-text="item.status"></h5>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300" x-text="item.date"></span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300 mt-1" x-text="item.notes"></p>
-                                        </div>
-                                    </div>
-                                </template>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Application Timeline</h3>
+                            <div id="applicant-timeline" class="bg-white dark:bg-slate-800 rounded-lg shadow border border-gray-200 dark:border-slate-700">
+                                
+                                <div class="flex justify-center items-center p-6">
+                                    <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="ml-2 text-gray-500">Loading timeline...</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,22 +150,6 @@
                                     class="py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
                                 >
                                     Resume
-                                </button>
-                                <button 
-                                    @click="activeTab = 'notes'" 
-                                    :class="{'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400': activeTab === 'notes',
-                                            'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600': activeTab !== 'notes'}"
-                                    class="py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
-                                >
-                                    Notes
-                                </button>
-                                <button 
-                                    @click="activeTab = 'assessments'" 
-                                    :class="{'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400': activeTab === 'assessments',
-                                            'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600': activeTab !== 'assessments'}"
-                                    class="py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
-                                >
-                                    Assessments
                                 </button>
                             </nav>
                         </div>
@@ -204,44 +169,6 @@
                                         Download PDF
                                     </button>
                                 </div>
-                            </div>
-                            
-                            <!-- Notes Tab -->
-                            <div x-show="activeTab === 'notes'" class="space-y-4" style="display: none;">
-                                <div class="space-y-4">
-                                    <!-- Note Form -->
-                                    <div class="mb-4">
-                                        <textarea placeholder="Add a note about this applicant..." class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg p-3 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" rows="3"></textarea>
-                                        <div class="flex justify-end mt-2">
-                                            <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-                                                Add Note
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Notes List (Sample Only) -->
-                                    <div class="space-y-4">
-                                        <div class="bg-gray-50 dark:bg-slate-700/50 p-3 rounded-lg transition-colors duration-300">
-                                            <div class="flex justify-between items-center mb-2">
-                                                <span class="font-medium text-gray-900 dark:text-white transition-colors duration-300">John Doe</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">3 days ago</span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                                                Excellent technical skills. Phone screening went well. Recommend for an in-person interview.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Assessments Tab -->
-                            <div x-show="activeTab === 'assessments'" class="space-y-4" style="display: none;">
-                                <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                                    No assessment data available for this applicant yet.
-                                </p>
-                                <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-                                    Send Assessment
-                                </button>
                             </div>
                         </div>
                     </div>

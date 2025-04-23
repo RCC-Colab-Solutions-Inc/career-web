@@ -40,7 +40,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/add-job', 'addjobform');
     Route::post('/addjob', 'addjob');
     
-    Route::get('/users', 'user');
+    Route::get('/users', [JobPostingController::class, 'user'])->name('users');
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
     Route::get('/profile', 'myprofile');
@@ -73,6 +73,7 @@ Route::controller(ClientMainController::class)->group(function () {
 
 Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->group(function () {
     Route::get('/applicants', [ApplicantController::class, 'applicants'])->name('applicants');
+    Route::get('/applicant-timeline/{applicantId}', [ApplicantController::class, 'getApplicantTimeline']);
     Route::get('/selectapplicants/{jobid}', 'selectapplicant');
     Route::post('/updateapplicantstatus', 'updateapplicantstatus');
     Route::post('/forwardtoclient', 'forwardtoclient');
