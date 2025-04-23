@@ -35,25 +35,20 @@ class ApplicantController extends Controller
         });
     }
     
-    // Filter by job position
     if ($request->has('position') && !empty($request->position)) {
         $query->where('job_postings.jobtitle', $request->position);
     }
     
-    // Filter by applicant status
     if ($request->has('status') && !empty($request->status)) {
         $query->where('applicants_applications.applicant_status', $request->status);
     }
     
-    // Filter by company (assuming job_postings has a companyid column)
     if ($request->has('company') && !empty($request->company)) {
         $query->where('job_postings.companyid', $request->company);
     }
     
-    // Get the results with pagination
     $applicants = $query->paginate(10);
     
-    // Append query parameters to pagination links
     $applicants->appends($request->all());
     
     return view('applicants', compact('applicants'));
@@ -61,7 +56,6 @@ class ApplicantController extends Controller
 
     public function selectapplicant($jobid)
     {
-        //get all applicants and concat the jobposting.id to the applicants_application.priority_job_id and paginate 10
         $applicants = ApplicantsApplication::join('job_postings', 'applicants_applications.priority_job_id', '=', 'job_postings.id')
         ->select('applicants_applications.*', 'job_postings.jobtitle', 'job_postings.department')
         ->where('job_postings.id', $jobid)
@@ -80,7 +74,6 @@ class ApplicantController extends Controller
         return response()->json(['error' => 'Applicant not found'], 404);
     }
     
-    // Using the correct field name 'resume' instead of 'resume_path'
     $resumeInfo = [
         'has_resume' => !empty($applicant->resume),
         'resume_path' => $applicant->resume,
@@ -98,11 +91,9 @@ public function viewResume($applicantId)
         return abort(404);
     }
     
-    // Point to the public/uploads directory where your files are located
     $path = public_path('uploads/' . $applicant->resume);
     
     if (!file_exists($path)) {
-        // If the exact filename doesn't exist, we can try to find it
         $files = glob(public_path('uploads/*_Resume_*.pdf'));
         $found = false;
         
@@ -119,7 +110,6 @@ public function viewResume($applicantId)
         }
     }
     
-    // Return file with headers optimized for embedding
     return response()->file($path, [
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
@@ -135,11 +125,9 @@ public function downloadResume($applicantId)
         return abort(404);
     }
     
-    // Point to the public/uploads directory where your files are located
     $path = public_path('uploads/' . $applicant->resume);
     
     if (!file_exists($path)) {
-        // If the exact filename doesn't exist, we can try a fuzzy match
         $files = glob(public_path('uploads/*_Resume_*.pdf'));
         $found = false;
         
@@ -156,20 +144,17 @@ public function downloadResume($applicantId)
         }
     }
     
-    // Return file as download
     return response()->download($path, $applicant->resume);
 }
 
     public function getApplicantTimeline($applicantId)
     {
-        // Validate the applicant exists
         $applicant = ApplicantsApplication::find($applicantId);
         
         if (!$applicant) {
             return response()->json(['error' => 'Applicant not found'], 404);
         }
         
-        // Get all status changes for this applicant, ordered by date
         $statusHistory = ApplicantStatus::where('applicant_id', $applicantId)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -183,7 +168,6 @@ public function downloadResume($applicantId)
     public function updateapplicantstatus(Request $request)
     {
         $mail = new MailSettingController();
-        //check if there applicantid is in the request
        
            
         $validation = Validator::make($request->all(), [
@@ -191,7 +175,6 @@ public function downloadResume($applicantId)
             'status' => 'required',
         ]);
 
-        //return the validation error if there is any
         if ($validation->fails()) {
             foreach ($validation->errors()->all() as $error) {
                 ToastMagic::error("Error!", $error);
@@ -199,19 +182,14 @@ public function downloadResume($applicantId)
             return redirect()->back();
         }
 
-       // Step 1: Get the applicant record properly
-    $applicant = ApplicantsApplication::find($request->input('applicantid')); // fetches a model instance
+    $applicant = ApplicantsApplication::find($request->input('applicantid'));
 
-    // Step 2: Check if the applicant was found
     if ($applicant) {
-        // Step 3: Update the status
         $applicant->applicant_status = $request->input('status');
-        $applicant->save(); // persist the update
+        $applicant->save();
 
-        // Step 4: Now that the model is saved, get the job posting ID
         $job_posting_id = $applicant->priority_job_id;
 
-        // Step 5: Insert new status tracking record
         $applicantstatus = new ApplicantStatus();
         $applicantstatus->applicant_id = $applicant->id;
         $applicantstatus->applicant_status = $request->input('status');
@@ -219,12 +197,10 @@ public function downloadResume($applicantId)
         $applicantstatus->job_posting_id = $job_posting_id;
         $applicantstatus->save();
 
-        // Step 6: Show success
         ToastMagic::success("Success!", "Applicant status updated successfully.");
         return redirect()->back();
     }
 
-    // Step 7: Fallback error message
     ToastMagic::error("Error!", "Applicant not found.");
     return redirect()->back();
 
