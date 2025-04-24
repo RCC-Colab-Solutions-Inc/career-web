@@ -114,9 +114,14 @@ public function viewResume($applicantId)
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
     ]);
-    
+
+    // Remove X-Frame-Options (just in case)
     $response->headers->remove('X-Frame-Options');
-    
+
+    // Set Content-Security-Policy with app URL from .env
+    $appUrl = rtrim(env('APP_URL'), '/');
+    $response->headers->set('Content-Security-Policy', "frame-ancestors 'self' $appUrl");
+
     return $response;
 }
 
