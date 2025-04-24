@@ -197,6 +197,18 @@ public function downloadResume($applicantId)
         $applicantstatus->job_posting_id = $job_posting_id;
         $applicantstatus->save();
 
+        $mail = new MailSettingController();
+        $email = $applicant->email;
+        $reference = $applicant->reference_code;
+        $cc = [];
+        $bcc = [];
+        $subject = "Applicant Status Update";
+        $body = view('emails.status', [
+            'code' => $reference,
+           'link' => env('SANCTUM_STATEFUL_DOMAINS') . '/applicant/portal',
+        ])->render();
+        $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
+
         ToastMagic::success("Success!", "Applicant status updated successfully.");
         return redirect()->back();
     }
