@@ -19,10 +19,10 @@ class SetXFrameOptions
 
         // Set X-Frame-Options to 'SAMEORIGIN' or 'unset' (as needed)
         // Option 1: Allow same-origin iframes
-        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        // $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         
         // Option 2: Unset X-Frame-Options if you want to allow iframe from anywhere
-        // $response->headers->set('X-Frame-Options', 'unset');
+        $response->headers->set('X-Frame-Options', 'unset');
 
         return $response;
     }
