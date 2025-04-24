@@ -7,6 +7,8 @@ use App\Models\CompanyDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 
@@ -152,6 +154,71 @@ class JobPostingController extends Controller
     {
         return view('profile');
     }
+
+    public function updatePersonalInfo(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'firstName' => 'required',
+        'lastName' => 'required',
+        'email' => 'required|email|unique:users,email,' . Auth::id(),
+        'phone' => 'nullable'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ]);
+    }
+
+    $user = Auth::user();
+    $user->name = $request->firstName . ' ' . $request->lastName;
+    $user->email = $request->email;
+    
+    if ($request->has('phone')) {
+        $user->phone = $request->phone;
+    }
+    
+    $user->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Personal information updated successfully!'
+    ]);
+}
+
+public function updatePassword(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'currentPassword' => 'required',
+        'newPassword' => 'required|min:8',
+        'confirmPassword' => 'required|same:newPassword'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $validator->errors()->first()
+        ]);
+    }
+
+    $user = Auth::user();
+    
+    if (!Hash::check($request->currentPassword, $user->password)) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Current password is incorrect'
+        ]);
+    }
+
+    $user->password = Hash::make($request->newPassword);
+    $user->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Password updated successfully!'
+    ]);
+}
 
     public function positionpage()
     {

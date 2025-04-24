@@ -44,6 +44,8 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
     Route::get('/profile', 'myprofile');
+    Route::post('/update-personal-info', 'updatePersonalInfo');
+    Route::post('/update-password', 'updatePassword');
     Route::get('/application/position', 'positionpage');
     Route::get('/ip-address', 'ipaddress');
 

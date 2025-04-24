@@ -147,4 +147,78 @@
             document.getElementById('passwordSuccess').classList.add('hidden');
         }, 3000);
     });
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Personal Info Form Submit
+    document.getElementById('personalInfoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value
+        };
+        
+        $.ajax({
+            url: '/update-personal-info',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.status === 'success') {
+                    document.getElementById('personalInfoSuccess').classList.remove('hidden');
+                    setTimeout(function() {
+                        document.getElementById('personalInfoSuccess').classList.add('hidden');
+                    }, 3000);
+                } else {
+                    // Display error message
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+    
+    // Password Update Form Submit
+    document.getElementById('passwordUpdateForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            currentPassword: document.getElementById('currentPassword').value,
+            newPassword: document.getElementById('newPassword').value,
+            confirmPassword: document.getElementById('confirmPassword').value
+        };
+        
+        $.ajax({
+            url: '/update-password',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.status === 'success') {
+                    document.getElementById('passwordSuccess').classList.remove('hidden');
+                    setTimeout(function() {
+                        document.getElementById('passwordSuccess').classList.add('hidden');
+                    }, 3000);
+                    
+                    // Clear the password fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                } else {
+                    // Display error message
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
 </script>

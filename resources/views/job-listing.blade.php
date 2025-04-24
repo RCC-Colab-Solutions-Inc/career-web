@@ -6,7 +6,7 @@
 @include('includes.side')
     
     <!-- Main Content -->
-    <div class="flex-1 overflow-x-hidden overflow-y-auto transition-colors duration-300 bg-gray-50 dark:bg-slate-900">
+    <div class="flex-1 transition-colors duration-300 bg-gray-50 dark:bg-slate-900">
         
     @include('includes.nav')
         
