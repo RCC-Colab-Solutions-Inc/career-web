@@ -473,7 +473,7 @@
                     // copy function
                     copyJobDetails(jobcode) {
                         try {
-                            const baseUrl = "{{ env('APP_URL') }}/job/";
+                            const baseUrl = "{{ env('APP_URL') }}job/";
                             const textToCopy = baseUrl + jobcode;
                             
                             const copyToast = document.getElementById('copyToast');
