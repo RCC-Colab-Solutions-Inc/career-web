@@ -203,7 +203,7 @@ class ApplicantFrontEndClient extends Controller
         'link' => env('SANCTUM_STATEFUL_DOMAINS') + 'applicant/portal',
     ])->render();
 
-
+    $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
 
     return response()->json([
         'status' => 'success',
