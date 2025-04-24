@@ -44,7 +44,7 @@ class ClientMainController extends Controller
             $applicantstatuses[] = [
                 'status' => $status->applicant_status,
                 'remarks' => $status->remarks,
-                'date' => $status->created_at->format('Y-m-d H:i:s'),
+                'date' => $status->created_at->format('M. d, Y h:iA'),
             ];
         }
 
