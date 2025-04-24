@@ -18,19 +18,19 @@
             
             <table style="width: 100%; border-collapse: collapse; margin: 30px 0; border: 1px solid #ddd; color: #0A2472;">
                 <tr>
-                    <td colspan="2" style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: center; font-weight: bold;">20250326-001</td>
+                    <td colspan="2" style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: center; font-weight: bold;">{{$reference_code}}</td>
                 </tr>
                 <tr>
                     <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Name</th>
-                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Kent C. Cortiguerra</td>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">{{$name}}</td>
                 </tr>
                 <tr>
                     <th style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Position</th>
-                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">Mid Java Developer</td>
+                    <td style="padding: 15px; border: 2px solid #ddd; width: 50%; text-align: left;">{{$job_title}}</td>
                 </tr>
             </table>
             
-            <a href="#" style="display: inline-block; background-color: #0A2472; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-bottom: 30px;">View Dashboard</a>
+            <a href="{{$link}}" style="display: inline-block; background-color: #0A2472; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-bottom: 30px;">View Dashboard</a>
             
             <p style="color: #666; margin-bottom: 30px;">This is an automatic Email. Please Do not Reply.</p>
         </div>

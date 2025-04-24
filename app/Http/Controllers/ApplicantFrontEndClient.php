@@ -190,6 +190,21 @@ class ApplicantFrontEndClient extends Controller
     $status->job_posting_id = $job->id;
     $status->save();
 
+    // Send email to the applicant
+    $mail = new MailSettingController();
+    $email = $request->email;
+    $subject = "Application Received - Reference Code: $referenceCode";
+    $cc = []; // Convert to an array
+    $bcc = []; // Convert to an array
+    $body = view('emails.application', [
+        'name' => $request->firstName . ' ' . $request->lastName,
+        'reference_code' => $referenceCode,
+        'job_title' => $job->jobtitle,
+        'link' => env('SANCTUM_STATEFUL_DOMAINS') + 'applicant/portal',
+    ])->render();
+
+
+
     return response()->json([
         'status' => 'success',
         'code' => 200,
