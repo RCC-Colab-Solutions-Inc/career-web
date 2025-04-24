@@ -34,8 +34,7 @@ class ClientMainController extends Controller
                 'status' => 'error',
                 'code' => 404,
                 'data' => null,
-                'message' => 'No status found for this applicant',
-                'timestamp' => Carbon::now()->toDateTimeString()
+                'message' => 'No status found for this applicant'
             ], 404);
         }
 
@@ -53,7 +52,6 @@ class ClientMainController extends Controller
             'code' => 200,
             'message' => 'Applicant status found',
             'data' => $applicantstatuses,
-            'timestamp' => Carbon::now()->toDateTimeString(),
 
         ]);
 
