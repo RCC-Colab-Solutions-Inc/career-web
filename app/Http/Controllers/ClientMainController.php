@@ -27,6 +27,7 @@ class ClientMainController extends Controller
         //get all the status of the application
         $statuses = ApplicantStatus::where('applicant_id', $request->applicant_id)
         ->where('job_posting_id', $request->priority_job_id)
+        ->orderBy('created_at', 'desc')
         ->get();
 
         if ($statuses->isEmpty()) {
@@ -43,7 +44,7 @@ class ClientMainController extends Controller
             $applicantstatuses[] = [
                 'status' => $status->applicant_status,
                 'remarks' => $status->remarks,
-                'date' => $status->created_at->format('Y-m-d'),
+                'date' => $status->created_at->format('Y-m-d H:i:s'),
             ];
         }
 
