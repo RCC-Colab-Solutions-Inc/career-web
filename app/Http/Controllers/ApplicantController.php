@@ -110,11 +110,14 @@ public function viewResume($applicantId)
         }
     }
     
-    return response()->file($path, [
+    $response = response()->file($path, [
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
-        'X-Frame-Options' => 'SAMEORIGIN'
     ]);
+    
+    $response->headers->remove('X-Frame-Options');
+    
+    return $response;
 }
 
 public function downloadResume($applicantId)
