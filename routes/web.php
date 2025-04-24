@@ -88,7 +88,7 @@ Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->grou
     Route::get('/applicant-timeline/{applicantId}', [ApplicantController::class, 'getApplicantTimeline']);
     Route::get('/selectapplicants/{jobid}', 'selectapplicant');
     Route::get('/applicant-resume/{applicantId}', [ApplicantController::class, 'getApplicantResume']);
-    Route::get('/view-resume/{applicantId}', [ApplicantController::class, 'viewResume'])->middleware('set-x-frame');
+    Route::get('/view-resume/{applicantId}', [ApplicantController::class, 'viewResume']);
     Route::get('/download-resume/{applicantId}', [ApplicantController::class, 'downloadResume']);
     Route::post('/updateapplicantstatus', 'updateapplicantstatus');
     Route::post('/forwardtoclient', 'forwardtoclient');
