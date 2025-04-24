@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 
@@ -156,36 +158,44 @@ class JobPostingController extends Controller
     }
 
     public function updatePersonalInfo(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'firstName' => 'required',
-        'lastName' => 'required',
-        'email' => 'required|email|unique:users,email,' . Auth::id(),
-        'phone' => 'nullable'
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $validator->errors()->first()
+    {
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
         ]);
-    }
-
-    $user = Auth::user();
-    $user->name = $request->firstName . ' ' . $request->lastName;
-    $user->email = $request->email;
     
-    if ($request->has('phone')) {
-        $user->phone = $request->phone;
-    }
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ]);
+        }
     
-    $user->save();
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Personal information updated successfully!'
-    ]);
-}
+        try {
+            $user = Auth::user();
+            $user->name = $request->firstName . ' ' . $request->lastName;
+            $user->email = $request->email;
+            
+            if (Schema::hasColumn('users', 'phone') && $request->has('phone')) {
+                $user->phone = $request->phone;
+            }
+            
+            $user->save();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Personal information updated successfully!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating user profile: ' . $e->getMessage());
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while updating your information: ' . $e->getMessage()
+            ]);
+        }
+    }
 
 public function updatePassword(Request $request)
 {

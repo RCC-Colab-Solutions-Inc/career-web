@@ -52,6 +52,7 @@
                         <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-4 transition-colors duration-300">Personal Information</h3>
                         
                         <form id="personalInfoForm">
+                        @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label for="firstName" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">First Name</label>
@@ -64,10 +65,6 @@
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">Email Address</label>
                                     <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label for="phone" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">Phone Number</label>
-                                    <input type="tel" id="phone" name="phone" placeholder="(000) 123-4567" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition-colors duration-300">
                                 </div>
                             </div>
                             
@@ -92,6 +89,7 @@
                         <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-4 transition-colors duration-300">Update Password</h3>
                         
                         <form id="passwordUpdateForm">
+                        @csrf
                             <div class="grid grid-cols-1 gap-6 mb-6">
                                 <div>
                                     <label for="currentPassword" class="block text-sm font-medium text-slate-700 dark:text-blue-200/90 mb-1 transition-colors duration-300">Current Password</label>
@@ -132,93 +130,77 @@
 @include('includes.footer')
 
 <script>
-    document.getElementById('savePersonalInfo').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('personalInfoSuccess').classList.remove('hidden');
-        setTimeout(function() {
-            document.getElementById('personalInfoSuccess').classList.add('hidden');
-        }, 3000);
-    });
+   // Personal Info Form Submit
+document.getElementById('personalInfoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    document.getElementById('updatePassword').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('passwordSuccess').classList.remove('hidden');
-        setTimeout(function() {
-            document.getElementById('passwordSuccess').classList.add('hidden');
-        }, 3000);
-    });
-
-    $.ajaxSetup({
+    const formData = new FormData(this);
+    
+    fetch('/update-personal-info', {
+        method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server returned ' + response.status);
         }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('personalInfoSuccess').classList.remove('hidden');
+            setTimeout(function() {
+                document.getElementById('personalInfoSuccess').classList.add('hidden');
+            }, 3000);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        alert('An error occurred. Please try again.');
+        console.error('Error:', error);
     });
+});
 
-    // Personal Info Form Submit
-    document.getElementById('personalInfoForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value
-        };
-        
-        $.ajax({
-            url: '/update-personal-info',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.status === 'success') {
-                    document.getElementById('personalInfoSuccess').classList.remove('hidden');
-                    setTimeout(function() {
-                        document.getElementById('personalInfoSuccess').classList.add('hidden');
-                    }, 3000);
-                } else {
-                    // Display error message
-                    alert(response.message);
-                }
-            },
-            error: function(xhr) {
-                alert('An error occurred. Please try again.');
-            }
-        });
-    });
+// Password Update Form Submit
+document.getElementById('passwordUpdateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    // Password Update Form Submit
-    document.getElementById('passwordUpdateForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            currentPassword: document.getElementById('currentPassword').value,
-            newPassword: document.getElementById('newPassword').value,
-            confirmPassword: document.getElementById('confirmPassword').value
-        };
-        
-        $.ajax({
-            url: '/update-password',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.status === 'success') {
-                    document.getElementById('passwordSuccess').classList.remove('hidden');
-                    setTimeout(function() {
-                        document.getElementById('passwordSuccess').classList.add('hidden');
-                    }, 3000);
-                    
-                    // Clear the password fields
-                    document.getElementById('currentPassword').value = '';
-                    document.getElementById('newPassword').value = '';
-                    document.getElementById('confirmPassword').value = '';
-                } else {
-                    // Display error message
-                    alert(response.message);
-                }
-            },
-            error: function(xhr) {
-                alert('An error occurred. Please try again.');
-            }
-        });
+    const formData = new FormData(this);
+    
+    fetch('/update-password', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server returned ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('passwordSuccess').classList.remove('hidden');
+            setTimeout(function() {
+                document.getElementById('passwordSuccess').classList.add('hidden');
+            }, 3000);
+            
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        alert('An error occurred. Please try again.');
+        console.error('Error:', error);
     });
+});
 </script>
