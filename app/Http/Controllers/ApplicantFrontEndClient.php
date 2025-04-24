@@ -247,6 +247,7 @@ class ApplicantFrontEndClient extends Controller
             foreach ($statuses as $status) {
                 $applicantstatuses[] = [
                     'status' => $status->applicant_status,
+                    'remarks' => $status->remarks,
                     'date' => $status->created_at->format('Y-m-d'),
                 ];
             }
@@ -263,7 +264,6 @@ class ApplicantFrontEndClient extends Controller
                     'date_applied' => $applicant->created_at->format('Y-m-d'),
                 ],
                 'statuses' => $applicantstatuses,
-                'remarks' => $applicant->remarks,
             ]);
         }
 
