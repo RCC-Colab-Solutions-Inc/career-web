@@ -41,6 +41,7 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::post('/addjob', 'addjob');
     
     Route::get('/users', [JobPostingController::class, 'user'])->name('users');
+    Route::delete('/delete-user/{userId}', 'deleteUser')->name('delete-user');
     Route::get('/applicant-login', 'applicantlogin');
     Route::get('/applicant-form', 'applicantform');
     Route::get('/profile', 'myprofile');

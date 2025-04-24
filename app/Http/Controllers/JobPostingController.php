@@ -142,6 +142,32 @@ class JobPostingController extends Controller
         return view('users', compact('users'));
     }
 
+    public function deleteUser($userId)
+{
+    try {
+        $user = \App\Models\User::find($userId);
+        
+        if (!$user) {
+            ToastMagic::error("Error!", "User not found.");
+            return back();
+        }
+
+        if ($user->id === Auth::id()) {
+            ToastMagic::error("Error!", "You cannot delete your own account.");
+            return back();
+        }
+
+        $userName = $user->name;
+        $user->delete();
+
+        ToastMagic::success('Success', "User '{$userName}' has been deleted successfully!");
+        return back();
+    } catch (\Exception $e) {
+        ToastMagic::error("Error!", "An error occurred while deleting the user.");
+        return back();
+    }
+}
+
     public function applicantlogin()
     {
         return view('applicant-login');
