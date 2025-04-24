@@ -53,17 +53,6 @@
                     </div>
 
                     <div class="grid grid-cols-3 w-full gap-4">
-                        <!-- Job Position Filter -->
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Job Position</label>
-                            <select name="position" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                                <option value="">All Positions</option>
-                                <option value="Senior .NET Developer" {{ request('position') == 'Senior .NET Developer' ? 'selected' : '' }}>Senior .NET Developer</option>
-                                <option value="UX/UI Designer" {{ request('position') == 'UX/UI Designer' ? 'selected' : '' }}>UX/UI Designer</option>
-                                <option value="IT Support Specialist" {{ request('position') == 'IT Support Specialist' ? 'selected' : '' }}>IT Support Specialist</option>
-                                <option value="Backend Developer" {{ request('position') == 'Backend Developer' ? 'selected' : '' }}>Backend Developer</option>
-                            </select>
-                        </div>
                         
                         <!-- Status Filter -->
                         <div>
@@ -79,14 +68,6 @@
                                 <option value="Hired" {{ request('status') == 'Hired' ? 'selected' : '' }}>Hired</option>
                                 <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                                 <option value="Decline" {{ request('status') == 'Decline' ? 'selected' : '' }}>Decline</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Company Filter -->
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">Company</label>
-                            <select name="company" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                                <option value="">All</option>
                             </select>
                         </div>
                     </div>
