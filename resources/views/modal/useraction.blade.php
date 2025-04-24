@@ -149,7 +149,8 @@
                 
                 <!-- Modal Body -->
                 <div class="px-6 py-4">
-                    <form>
+                    <form action="{{ route('add-user') }}" method="POST">
+                        @csrf
                         <!-- Full Name Field -->
                         <div class="mb-4">
                             <label for="full_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors duration-300">
@@ -194,22 +195,23 @@
                                 required
                             >
                         </div>
+
+                        <!-- Modal Footer -->
+                        <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
+                            <button 
+                                type="button"
+                                @click="close()" 
+                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                type="submit"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
+                            >
+                                Add User
+                            </button>
+                        </div>
                     </form>
                 </div>
-                
-                <!-- Modal Footer -->
-                <div class="px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex justify-end space-x-3">
-                    <button 
-                        @click="close()" 
-                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors duration-200"
-                    >
-                        Cancel
-                    </button>
-                    <button 
-                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-md"
-                    >
-                        Add User
-                    </button>
-                </div>
             </div>
-        </div>

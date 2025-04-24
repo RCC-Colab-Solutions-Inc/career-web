@@ -168,6 +168,29 @@ class JobPostingController extends Controller
     }
 }
 
+public function addUser(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'full_name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8',
+    ]);
+
+    if ($validator->fails()) {
+        ToastMagic::error("Error!", implode(", ", $validator->errors()->all()));
+        return back();
+    }
+
+    $user = new \App\Models\User();
+    $user->name = $request->full_name;
+    $user->email = $request->email;
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    ToastMagic::success('Success', 'User added successfully!');
+    return back();
+}
+
     public function applicantlogin()
     {
         return view('applicant-login');
