@@ -269,7 +269,7 @@ class ClientMainController extends Controller
         $cc = [];
         $bcc = [];
         $subject = "Applicant Status Update";
-        $body = view('emails.applicantstatus', [
+        $body = view('emails.status', [
             'code' => $reference,
            'link' => env('SANCTUM_STATEFUL_DOMAINS') . '/applicant/portal',
         ])->render();
