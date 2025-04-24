@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\ApiAuthMiddleware;
 use App\Http\Middleware\LoginMainController;
 use App\Http\Middleware\TokenizedCompany;
+use App\Http\Middleware\SetXFrameOptions;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'api.auth' => ApiAuthMiddleware::class,
+            'unset-x-frame' => SetXFrameOptions::class,
         ]);
        
         $middleware->statefulApi();
