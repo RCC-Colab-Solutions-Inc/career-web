@@ -200,7 +200,7 @@ class ApplicantFrontEndClient extends Controller
         'name' => $request->firstName . ' ' . $request->lastName,
         'reference_code' => $referenceCode,
         'job_title' => $job->jobtitle,
-        'link' => env('SANCTUM_STATEFUL_DOMAINS') + 'applicant/portal',
+        'link' => env('SANCTUM_STATEFUL_DOMAINS') . '/applicant/portal',
     ])->render();
 
     $sendMail = $mail->sendMail($email, $subject, $body,$cc, $bcc);
