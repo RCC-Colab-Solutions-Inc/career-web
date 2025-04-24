@@ -25,7 +25,7 @@ class ClientMainController extends Controller
 
         
         //get all the status of the application
-        $statuses = ApplicantStatus::where('applicant_id', $applicant->id)
+        $statuses = ApplicantStatus::where('applicant_id', $request->applicant_id)
         ->where('job_posting_id', $request->priority_job_id)
         ->get();
 
@@ -52,7 +52,7 @@ class ClientMainController extends Controller
             'status' => 'success',
             'code' => 200,
             'message' => 'Applicant status found',
-            'statuses' => $applicantstatuses,
+            'data' => $applicantstatuses,
             'timestamp' => Carbon::now()->toDateTimeString(),
 
         ]);
@@ -60,7 +60,7 @@ class ClientMainController extends Controller
 
        
     }
-    
+
     public function companyprofile(Request $request){
         $companyId = $this->getCompanyIdByToken($request);
         if (!$companyId) {
