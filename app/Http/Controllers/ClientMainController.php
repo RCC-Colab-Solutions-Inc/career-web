@@ -17,6 +17,50 @@ use Illuminate\Support\Facades\Hash;
 
 class ClientMainController extends Controller
 {
+    public function getapplicantstatus(Request $request){
+        $request->validate([
+            'applicant_id' => 'required',
+            'priority_job_id' => 'required',
+        ]);
+
+        
+        //get all the status of the application
+        $statuses = ApplicantStatus::where('applicant_id', $applicant->id)
+        ->where('job_posting_id', $request->priority_job_id)
+        ->get();
+
+        if ($statuses->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'data' => null,
+                'message' => 'No status found for this applicant',
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 404);
+        }
+
+        $applicantstatuses = [];
+        foreach ($statuses as $status) {
+            $applicantstatuses[] = [
+                'status' => $status->applicant_status,
+                'remarks' => $status->remarks,
+                'date' => $status->created_at->format('Y-m-d'),
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Applicant status found',
+            'statuses' => $applicantstatuses,
+            'timestamp' => Carbon::now()->toDateTimeString(),
+
+        ]);
+
+
+       
+    }
+    
     public function companyprofile(Request $request){
         $companyId = $this->getCompanyIdByToken($request);
         if (!$companyId) {

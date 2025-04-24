@@ -24,6 +24,7 @@ Route::middleware(['api.auth'])->group(function () {
             Route::post('updateapplicant', 'updateapplicant');
             Route::get('positions', 'positions');
             Route::post('updateemails', 'updateemails');
+            Route::post('getapplicantstatus', 'getapplicantstatus');
     });
     
 
