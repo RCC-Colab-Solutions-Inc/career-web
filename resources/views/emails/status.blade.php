@@ -13,10 +13,10 @@
         </div>
         
         <div style="padding: 40px;">
-            <h1 style="color: #0A2472; font-size: 32px; margin-bottom: 10px; line-height: 1.2;">Your application status has been updated</h1>
+            <h1 style="color: #0A2472; font-size: 32px; margin-bottom: 10px; line-height: 1.2;">Your application with Reference No. {{$code}} status has been updated</h1>
             <p style="color: #666; font-size: 18px; margin-bottom: 30px;">Please check your status by Clicking the Button below.</p>
             
-            <a href="#" style="display: inline-block; background-color: #0A2472; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-bottom: 30px; min-width: 170px; text-align: center;">Check Status</a>
+            <a href="{{$link}}" style="display: inline-block; background-color: #0A2472; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-bottom: 30px; min-width: 170px; text-align: center;">Check Status</a>
             
             <p style="color: #666; margin-top: 40px;">This is an automatic Email. Please Do not Reply.</p>
         </div>

@@ -221,6 +221,8 @@ class ClientMainController extends Controller
             'jobpostings' => $jobpostings,
         ]);
     }
+
+
     public function updateapplicant(Request $request)
     {
         $mail = new MailSettingController();
@@ -260,6 +262,17 @@ class ClientMainController extends Controller
         $applicantStatus->applicant_status = $request->status;
         $applicantStatus->remarks = $request->remarks;
         $applicantStatus->save();
+
+        $mail = new MailSettingController();
+        $email = $applicant->email;
+        $reference = $applicant->reference_code;
+        $cc = [];
+        $bcc = [];
+        $subject = "Applicant Status Update";
+        $body = view('emails.applicantstatus', [
+            'code' => $reference,
+           'link' => env('SANCTUM_STATEFUL_DOMAINS') . '/applicant/portal',
+        ])->render();
 
         return response()->json([
             'status' => 'success',
