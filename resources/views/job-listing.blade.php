@@ -473,7 +473,7 @@
                     // copy function
                     copyJobDetails(jobcode) {
                         try {
-                            const baseUrl = "{{ config('app.url') }}/job/";
+                            const baseUrl = "{{ env('SANCTUM_STATEFUL_DOMAINS') }}/job/";
                             const textToCopy = baseUrl + jobcode;
                             
                             const copyToast = document.getElementById('copyToast');
