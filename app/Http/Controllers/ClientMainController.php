@@ -90,6 +90,17 @@ class ClientMainController extends Controller
             ->select('applicants_applications.*','job_postings.jobtitle')
 
             ->get();
+
+        //select all status of the applicant
+        $status  = ApplicantStatus::where('applicant_id', $applicants->id)->get();
+        //check if the applicant is empty
+        if ($status->isEmpty()) {
+           $stat = null;
+        }else{
+            $stat = $status;
+        }
+
+
         
         if ($applicants->isEmpty()) {
             return response()->json([
@@ -104,6 +115,7 @@ class ClientMainController extends Controller
             'message_tokenized' => 'Token is valid',
             'code' => 200,
             'applicants' => $applicants,
+            'statuses' => $stat,
         ]);
 
 
