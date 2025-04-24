@@ -150,12 +150,12 @@
                     
                     <template x-if="resumeInfo.has_resume">
                         <div class="border border-gray-200 dark:border-slate-700 rounded-lg h-[700px] overflow-y-auto">
-                            <iframe
-                                :src="'/view-resume/' + applicantId"
+                            <object
+                                data="'/view-resume/' + applicantId"
                                 class="w-full h-full"
                                 style="border: none;"
                                 title="Resume Preview"
-                            ></iframe>
+                            ></object>
                         </div>
                     </template>
                     
