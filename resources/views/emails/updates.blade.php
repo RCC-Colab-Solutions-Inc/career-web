@@ -9,7 +9,7 @@
 <body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;">
     <div style="width: 100%; max-width: 800px; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <div style="background-color: #0A2472; padding: 20px; text-align: left;">
-            <span style="color: white; font-size: 12px; font-weight: bold;">RCC Colab Solutions Inc.</span>
+            <span style="color: white; font-size: 12px; font-weight: bold;"></span>
         </div>
         
         <div style="padding: 40px;">
