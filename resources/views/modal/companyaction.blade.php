@@ -1,40 +1,64 @@
        <!-- Add Modal -->
        <div
-            x-data="{ 
-                    show: false,
-                    id: null,
-                    showSuccessMessage: false,
-                    init() {
-                        window.addEventListener('open-modal', (e) => {
-                            if (e.detail.id === 'add-company-modal') {
-                                this.show = true;
-                                document.body.classList.add('overflow-hidden');
-                            }
-                        });
-                    },
-                    close() {
-                        this.show = false;
-                        document.body.classList.remove('overflow-hidden');
-                    },
-                    saveCompany() {
-                        // Show success message
-                        this.showSuccessMessage = true;
-                        
-                        // Auto-hide success message after 2 seconds
-                        setTimeout(() => {
-                            this.showSuccessMessage = false;
-                            // Close the modal after showing success
-                            setTimeout(() => {
-                                this.close();
-                                // Reset form (if needed)
-                                document.getElementById('company_name').value = '';
-                                document.getElementById('company_email').value = '';
-                                document.getElementById('contact_name').value = '';
-                                document.getElementById('contact_phone').value = '';
-                            }, 300);
-                        }, 2000);
+       x-data="{ 
+                show: false,
+                id: null,
+                showSuccessMessage: false,
+                // New fields for the form
+                company_name: '',
+                company_email: '',
+                contact_name: '',
+                contact_phone: '',
+                formatPhoneNumber() {
+                    // Remove any non-digit characters except + 
+                    let digits = this.contact_phone.replace(/[^\d+]/g, '');
+                    
+                    // If it doesn't start with +63, and it has digits
+                    if (!digits.startsWith('+63') && digits.length > 0) {
+                        // If it starts with 0, replace the leading 0 with +63
+                        if (digits.startsWith('0')) {
+                            digits = '+63' + digits.substring(1);
+                        } else {
+                            // Otherwise, just add +63 at the beginning
+                            digits = '+63' + digits;
+                        }
+                        this.contact_phone = digits;
                     }
-                }"
+                },
+                init() {
+                    window.addEventListener('open-modal', (e) => {
+                        if (e.detail.id === 'add-company-modal') {
+                            this.show = true;
+                            document.body.classList.add('overflow-hidden');
+                        }
+                    });
+                },
+                close() {
+                    this.show = false;
+                    document.body.classList.remove('overflow-hidden');
+                },
+                saveCompany() {
+                    // Format phone number before submitting
+                    this.formatPhoneNumber();
+                    
+                    // Show success message
+                    this.showSuccessMessage = true;
+                    
+                    // Auto-hide success message after 2 seconds
+                    setTimeout(() => {
+                        this.showSuccessMessage = false;
+                        // Close the modal after showing success
+                        setTimeout(() => {
+                            this.close();
+                            // Reset form
+                            this.company_name = '';
+                            this.company_email = '';
+                            this.contact_name = '';
+                            this.contact_phone = '';
+                        }, 300);
+                    }, 2000);
+                }
+            }"
                 x-show="show"
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0"
@@ -81,13 +105,14 @@
                                         Company Name
                                     </label>
                                     <input 
-                                        type="text" 
-                                        id="company_name" 
-                                        name="company_name" 
-                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                        placeholder="Enter company name"
-                                        required
-                                    >
+                                    type="text" 
+                                    id="company_name" 
+                                    name="company_name" 
+                                    x-model="company_name"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="Enter company name"
+                                    required
+                                >
                                 </div>
                                 
                                 <!-- Email Field -->
@@ -96,13 +121,14 @@
                                         Email
                                     </label>
                                     <input 
-                                        type="email" 
-                                        id="company_email" 
-                                        name="company_email" 
-                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                        placeholder="Enter company email"
-                                        required
-                                    >
+                                    type="email" 
+                                    id="company_email" 
+                                    name="company_email" 
+                                    x-model="company_email"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="Enter company email"
+                                    required
+                                >
                                 </div>
                                 
                                 <!-- Contact Name Field -->
@@ -111,13 +137,14 @@
                                         Contact Name
                                     </label>
                                     <input 
-                                        type="text" 
-                                        id="contact_name" 
-                                        name="contact_name" 
-                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                        placeholder="Enter contact person's name"
-                                        required
-                                    >
+                                    type="text" 
+                                    id="contact_name" 
+                                    name="contact_name" 
+                                    x-model="contact_name"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="Enter contact person's name"
+                                    required
+                                >
                                 </div>
                                 
                                 <!-- Contact Phone Field -->
@@ -126,12 +153,16 @@
                                         Contact Phone
                                     </label>
                                     <input 
-                                        type="tel" 
-                                        id="contact_phone" 
-                                        name="contact_phone" 
-                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                        placeholder="+63 XXX XXX XXXX"
-                                    >
+                                    type="tel" 
+                                    id="contact_phone" 
+                                    name="contact_phone" 
+                                    x-model="contact_phone"
+                                    @blur="formatPhoneNumber()"
+                                    pattern="[0-9+\s()-]+"
+                                    title="Phone number must contain only numbers, spaces, and the following characters: + - ( )"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="+63 XXX XXX XXXX"
+                                >
                                 </div>
 
                                 <!-- Success Message -->
@@ -161,42 +192,61 @@
         <!-- Edit Modal -->
             <div
             x-data="{ 
-                    show: false,
-                    showSuccessMessage: false,
-                    company: {
-                        id: null,
-                        name: '',
-                        email: '',
-                        contact_name: '',
-                        contact_phone: ''
-                    },
-                    init() {
-                        window.addEventListener('open-modal', (e) => {
-                            if (e.detail.id === 'edit-company-modal') {
-                                this.company = e.detail.company;
-                                this.show = true;
-                                document.body.classList.add('overflow-hidden');
-                            }
-                        });
-                    },
-                    close() {
-                        this.show = false;
-                        document.body.classList.remove('overflow-hidden');
-                    },
-                    updateCompany() {
-                        // Show success message
-                        this.showSuccessMessage = true;
-                        
-                        // Auto-hide success message after 2 seconds
-                        setTimeout(() => {
-                            this.showSuccessMessage = false;
-                            // Close the modal after showing success
-                            setTimeout(() => {
-                                this.close();
-                            }, 300);
-                        }, 2000);
+            show: false,
+            showSuccessMessage: false,
+            company: {
+                id: null,
+                name: '',
+                email: '',
+                contact_name: '',
+                contact_phone: ''
+            },
+            formatPhoneNumber() {
+                // Remove any non-digit characters except + 
+                let digits = this.company.contact_phone.replace(/[^\d+]/g, '');
+                
+                // If it doesn't start with +63, and it has digits
+                if (!digits.startsWith('+63') && digits.length > 0) {
+                    // If it starts with 0, replace the leading 0 with +63
+                    if (digits.startsWith('0')) {
+                        digits = '+63' + digits.substring(1);
+                    } else {
+                        // Otherwise, just add +63 at the beginning
+                        digits = '+63' + digits;
                     }
-                }"
+                    this.company.contact_phone = digits;
+                }
+            },
+            init() {
+                window.addEventListener('open-modal', (e) => {
+                    if (e.detail.id === 'edit-company-modal') {
+                        this.company = e.detail.company;
+                        this.show = true;
+                        document.body.classList.add('overflow-hidden');
+                    }
+                });
+            },
+            close() {
+                this.show = false;
+                document.body.classList.remove('overflow-hidden');
+            },
+            updateCompany() {
+                // Format phone number before submitting
+                this.formatPhoneNumber();
+                
+                // Show success message
+                this.showSuccessMessage = true;
+                
+                // Auto-hide success message after 2 seconds
+                setTimeout(() => {
+                    this.showSuccessMessage = false;
+                    // Close the modal after showing success
+                    setTimeout(() => {
+                        this.close();
+                    }, 300);
+                }, 2000);
+            }
+        }"
                 x-show="show"
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0"
@@ -289,12 +339,16 @@
                                         Contact Phone
                                     </label>
                                     <input 
-                                        type="tel" 
-                                        id="edit_contact_phone" 
-                                        name="contact_phone" 
-                                        x-model="company.contact_phone"
-                                        class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
-                                    >
+                                    type="tel" 
+                                    id="edit_contact_phone" 
+                                    name="contact_phone" 
+                                    x-model="company.contact_phone"
+                                    @blur="formatPhoneNumber()"
+                                    pattern="[0-9+\s()-]+"
+                                    title="Phone number must contain only numbers, spaces, and the following characters: + - ( )"
+                                    class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300"
+                                    placeholder="+63 XXX XXX XXXX"
+                                >
                                 </div>
 
                                 <!-- Success Message -->

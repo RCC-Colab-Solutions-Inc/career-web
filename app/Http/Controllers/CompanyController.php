@@ -43,7 +43,7 @@ class CompanyController extends Controller
             'company_name' => 'required',
             'company_email' => 'required',
             'contact_name' => 'required',
-            'contact_phone' => 'required',
+            'contact_phone' => 'required|regex:/^[0-9+\s()-]+$/',
         ]);
 
         if ($validator->fails()) {
@@ -81,7 +81,7 @@ class CompanyController extends Controller
             'company_name' => 'required',
             'company_email' => 'required | email',
             'contact_name' => 'required',
-            'contact_phone' => 'required',
+            'contact_phone' => 'required|regex:/^[0-9+\s()-]+$/',
         ]);
 
         if ($validator->fails()) {
