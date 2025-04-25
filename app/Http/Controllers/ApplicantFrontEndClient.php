@@ -22,7 +22,7 @@ class ApplicantFrontEndClient extends Controller
         $validator = Validator::make($request->all(), [
             'cv' => 'required|mimes:pdf|max:2048',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -32,9 +32,9 @@ class ApplicantFrontEndClient extends Controller
                 'timestamp' => Carbon::now()->toDateTimeString()
             ], 422);
         }
-
+    
         $file = $request->file('cv');
-
+    
         if (!$file->isValid() || $file->getClientOriginalExtension() !== 'pdf') {
             return response()->json([
                 'status' => 'error',
@@ -43,32 +43,54 @@ class ApplicantFrontEndClient extends Controller
                 'timestamp' => Carbon::now()->toDateTimeString()
             ], 422);
         }
+    
+        // Generate unique file name
+        $unique = Str::random(8);
+        $fileName = $unique . '_' . $file->getClientOriginalName();
+    
+        // Upload to S3
+       
+        try {
+            $path = Storage::disk('s3')->put('uploads/cv', $request->file('cv'), 'public');
+            // $url = Storage::disk('s3')->url($path);
+            $url = Storage::disk('s3')->temporaryUrl(
+                $path,
+                Carbon::now()->addMinutes(10)  // URL will be valid for 10 minutes
+            );
 
-        // Create uploads directory if it doesn't exist
-        $destinationPath = public_path('uploads');
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0755, true);
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'File uploaded successfully',
+                'data' => [
+                    'url' => $path,
+                ],
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'url' => "",
+                ],
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 500);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 200,
+                //display the error message
+                'message' => $th->getMessage(),
+                'data' => [
+                    'url' => "",
+                ],
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 200);
         }
-
-        // Generate unique name
-        $unique = Str::random(8); // e.g., "X8f92Kf1"
-        $originalName = $file->getClientOriginalName(); // e.g., "my_cv.pdf"
-        $fileName = $unique . '_' . $originalName;
-
-        // Move file to public/uploads
-        $file->move($destinationPath, $fileName);
-
-        $url = asset("uploads/$fileName");
-
-        return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'CV uploaded successfully',
-            'data' => [
-                'url' => "$fileName",
-            ],
-            'timestamp' => Carbon::now()->toDateTimeString()
-        ], 200);
+    
+       
     }
 
 

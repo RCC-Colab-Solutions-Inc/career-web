@@ -8,6 +8,8 @@ use App\Models\JobPosting;
 use App\Models\CompanyDatabase;
 use App\Models\ApplicantStatus;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 //use validate
 use Illuminate\Support\Facades\Validator;
@@ -91,30 +93,13 @@ public function viewResume($applicantId)
         return abort(404);
     }
     
-    $path = public_path('uploads/' . $applicant->resume);
-    
-    if (!file_exists($path)) {
-        $files = glob(public_path('uploads/*_Resume_*.pdf'));
-        $found = false;
-        
-        foreach ($files as $file) {
-            if (basename($file) == $applicant->resume) {
-                $path = $file;
-                $found = true;
-                break;
-            }
-        }
-        
-        if (!$found) {
-            return abort(404);
-        }
-    }
-    
-    return response()->file($path, [
-        'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
-        'X-Frame-Options' => 'SAMEORIGIN'
-    ]);
+    $url = Storage::disk('s3')->temporaryUrl(
+        $applicant->resume,
+        Carbon::now()->addMinutes(10)  // URL will be valid for 10 minutes
+    );
+
+  
+    return redirect()->away($url);
 }
 
 public function downloadResume($applicantId)
