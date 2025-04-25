@@ -33,7 +33,7 @@ Route::get('/job/{jobcode}', function ($jobcode) {
     $job = App\Models\JobPosting::where('jobcode', $jobcode)->first();
     
     if ($job) {
-        return redirect()->away('http://localhost:5174/career?job=' . $jobcode);
+        return redirect()->away(env('SANCTUM_STATEFUL_DOMAINS') . '/career?job=' . $jobcode);
     } else {
         abort(404);
     }

@@ -91,9 +91,7 @@
                                             Contact
                                         </div>
                                     </th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">                                   
-                                            Status                                 
-                                    </th>
+                                    
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                         Actions
                                     </th>
@@ -127,24 +125,7 @@
                                                     {{ $company->representative_contact_number }}
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                <span 
-                                                    x-data="{ 
-                                                        status: {{ $company->status ? 'active' : 'inactive' }},
-                                                        init() {
-                                                            window.addEventListener('status-confirmed', (e) => {
-                                                                if(e.detail.id === {{ $company->id }}) {
-                                                                    this.status = e.detail.activate;
-                                                                }
-                                                            });
-                                                        }
-                                                    }"
-                                                    :class="status ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'"
-                                                    class="px-2.5 py-1 rounded-full text-xs font-medium"
-                                                >
-                                                    <span x-text="status ? 'active' : 'inactive'"></span>
-                                                </span>
-                                            </td>
+                                            
                                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                                 <div class="flex items-center justify-center space-x-3">
                                                     <button 
@@ -165,46 +146,7 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                         </svg>
                                                     </button>
-                                                    <!-- Status toggle buttons -->
-                                                    <div x-data="{ 
-                                                                    isActive: {{ $company->isActive ? 'true' : 'false' }},
-                                                                    init() {
-                                                                        window.addEventListener('status-confirmed', (e) => {
-                                                                            if(e.detail.id === {{ $company->id }}) {
-                                                                                this.isActive = e.detail.activate;
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }">
-                                                        <!-- Activate button -->
-                                                        <button 
-                                                            x-show="!isActive"
-                                                            @click="$dispatch('open-status-confirm', {
-                                                                id: {{ $company->id }},
-                                                                name: {{ json_encode($company->company_name) }},
-                                                                activating: true
-                                                            })"
-                                                            class="p-1.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors duration-200"
-                                                            title="Activate">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                            </svg>
-                                                        </button>
-                                                        
-                                                        <!-- Deactivate button -->
-                                                        <button 
-                                                            x-show="isActive"
-                                                            @click="$dispatch('open-status-confirm', {
-                                                                id: {{ $company->id }},
-                                                                name: {{ json_encode($company->company_name) }},
-                                                                activating: false
-                                                            })"
-                                                            class="p-1.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors duration-200"
-                                                            title="Deactivate">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                            </svg>
-                                                        </button>
+                                                    
                                                     </div>
                                                 </div>
                                             </td>
