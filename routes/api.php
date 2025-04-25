@@ -26,7 +26,7 @@ Route::middleware(['api.auth'])->group(function () {
             Route::post('updateemails', 'updateemails');
             Route::post('getapplicantstatus', 'getapplicantstatus');
     });
-    
+    Route::get('/view-resume/{applicantId}', [ApplicantController::class, 'viewFrontResume']);
 
     
     

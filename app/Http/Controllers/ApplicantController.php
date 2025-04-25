@@ -102,6 +102,26 @@ public function viewResume($applicantId)
     return redirect()->away($url);
 }
 
+public function viewFrontResume($applicantId)
+{
+    $applicant = ApplicantsApplication::find($applicantId);
+    
+    if (!$applicant || empty($applicant->resume)) {
+        return abort(404);
+    }
+    
+    $url = Storage::disk('s3')->temporaryUrl(
+        $applicant->resume,
+        Carbon::now()->addMinutes(10)  // URL will be valid for 10 minutes
+    );
+
+  
+    return response()->json([
+        'url' => $url,
+
+    ]);
+}
+
 public function downloadResume($applicantId)
 {
     $applicant = ApplicantsApplication::find($applicantId);
