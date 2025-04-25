@@ -153,7 +153,7 @@
                                         Contact Phone
                                     </label>
                                     <input 
-                                    type="tel" 
+                                    type="number" 
                                     id="contact_phone" 
                                     name="contact_phone" 
                                     x-model="contact_phone"
@@ -339,7 +339,7 @@
                                         Contact Phone
                                     </label>
                                     <input 
-                                    type="tel" 
+                                    type="number" 
                                     id="edit_contact_phone" 
                                     name="contact_phone" 
                                     x-model="company.contact_phone"
