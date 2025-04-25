@@ -15,7 +15,7 @@ class XFrameHeadersMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        $response = $next($request);
 
         $response()->withHeaders('X-Frame-Options', 'unset');
 
