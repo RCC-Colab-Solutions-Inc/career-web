@@ -167,6 +167,7 @@ class ClientMainController extends Controller
         $bcc = EmailAdditional::where('company', $companyId)->where('email_type', 'bcc')->first();
         if ($cc) {
             $cc->email = $request->cc;
+            $cc->email_type = 'cc';
             $cc->save();
         }else{
             $cc = new EmailAdditional();
@@ -177,6 +178,7 @@ class ClientMainController extends Controller
         }
         if ($bcc) {
             $bcc->email = $request->bcc;
+            $bcc->email_type = 'bcc';
             $bcc->save();
         }else{
             $bcc = new EmailAdditional();
