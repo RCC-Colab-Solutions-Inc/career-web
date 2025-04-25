@@ -113,7 +113,7 @@ public function viewResume($applicantId)
     return response()->file($path, [
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="' . $applicant->resume . '"',
-        'X-Frame-Options' => 'unset'
+        'X-Frame-Options' => 'SAMEORIGIN'
     ]);
 }
 
