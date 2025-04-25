@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('jobcode');
             $table->string('jobtitle');
-            $table->string('jobdescription');
+            $table->text('jobdescription');
             $table->string('companyid');
             $table->enum('workplace',['On-Site', 'Remote', 'Hybrid']);
             $table->string('joblocation');
