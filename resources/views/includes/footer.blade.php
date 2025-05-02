@@ -1,0 +1,4 @@
+{!! ToastMagic::scripts() !!}
+
+</body>
+</html>
