@@ -25,6 +25,8 @@ Route::middleware(['api.auth'])->group(function () {
             Route::get('positions', 'positions');
             Route::post('updateemails', 'updateemails');
             Route::post('getapplicantstatus', 'getapplicantstatus');
+            Route::post('scheduleapplicant', 'SaveSchedule');
+            Route::post('UpdateStatusSchedule', 'UpdateStatusSchedule');
     });
     Route::prefix('client')
         ->group(function () {
@@ -41,6 +43,7 @@ Route::middleware(['api.auth'])->group(function () {
         Route::post('applyjob', 'apply');
         Route::post('uploadcv', 'uploadcv');
         Route::post('checkapplicant', 'checkapplicant');
+
         
     });
    

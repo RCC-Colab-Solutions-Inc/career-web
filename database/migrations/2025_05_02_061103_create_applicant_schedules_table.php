@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('job_posting_id')->unsigned();
             $table->string('subject');
             $table->string('attendee');
-            $dateTime('start_schedule_date');
+            $table->string('start_schedule_date');
             $table->string('start_schedule_time');
             $table->string('end_schedule_date');
             $table->string('end_schedule_time');

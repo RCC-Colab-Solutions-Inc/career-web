@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\ApplicantSchedule;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use App\Services\MicrosoftGraphService;
 class ClientMainController extends Controller
 {
     public function getapplicantstatus(Request $request){
@@ -443,5 +446,145 @@ class ClientMainController extends Controller
         $result = $response->json();
 
         return $result['success'] ?? false;
+    }
+
+    public function SaveSchedule(Request $request){
+        $validator = Validator::make($request->all(), [
+            'applicant_id' => 'required|exists:applicants_applications,id',
+            'client_id' => 'required|exists:company_databases,id',
+            'job_posting_id' => 'required|exists:job_postings,id',
+            'subject' => 'required|string|max:255',
+            'attendee' => 'required|string|max:255',
+            'start_schedule_date' => 'required|date',
+            'start_schedule_time' => 'required|date_format:H:i',
+            'end_schedule_date' => 'required|date',
+            'end_schedule_time' => 'required|date_format:H:i',
+            'schedule_type' => 'required|string|max:50',
+            'location' => 'nullable|string|max:255',
+            // Add other validation rules as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $schedule = new ApplicantSchedule();
+        $schedule->applicant_id = $request->applicant_id;
+        $schedule->client_id = $request->client_id;
+        $schedule->job_posting_id = $request->job_posting_id;
+        $schedule->subject = $request->subject;
+        $schedule->attendee = $request->attendee;
+        $schedule->start_schedule_date = $request->start_schedule_date;
+        $schedule->start_schedule_time = $request->start_schedule_time;
+        $schedule->end_schedule_date = $request->end_schedule_date;
+        $schedule->end_schedule_time = $request->end_schedule_time;
+        $schedule->schedule_type = $request->schedule_type;
+        $schedule->location = $request->location;
+        $schedule->status = 'Pending';
+        $schedule->remarks = $request->remarks ?? null;
+        $schedule->schedule_link = $request->schedule_link ?? null;
+        $schedule->save();
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Schedule saved successfully',
+            'data' => $schedule,
+        ]);
+
+    }
+
+
+    public function UpdateStatusSchedule(Request $request){
+        $validator = Validator::make($request->all(), [
+            'schedule_id' => 'required|exists:applicant_schedules,id',
+            'status' => 'required|string|max:50',
+            // Add other validation rules as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $schedule = ApplicantSchedule::find($request->schedule_id);
+        $applicantID = $schedule->applicant_id;
+        $subject = $schedule->subject;
+        $attendees = json_decode($schedule->attendee, true);
+        
+       // Convert to ISO 8601 format with timezone
+       // Convert to ISO 8601 format with timezone
+       $startRaw = $schedule->start_schedule_date . ' ' . $schedule->start_schedule_time;
+        $endRaw = $schedule->end_schedule_date . ' ' . $schedule->end_schedule_time;
+
+        try {
+            $start_schedule = Carbon::createFromFormat('m/d/Y h:i A', $startRaw, 'Asia/Manila')->toIso8601String();
+            $end_schedule = Carbon::createFromFormat('m/d/Y h:i A', $endRaw, 'Asia/Manila')->toIso8601String();
+        } catch (\Exception $e) {
+            Log::error('Datetime parsing failed', [
+                'startRaw' => $startRaw,
+                'endRaw' => $endRaw,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Invalid date/time format'], 500);
+        }
+
+
+        $applicant = ApplicantsApplication::find($applicantID);
+        $email = $applicant->email ?? null;
+        $attendees[] = $email;
+
+        
+       
+
+        
+        if($request->status == 'Accepted'){
+            $graph = new MicrosoftGraphService();
+            try {
+                $graph->createTeamsMeeting(
+                    $subject,
+                    $start_schedule,
+                    $end_schedule,
+                    $attendees
+    
+                    
+                );
+                $schedule->schedule_link= $response['joinWebUrl'] ?? null;
+                $schedule->save();
+                return response()->json([
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Teams meeting created successfully',
+                    'start_date_time' => $start_schedule,
+                    'end_date_time' => $end_schedule, 
+                ]);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'status' => 'failed',
+                    'code' => 500,
+                    'message' => 'Error creating Teams meeting: ' . $e->getMessage(),
+                ], 500);
+            }
+
+        }
+
+        
+        $schedule = ApplicantSchedule::find($request->schedule_id);
+        $schedule->status = $request->status;
+        $schedule->save();
+
+       
+
+       
     }
 }
