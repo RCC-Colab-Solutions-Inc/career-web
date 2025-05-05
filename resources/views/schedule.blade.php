@@ -40,8 +40,11 @@
                 </div>
             </div>
             
-            <div class="mb-8" x-show="currentView === 'table'">
-                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 transition-colors duration-300">
+            <div x-data="{ currentView: 'table' }" @set-view.window="currentView = $event.detail.view">
+    <!-- Filters Section - only shows in table view -->
+    <div class="mb-8" x-show="currentView === 'table'" x-cloak>
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 p-6 transition-colors duration-300">
+            <!-- Filter content remains the same -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</label>
@@ -86,16 +89,13 @@
                                 <thead>
                                     <tr class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-slate-600 transition-colors duration-300">
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                            Date & Time
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                             Candidate
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                             Position
                                         </th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
-                                            Type
+                                            Date & Time
                                         </th>
                                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider transition-colors duration-300">
                                             Status
@@ -108,14 +108,6 @@
                                 <tbody class="divide-y divide-gray-200 dark:divide-slate-700">
                                     <!-- Sample appointments -->
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                            Dec 5, 2024
-                                        </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                            10:00 AM
-                                        </div>
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-400 flex items-center justify-center text-white font-medium">
@@ -137,8 +129,11 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                            Technical Interview
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                                            Dec 5, 2024
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                            10:00 AM
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -168,14 +163,7 @@
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                            Dec 10, 2024
-                                        </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                            9:00 AM
-                                        </div>
-                                    </td>
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-medium">
@@ -197,8 +185,11 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                            HR Interview
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                                            Dec 10, 2024
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                            9:00 AM
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -229,14 +220,6 @@
                                 </tr>
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                                            Dec 15, 2024
-                                        </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                                            3:00 PM
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-8 w-8 rounded-full bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white font-medium">
                                                 ER
@@ -257,8 +240,11 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-white transition-colors duration-300">
-                                            Final Interview
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                                            Dec 15, 2024
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                                            3:00 PM
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
