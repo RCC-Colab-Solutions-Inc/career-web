@@ -85,4 +85,21 @@ class MicrosoftGraphService
     return $response->json();
 }
 
+
+    public function cancelTeamsMeeting($meetingId)
+    {
+        $token = $this->getAccessToken();
+
+        // The request should be against the user's events
+        $response = Http::withToken($token)->delete("https://graph.microsoft.com/v1.0/users/{$this->organizerEmail}/events/{$meetingId}");
+
+        if (!$response->successful()) {
+            logger()->error('Error canceling Teams event', $response->json());
+            throw new \Exception('Error canceling Teams meeting: ' . $response->body());
+        }
+
+        return $response->json();
+    }
+
+
 }

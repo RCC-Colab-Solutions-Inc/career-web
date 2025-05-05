@@ -24,9 +24,10 @@ return new class extends Migration
             $table->string('end_schedule_time');
             $table->string('schedule_type');
             $table->string('location');
-            $table->enum('status', ['Pending', 'Accepted', 'Declined'])->default('Pending');
+            $table->enum('status', ['Pending', 'Accepted', 'Declined','Cancelled'])->default('Pending');
             $table->text('remarks')->nullable();
-            $table->string('schedule_link')->nullable();
+            $table->text('meetingid')->nullable();
+            $table->text('meeting_link')->nullable();
             $table->timestamps();
         });
     }

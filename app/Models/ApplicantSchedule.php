@@ -21,7 +21,8 @@ class ApplicantSchedule extends Model
         'location',
         'status',
         'remarks',
-        'schedule_link'
+        'meeting_link',
+        'meetingid',
     ];
 
 }

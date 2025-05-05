@@ -456,9 +456,9 @@ class ClientMainController extends Controller
             'subject' => 'required|string|max:255',
             'attendee' => 'required|string|max:255',
             'start_schedule_date' => 'required|date',
-            'start_schedule_time' => 'required|date_format:H:i',
+            'start_schedule_time' => 'required',
             'end_schedule_date' => 'required|date',
-            'end_schedule_time' => 'required|date_format:H:i',
+            'end_schedule_time' => 'required',
             'schedule_type' => 'required|string|max:50',
             'location' => 'nullable|string|max:255',
             // Add other validation rules as needed
@@ -488,7 +488,7 @@ class ClientMainController extends Controller
         $schedule->location = $request->location;
         $schedule->status = 'Pending';
         $schedule->remarks = $request->remarks ?? null;
-        $schedule->schedule_link = $request->schedule_link ?? null;
+        $schedule->meeting_link = $request->schedule_link ?? null;
         $schedule->save();
         return response()->json([
             'status' => 'success',
@@ -546,27 +546,39 @@ class ClientMainController extends Controller
 
         
        
-
+        if($schedule->status == 'Accepted'){
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Schedule already accepted',
+            ], 422);
+        }
         
         if($request->status == 'Accepted'){
+            //check if the schedule is already accepted
+            
+
             $graph = new MicrosoftGraphService();
             try {
-                $graph->createTeamsMeeting(
+                $response = $graph->createTeamsMeeting(
                     $subject,
                     $start_schedule,
                     $end_schedule,
                     $attendees
-    
-                    
                 );
-                $schedule->schedule_link= $response['joinWebUrl'] ?? null;
+                $schedule->meeting_link= $response['onlineMeeting']['joinUrl'] ?? null;
+                $schedule->meetingid = $response['id'] ?? null;
+                $schedule->status = $request->status;
                 $schedule->save();
                 return response()->json([
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Teams meeting created successfully',
-                    'start_date_time' => $start_schedule,
-                    'end_date_time' => $end_schedule, 
+                    'data' => [
+                        'url' =>  $response['onlineMeeting']['joinUrl'] ?? null,
+                        'meeting_id' => $response['id'] ?? null,
+
+                    ],
                 ]);
             } catch (\Throwable $e) {
                 return response()->json([
@@ -578,13 +590,58 @@ class ClientMainController extends Controller
 
         }
 
-        
-        $schedule = ApplicantSchedule::find($request->schedule_id);
-        $schedule->status = $request->status;
-        $schedule->save();
-
        
+    }
 
-       
+
+    public function cancelSchedule(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'meeting_id' => 'required|exists:applicant_schedules,meetingid',
+            'message' => 'nullable|string|max:255', // Optional cancellation message
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $schedule = ApplicantSchedule::where('meetingid', $request->meeting_id)->first();
+
+        if (!$schedule) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Schedule not found',
+            ], 404);
+        }
+
+        $meetingId = $schedule->meetingid;
+
+        try {
+            // Cancel the meeting through Microsoft Graph API
+            $graph = new MicrosoftGraphService();
+            $graph->cancelTeamsMeeting($meetingId);
+
+            // Update the schedule status in your database
+            $schedule->status = 'Cancelled';
+            $schedule->save();
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Meeting cancelled successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 500,
+                'message' => 'Error cancelling Teams meeting: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

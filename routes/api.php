@@ -27,6 +27,7 @@ Route::middleware(['api.auth'])->group(function () {
             Route::post('getapplicantstatus', 'getapplicantstatus');
             Route::post('scheduleapplicant', 'SaveSchedule');
             Route::post('UpdateStatusSchedule', 'UpdateStatusSchedule');
+            Route::post('CancelSchedule', 'cancelSchedule');
     });
     Route::prefix('client')
         ->group(function () {
