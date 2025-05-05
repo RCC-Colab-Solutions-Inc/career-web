@@ -330,4 +330,14 @@ public function updatePassword(Request $request)
         ToastMagic::success('Success','Successfully Deleted');
         return back();
     }
+
+    public function schedule()
+    {
+        return view('schedule');
+    }
+
+    public function messages()
+    {
+        return view('messages');
+    }
 }

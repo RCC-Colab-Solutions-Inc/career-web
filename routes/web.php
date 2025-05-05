@@ -58,6 +58,8 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::post('/update-password', 'updatePassword');
     Route::get('/application/position', 'positionpage');
     Route::get('/ip-address', 'ipaddress');
+    Route::get('/schedule', 'schedule');
+    Route::get('/messages', 'messages');
 
 
     //make urgent
