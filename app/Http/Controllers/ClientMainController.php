@@ -448,6 +448,41 @@ class ClientMainController extends Controller
         return $result['success'] ?? false;
     }
 
+    public function getSchedule(Request $request){
+         $companyId = $this->getCompanyIdByToken($request);
+        if (!$companyId) {
+            return response()->json([
+                'status_tokenized' => 'error',
+                'message_tokenized' => 'Invalid token or token not provided',
+                'code' => 200,
+            ], 200);
+        }
+        
+        //get all the schedule from the applicant_schedules concat with company_database and applicants_applications where company_database.id = applicant_schedules.client_id and applicants_applications.id = applicant_schedules.applicant_id
+        $schedules = ApplicantSchedule::join('company_databases', 'applicant_schedules.client_id', '=', 'company_databases.id')
+        ->join('applicants_applications', 'applicant_schedules.applicant_id', '=', 'applicants_applications.id')
+        ->where('company_databases.id', $companyId)
+        ->select('applicant_schedules.*', 'company_databases.company_name', 'applicants_applications.firstname', 'applicants_applications.lastname')
+        ->orderBy('applicant_schedules.created_at', 'desc')
+        ->get();
+        if ($schedules->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'data' => null,
+                'message' => 'No schedule found for this company'
+            ], 404);
+        }
+        $scheduleData = [];
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Schedule found',
+            'data' => $schedules,
+        ]);
+
+    }
+
     public function SaveSchedule(Request $request){
         $validator = Validator::make($request->all(), [
             'applicant_id' => 'required|exists:applicants_applications,id',
