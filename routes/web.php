@@ -96,6 +96,15 @@ Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->grou
     Route::post('/forwardtoclient', 'forwardtoclient');
 });
 
+// ScheduleController routes
+Route::middleware(['web', 'auth'])->controller(App\Http\Controllers\ScheduleController::class)->group(function () {
+    Route::get('/schedule', 'index')->name('schedule');
+    Route::post('/schedule/save', 'save')->name('schedule.save');
+    Route::post('/schedule/update', 'update')->name('schedule.update');
+    Route::post('/schedule/approve', 'approve')->name('schedule.approve');
+    Route::post('/schedule/cancel', 'cancel')->name('schedule.cancel');
+});
+
 // ✅ Public Routes (Login & Logout)
 Route::controller(LoginMainController::class)->group(function () {
     Route::get('/', 'welcome')->name('login'); // 🔹 Add 'name' to login for proper redirect
