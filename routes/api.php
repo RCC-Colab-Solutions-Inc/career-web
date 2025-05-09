@@ -6,8 +6,16 @@ use App\Http\Controllers\RegistrationAPIControllers;
 use App\Http\Controllers\ClientMainController;
 use App\Http\Controllers\ApplicantFrontEndClient;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\MessageController;
 
 Route::middleware(['api.auth'])->group(function () {
+
+    Route::prefix('client/messages')->group(function () {
+        Route::post('/start-conversation', [MessageController::class, 'startConversation']);
+        Route::post('/send', [MessageController::class, 'sendMessage']);
+        Route::get('/conversations', [MessageController::class, 'getConversations']);
+        Route::get('/conversation/{conversationId}', [MessageController::class, 'getMessages']);
+    });
     
     
     Route::controller(RegistrationAPIControllers::class)->group(function(){
@@ -37,8 +45,6 @@ Route::middleware(['api.auth'])->group(function () {
         });
     
 
-    
-    
     // Route for Applicant Checking
     Route::prefix('client')->controller(ApplicantFrontEndClient::class)->group(function () {
         Route::get('getjob', 'getjob');
