@@ -385,4 +385,151 @@ public function sendApplicantMessage(Request $request)
         'data' => ['message_id' => $message->id]
     ]);
 }
+
+public function adminMessages() 
+{
+    return view('messages'); 
+}
+
+public function adminGetConversations(Request $request)
+{
+    try {
+        \Log::info('adminGetConversations called');
+        
+        // Fetch all conversations with latest message for admin view
+        $conversations = Conversation::with([
+            'company:id,company_name',
+            'applicant:id,firstname,lastname,email',
+            'job:id,jobtitle'
+        ])
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        
+        \Log::info('Found ' . $conversations->count() . ' conversations');
+
+        $conversationData = [];
+        
+        foreach ($conversations as $conversation) {
+            if (!$conversation->applicant || !$conversation->company) {
+                \Log::warning('Missing applicant or company for conversation ID: ' . $conversation->id);
+                continue;
+            }
+            
+            $latestMessage = Message::where('conversation_id', $conversation->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $unreadCount = Message::where('conversation_id', $conversation->id)
+                ->where('is_read', false)
+                ->count();
+            
+            $companyName = $conversation->company->company_name ?? 'Unknown Company';
+            
+            $conversationData[] = [
+                'id' => $conversation->id,
+                'applicant_id' => $conversation->applicant_id,
+                'applicant_name' => $conversation->applicant->firstname . ' ' . $conversation->applicant->lastname,
+                'applicant_initial' => strtoupper(substr($conversation->applicant->firstname, 0, 1) . substr($conversation->applicant->lastname, 0, 1)),
+                'applicant_email' => $conversation->applicant->email,
+                'company_name' => $companyName,
+                'company_initial' => strtoupper(substr($companyName, 0, 2)),
+                'job_title' => $conversation->job->jobtitle ?? 'N/A',
+                'last_message' => $latestMessage ? $latestMessage->message : null,
+                'last_message_time' => $latestMessage ? $latestMessage->created_at->diffForHumans() : null,
+                'unread_count' => $unreadCount,
+                'is_active' => $conversation->is_active ?? true
+            ];
+        }
+
+        \Log::info('Returning ' . count($conversationData) . ' conversations');
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $conversationData
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Error in adminGetConversations: ' . $e->getMessage());
+        \Log::error('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
+        \Log::error($e->getTraceAsString());
+        
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Error retrieving conversations: ' . $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
+    }
+}
+
+public function adminGetMessages(Request $request, $conversationId)
+{
+    try {
+        $conversation = Conversation::with([
+            'company:id,company_name',
+            'applicant:id,firstname,lastname',
+            'job:id,jobtitle'
+        ])->find($conversationId);
+        
+        if (!$conversation) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Conversation not found'
+            ], 404);
+        }
+
+        if (!$conversation->applicant || !$conversation->company) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid conversation data'
+            ], 400);
+        }
+
+        $messages = Message::where('conversation_id', $conversationId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        
+        $messageData = [];
+        
+        foreach ($messages as $message) {
+            $isFromCompany = $message->sender_id == $conversation->company_id;
+            $senderName = $isFromCompany ? 
+                ($conversation->company->company_name ?? 'Company') : 
+                ($conversation->applicant->firstname . ' ' . $conversation->applicant->lastname);
+            $senderInitial = $isFromCompany ? 
+                strtoupper(substr($conversation->company->company_name ?? 'C', 0, 1)) : 
+                strtoupper(substr($conversation->applicant->firstname, 0, 1));
+            
+            $messageData[] = [
+                'id' => $message->id,
+                'sender' => $senderName,
+                'sender_type' => $isFromCompany ? 'Company' : 'Applicant',
+                'initial' => $senderInitial,
+                'content' => [$message->message],
+                'received' => !$isFromCompany,
+                'timestamp' => $message->created_at->toISOString(),
+                'time' => $message->created_at->format('h:i A'),
+                'is_read' => $message->is_read
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'conversation' => [
+                'company_name' => $conversation->company->company_name ?? 'Company',
+                'applicant_name' => $conversation->applicant->firstname . ' ' . $conversation->applicant->lastname,
+                'job_title' => $conversation->job->jobtitle ?? 'N/A'
+            ],
+            'data' => $messageData
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Error in adminGetMessages: ' . $e->getMessage());
+        \Log::error('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
+        \Log::error($e->getTraceAsString());
+        
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Error retrieving messages: ' . $e->getMessage()
+        ], 500);
+    }
+}
 }

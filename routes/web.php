@@ -111,3 +111,8 @@ Route::controller(LoginMainController::class)->group(function () {
     Route::post('/login', 'login');
     Route::get('/logout', 'logout')->name('logout'); // 🔹 Use POST method for security
 });
+
+Route::middleware(['web', 'auth'])->controller(App\Http\Controllers\MessageController::class)->group(function () {
+    Route::get('/admin/messages-conversations', 'adminGetConversations');
+    Route::get('/admin/messages-conversation/{conversationId}', 'adminGetMessages');
+});
