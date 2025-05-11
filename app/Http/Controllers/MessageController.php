@@ -24,18 +24,16 @@ class MessageController extends Controller
         'message' => 'required|string'
     ]);
 
-    // First find or create the conversation
     $conversation = Conversation::firstOrCreate([
         'company_id' => $request->client_id,
         'applicant_id' => $request->applicant_id,
         'job_posting_id' => $request->job_id
     ]);
 
-    // Then create the message
     $message = new Message();
     $message->conversation_id = $conversation->id;
-    $message->sender_id = $request->client_id; // Company is the sender
-    $message->receiver_id = $request->applicant_id; // Applicant is the receiver
+    $message->sender_id = $request->client_id;
+    $message->receiver_id = $request->applicant_id;
     $message->message = $request->message;
     $message->is_read = false;
     $message->save();
@@ -70,7 +68,6 @@ class MessageController extends Controller
             ], 422);
         }
 
-        // Create the message
         $message = Message::create([
             'conversation_id' => $request->conversation_id,
             'sender_id' => $request->sender_id,
@@ -94,7 +91,6 @@ class MessageController extends Controller
     public function getConversations(Request $request)
 {
     try {
-        // Get the company ID from the token
         $tokenized = $request->header('X-Remember-Token');
 
         if (!$tokenized) {
@@ -105,7 +101,6 @@ class MessageController extends Controller
             ], 200);
         }
 
-        // Look for the company with the provided token
         $company = CompanyDatabase::where('remember_token', $tokenized)->first();
 
         if (!$company) {
@@ -118,10 +113,10 @@ class MessageController extends Controller
 
         $companyId = $company->id;
 
-        // Add debug logging
+    
         \Log::info('Fetching conversations for company ID: ' . $companyId);
         
-        // Get conversations with eager loading but limit the fields we retrieve
+ 
         $conversations = Conversation::where('company_id', $companyId)
             ->with([
                 'applicant:id,firstname,lastname,email,priority_job_id',
@@ -135,19 +130,16 @@ class MessageController extends Controller
         $conversationData = [];
         
         foreach ($conversations as $conversation) {
-            // Skip if the applicant doesn't exist in the relation
             if (!$conversation->applicant) {
                 \Log::warning('Missing applicant for conversation ID: ' . $conversation->id);
                 continue;
             }
-            
-            // Skip if the job doesn't exist in the relation
+ 
             if (!$conversation->job) {
                 \Log::warning('Missing job for conversation ID: ' . $conversation->id);
                 continue;
             }
-            
-            // Get the latest message
+
             $latestMessage = Message::where('conversation_id', $conversation->id)
                 ->orderBy('created_at', 'desc')
                 ->first();
@@ -174,8 +166,7 @@ class MessageController extends Controller
     } catch (\Exception $e) {
         \Log::error('Error in getConversations: ' . $e->getMessage());
         \Log::error($e->getTraceAsString());
-        
-        // Return full error details for debugging
+
         return response()->json([
             'status' => 'error',
             'message' => 'Error retrieving conversations: ' . $e->getMessage(),
@@ -191,7 +182,7 @@ class MessageController extends Controller
      */
     public function getMessages(Request $request, $conversationId)
     {
-        // Get the company ID from the token
+
         $tokenized = $request->header('X-Remember-Token');
 
         if (!$tokenized) {
@@ -202,7 +193,6 @@ class MessageController extends Controller
             ], 200);
         }
 
-        // Look for the company with the provided token
         $company = CompanyDatabase::where('remember_token', $tokenized)->first();
 
         if (!$company) {
@@ -215,7 +205,6 @@ class MessageController extends Controller
 
         $companyId = $company->id;
 
-        // Verify this conversation belongs to the company
         $conversation = Conversation::where('id', $conversationId)
             ->where('company_id', $companyId)
             ->first();
@@ -228,7 +217,6 @@ class MessageController extends Controller
             ], 404);
         }
 
-        // Get messages for this conversation
         $messages = Message::where('conversation_id', $conversationId)
             ->orderBy('created_at', 'asc')
             ->get();
@@ -249,7 +237,6 @@ class MessageController extends Controller
             ];
         }
 
-        // Mark all unread messages as read
         Message::where('conversation_id', $conversationId)
             ->where('receiver_id', $companyId)
             ->where('is_read', false)
@@ -261,4 +248,141 @@ class MessageController extends Controller
             'data' => $messageData
         ]);
     }
+
+    public function getApplicantConversations(Request $request)
+{
+    $applicantId = $request->header('X-Applicant-ID');
+    
+    \Log::info('Getting conversations for applicant: ' . $applicantId);
+    
+    if (!$applicantId) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Applicant ID not provided'
+        ], 400);
+    }
+    
+    $conversations = Conversation::where('applicant_id', $applicantId)
+        ->with(['company', 'job:id,jobtitle'])
+        ->orderBy('updated_at', 'desc')
+        ->get();
+    
+    \Log::info('Found ' . $conversations->count() . ' conversations for applicant ' . $applicantId);
+    
+    $conversationData = [];
+    
+    foreach ($conversations as $conversation) {
+        $latestMessage = Message::where('conversation_id', $conversation->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        $conversationData[] = [
+            'id' => $conversation->id,
+            'company_id' => $conversation->company_id,
+            'company_name' => $conversation->company->company_name ?? $conversation->company->name ?? 'Company',
+            'job_title' => $conversation->job->jobtitle ?? 'Position',
+            'last_message' => $latestMessage ? $latestMessage->message : null,
+            'last_message_time' => $latestMessage ? $latestMessage->created_at->timezone('Asia/Manila')->format('h:i A') : null,
+            'unread_count' => Message::where('conversation_id', $conversation->id)
+                ->where('receiver_id', $applicantId)
+                ->where('is_read', false)
+                ->count()
+        ];
+    }
+    
+    return response()->json([
+        'status' => 'success',
+        'data' => $conversationData
+    ]);
+}
+
+/**
+ * Get messages for a specific conversation (applicant view)
+ */
+public function getApplicantMessages(Request $request, $conversationId)
+{
+    $applicantId = $request->header('X-Applicant-ID');
+    
+    if (!$applicantId) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Applicant ID not provided'
+        ], 400);
+    }
+    
+    $conversation = Conversation::where('id', $conversationId)
+        ->where('applicant_id', $applicantId)
+        ->first();
+    
+    if (!$conversation) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Conversation not found'
+        ], 404);
+    }
+    
+    $messages = Message::where('conversation_id', $conversationId)
+        ->orderBy('created_at', 'asc')
+        ->get();
+    
+    $messageData = [];
+    
+    foreach ($messages as $message) {
+        $isFromApplicant = $message->sender_id == $applicantId;
+        
+        $messageData[] = [
+            'id' => $message->id,
+            'sender' => $isFromApplicant ? 'You' : 'Company',
+            'content' => [$message->message],
+            'received' => !$isFromApplicant,
+            'timestamp' => $message->created_at->toISOString(),
+            'time' => $message->created_at->timezone('Asia/Manila')->format('h:i A')
+        ];
+    }
+    
+    Message::where('conversation_id', $conversationId)
+        ->where('receiver_id', $applicantId)
+        ->where('is_read', false)
+        ->update(['is_read' => true]);
+    
+    return response()->json([
+        'status' => 'success',
+        'data' => $messageData
+    ]);
+}
+
+/**
+ * Send message from applicant
+ */
+public function sendApplicantMessage(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'conversation_id' => 'required|exists:conversations,id',
+        'sender_id' => 'required',
+        'receiver_id' => 'required',
+        'message' => 'required|string'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    $message = Message::create([
+        'conversation_id' => $request->conversation_id,
+        'sender_id' => $request->sender_id,
+        'receiver_id' => $request->receiver_id,
+        'message' => $request->message
+    ]);
+
+    Conversation::where('id', $request->conversation_id)
+        ->update(['updated_at' => now()]);
+
+    return response()->json([
+        'status' => 'success',
+        'data' => ['message_id' => $message->id]
+    ]);
+}
 }

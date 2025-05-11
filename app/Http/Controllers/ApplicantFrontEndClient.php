@@ -240,73 +240,62 @@ class ApplicantFrontEndClient extends Controller
 
 
     public function checkapplicant(Request $request)
-    {
-        $request->validate([
-            'application_code' => 'required',
-            'token' => 'required',
-        ]);
+{
+    $request->validate([
+        'application_code' => 'required',
+        'token' => 'required',
+    ]);
 
-        // //return the message failed in json during validation
-        // if ($request->fails()) {
-        //     return response()->json([
-        //         'status' => 'failed',
-        //         'message' => $request->errors(),
-        //     ]);
-        // }
-
-        if (!$this->verifycaptcha($request->token)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'reCAPTCHA verification failed',
-            ], 422);
-        }
-
-        $applicationCode = $request->application_code;
-        $applicant = ApplicantsApplication::where('reference_code', $applicationCode)->first();
-
-
-        if (!$applicant) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Application not found',
-            ], 404);
-        }else{
-            $name = $applicant->firstname . ' ' . $applicant->lastname;
-            $job = JobPosting::where('id', $applicant->priority_job_id)->first();
-            if ($job) {
-                $jobTitle = $job->jobtitle;
-            } else {
-                $jobTitle = 'N/A';
-            }
-            //get all the status of the application
-            $statuses = ApplicantStatus::where('applicant_id', $applicant->id)->get();
-            $applicantstatuses = [];
-            foreach ($statuses as $status) {
-                $applicantstatuses[] = [
-                    'status' => $status->applicant_status,
-                    'remarks' => $status->remarks,
-                    'date' => $status->created_at->format('Y-m-d'),
-                ];
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Application found',
-                'data' => [
-                    'name' => $name,
-                    'email' => $applicant->email,
-                    'phone' => $applicant->contact_number,
-                    'application_status' => $applicant->applicant_status,
-                    'position' => $jobTitle,
-                    'date_applied' => $applicant->created_at->format('Y-m-d'),
-                ],
-                'statuses' => $applicantstatuses,
-            ]);
-        }
-
-
-        
+    if (!$this->verifycaptcha($request->token)) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'reCAPTCHA verification failed',
+        ], 422);
     }
+
+    $applicationCode = $request->application_code;
+    $applicant = ApplicantsApplication::where('reference_code', $applicationCode)->first();
+
+    if (!$applicant) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Application not found',
+        ], 404);
+    } else {
+        $name = $applicant->firstname . ' ' . $applicant->lastname;
+        $job = JobPosting::where('id', $applicant->priority_job_id)->first();
+        if ($job) {
+            $jobTitle = $job->jobtitle;
+        } else {
+            $jobTitle = 'N/A';
+        }
+ 
+        $statuses = ApplicantStatus::where('applicant_id', $applicant->id)->get();
+        $applicantstatuses = [];
+        foreach ($statuses as $status) {
+            $applicantstatuses[] = [
+                'status' => $status->applicant_status,
+                'remarks' => $status->remarks,
+                'date' => $status->created_at->format('Y-m-d'),
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Application found',
+            'data' => [
+                'id' => $applicant->id,
+                'name' => $name,
+                'email' => $applicant->email,
+                'phone' => $applicant->contact_number,
+                'application_status' => $applicant->applicant_status,
+                'position' => $jobTitle,
+                'date_applied' => $applicant->created_at->format('Y-m-d'),
+            ],
+            'statuses' => $applicantstatuses,
+        ]);
+    }
+}
     private function verifycaptcha($captchaResponse)
     {
         $secretKey = env('RECAPTCHA_SECRET_KEY');

@@ -55,8 +55,11 @@ Route::middleware(['api.auth'])->group(function () {
 
         
     });
-   
-    
-    
+});
+
+Route::prefix('messages/applicant')->group(function () {
+    Route::get('/conversations', [MessageController::class, 'getApplicantConversations']);
+    Route::get('/conversation/{id}', [MessageController::class, 'getApplicantMessages']);
+    Route::post('/send', [MessageController::class, 'sendApplicantMessage']);
 });
 
