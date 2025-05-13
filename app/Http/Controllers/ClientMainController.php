@@ -20,6 +20,43 @@ use Illuminate\Support\Facades\Validator;
 use App\Services\MicrosoftGraphService;
 class ClientMainController extends Controller
 {
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Get company by email
+        $company = CompanyDatabase::where('representative_email', $request->email)->first();
+
+        if (!$company) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Company not found',
+            ], 404);
+        }
+
+        // Update the sign-in code (password) and set stPassword to 1
+        $company->sigin_code = Hash::make($request->password);
+        $company->stPassword = '1';  // Mark as password changed
+        $company->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password changed successfully',
+        ]);
+    }
+
     public function getapplicantstatus(Request $request){
         $request->validate([
             'applicant_id' => 'required',
@@ -422,14 +459,15 @@ class ClientMainController extends Controller
 
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Login successful',
-            'data' => [
-                'user' => $company->company_name,
-                'email' => $company->representative_email,
-                'token' => $token,
-            ],
-        ]);
+        'status' => 'success',
+        'message' => 'Login successful',
+        'data' => [
+            'user' => $company->company_name,
+            'email' => $company->representative_email,
+            'token' => $token,
+            'stPassword' => $company->stPassword,
+        ],
+    ]);
         
 
     }

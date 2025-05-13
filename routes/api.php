@@ -26,6 +26,7 @@ Route::middleware(['api.auth'])->group(function () {
         ->group(function () {
             
             Route::post('loginfront', 'login');
+            Route::post('change-password', [ClientMainController::class, 'changePassword']);
             Route::get('dashboard', 'dashboardpage');
             Route::get('companyprofile', 'companyprofile');
             Route::get('selectapplicants', 'selectapplicants');
