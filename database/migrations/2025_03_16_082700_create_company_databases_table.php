@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('representative_contact_number');
             $table->string('sigin_code');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('stPassword', ['0', '1'])->default('0');
             $table->rememberToken();
             $table->timestamps();
         });
