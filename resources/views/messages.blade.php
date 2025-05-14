@@ -45,8 +45,8 @@
                 </div>
                 
                 <!-- Main Chat Area -->
-                <div class="flex-1 flex flex-col">
-                <!-- When no chat is selected - keep this section -->
+            <div class="flex-1 flex flex-col">
+                <!-- When no chat is selected -->
                 <div class="no-selection flex-1 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700">
                     <div class="text-center">
                         <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
@@ -58,6 +58,16 @@
                         <p class="text-gray-500 dark:text-gray-400">Choose a conversation from the list to view messages</p>
                     </div>
                 </div>
+
+                <!-- Chat Content (Hidden by default) -->
+    <div class="chat-content flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700" style="display: none;">
+        <!-- Chat Header -->
+        <div class="chat-header p-4 border-b border-gray-200 dark:border-slate-700"></div>
+        
+        <!-- Messages Container -->
+        <div class="messages-container flex-1 p-4 overflow-y-auto space-y-4"></div>
+    </div>
+</div>
             </div>
         </main>
         
@@ -218,48 +228,53 @@ document.addEventListener('DOMContentLoaded', function() {
             return text.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-900">$1</mark>');
         },
 
-        renderMessages() {
-            const headerContainer = document.querySelector('.chat-header');
-            const messagesContainer = document.querySelector('.messages-container');
-            const noSelection = document.querySelector('.no-selection');
-            
-            if (noSelection) noSelection.style.display = 'none';
-            if (headerContainer) headerContainer.style.display = 'block';
-            if (messagesContainer) messagesContainer.style.display = 'block';
-            
-            if (headerContainer && this.selectedConversation) {
-                headerContainer.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="text-sm">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">
-                                    ${this.selectedConversation.applicant_name} ↔ ${this.selectedConversation.company_name}
-                                </h3>
-                                <p class="text-gray-500 dark:text-gray-400">${this.selectedConversation.job_title}</p>
-                            </div>
-                        </div>
+       renderMessages() {
+    const chatContent = document.querySelector('.chat-content');
+    const headerContainer = document.querySelector('.chat-header');
+    const messagesContainer = document.querySelector('.messages-container');
+    const noSelection = document.querySelector('.no-selection');
+    
+    if (noSelection) noSelection.style.display = 'none';
+    if (chatContent) chatContent.style.display = 'flex';
+    
+    if (headerContainer && this.selectedConversation) {
+        headerContainer.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="text-sm">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                            ${this.selectedConversation.applicant_name} ↔ ${this.selectedConversation.company_name}
+                        </h3>
+                        <p class="text-gray-500 dark:text-gray-400">${this.selectedConversation.job_title}</p>
                     </div>
-                `;
-            }
+                </div>
+            </div>
+        `;
+    }
 
-            if (messagesContainer) {
-                messagesContainer.innerHTML = this.messages.map(msg => `
-                    <div class="flex ${msg.sender_type === 'Company' ? 'flex-row-reverse' : ''} items-start gap-3">
-                        <div class="h-8 w-8 rounded-full bg-gradient-to-br ${msg.sender_type === 'Company' ? 'from-green-400 to-teal-400' : 'from-blue-400 to-indigo-400'} flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
-                            ${msg.initial}
-                        </div>
-                        <div class="flex-1 ${msg.sender_type === 'Company' ? 'flex flex-col items-end' : ''}">
-                            <div class="${msg.sender_type === 'Company' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700'} rounded-2xl ${msg.sender_type === 'Company' ? 'rounded-tr-none' : 'rounded-tl-none'} px-4 py-2 inline-block max-w-[70%]">
-                                <p class="${msg.sender_type === 'Company' ? 'text-white' : 'text-gray-900 dark:text-white'}">${msg.content[0]}</p>
-                            </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${msg.time}</p>
-                        </div>
+    if (messagesContainer) {
+        messagesContainer.innerHTML = this.messages.map(msg => {
+            // Handle lowercase vs uppercase in sender_type
+            const isCompany = msg.sender_type === 'company';
+            
+            return `
+                <div class="flex ${isCompany ? 'flex-row-reverse' : ''} items-start gap-3">
+                    <div class="h-8 w-8 rounded-full bg-gradient-to-br ${isCompany ? 'from-green-400 to-teal-400' : 'from-blue-400 to-indigo-400'} flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                        ${msg.initial}
                     </div>
-                `).join('');
+                    <div class="flex-1 ${isCompany ? 'flex flex-col items-end' : ''}">
+                        <div class="${isCompany ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700'} rounded-2xl ${isCompany ? 'rounded-tr-none' : 'rounded-tl-none'} px-4 py-2 inline-block max-w-[70%]">
+                            <p class="${isCompany ? 'text-white' : 'text-gray-900 dark:text-white'}">${msg.content[0]}</p>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${msg.time}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
 
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-        },
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+},
 
         selectChat(conversationId) {
             this.selectedChat = conversationId;
