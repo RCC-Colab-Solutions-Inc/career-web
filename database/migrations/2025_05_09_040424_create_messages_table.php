@@ -15,7 +15,9 @@ class CreateMessagesTable extends Migration
             $table->unsignedBigInteger('receiver_id'); // User ID of receiver
             $table->text('message');
             $table->boolean('is_read')->default(false);
+            $table->enum('sender_type', ['company', 'applicant']); // Type of sender (client or applicant)
             $table->timestamps();
+
             
             // Foreign key to conversations table
             $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
