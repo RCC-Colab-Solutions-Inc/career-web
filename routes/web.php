@@ -58,6 +58,8 @@ Route::middleware(['web', 'auth'])->controller(JobPostingController::class)->gro
     Route::post('/update-password', 'updatePassword');
     Route::get('/application/position', 'positionpage');
     Route::get('/ip-address', 'ipaddress');
+    Route::get('/schedule', 'schedule');
+    Route::get('/messages', 'messages');
 
 
     //make urgent
@@ -94,9 +96,23 @@ Route::middleware(['web', 'auth'])->controller(ApplicantController::class)->grou
     Route::post('/forwardtoclient', 'forwardtoclient');
 });
 
+// ScheduleController routes
+Route::middleware(['web', 'auth'])->controller(App\Http\Controllers\ScheduleController::class)->group(function () {
+    Route::get('/schedule', 'index')->name('schedule');
+    Route::post('/schedule/save', 'save')->name('schedule.save');
+    Route::post('/schedule/update', 'update')->name('schedule.update');
+    Route::post('/schedule/approve', 'approve')->name('schedule.approve');
+    Route::post('/schedule/cancel', 'cancel')->name('schedule.cancel');
+});
+
 // ✅ Public Routes (Login & Logout)
 Route::controller(LoginMainController::class)->group(function () {
     Route::get('/', 'welcome')->name('login'); // 🔹 Add 'name' to login for proper redirect
     Route::post('/login', 'login');
     Route::get('/logout', 'logout')->name('logout'); // 🔹 Use POST method for security
+});
+
+Route::middleware(['web', 'auth'])->controller(App\Http\Controllers\MessageController::class)->group(function () {
+    Route::get('/admin/messages-conversations', 'adminGetConversations');
+    Route::get('/admin/messages-conversation/{conversationId}', 'adminGetMessages');
 });

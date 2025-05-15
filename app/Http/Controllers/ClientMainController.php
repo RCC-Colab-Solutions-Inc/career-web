@@ -14,9 +14,49 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\ApplicantSchedule;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use App\Services\MicrosoftGraphService;
 class ClientMainController extends Controller
 {
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Get company by email
+        $company = CompanyDatabase::where('representative_email', $request->email)->first();
+
+        if (!$company) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Company not found',
+            ], 404);
+        }
+
+        // Update the sign-in code (password) and set stPassword to 1
+        $company->sigin_code = Hash::make($request->password);
+        $company->stPassword = '1';  // Mark as password changed
+        $company->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password changed successfully',
+        ]);
+    }
+
     public function getapplicantstatus(Request $request){
         $request->validate([
             'applicant_id' => 'required',
@@ -419,14 +459,15 @@ class ClientMainController extends Controller
 
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Login successful',
-            'data' => [
-                'user' => $company->company_name,
-                'email' => $company->representative_email,
-                'token' => $token,
-            ],
-        ]);
+        'status' => 'success',
+        'message' => 'Login successful',
+        'data' => [
+            'user' => $company->company_name,
+            'email' => $company->representative_email,
+            'token' => $token,
+            'stPassword' => $company->stPassword,
+        ],
+    ]);
         
 
     }
@@ -443,5 +484,367 @@ class ClientMainController extends Controller
         $result = $response->json();
 
         return $result['success'] ?? false;
+    }
+
+    public function getSchedule(Request $request){
+         $companyId = $this->getCompanyIdByToken($request);
+        if (!$companyId) {
+            return response()->json([
+                'status_tokenized' => 'error',
+                'message_tokenized' => 'Invalid token or token not provided',
+                'code' => 200,
+            ], 200);
+        }
+        
+        //get all the schedule from the applicant_schedules concat with company_database and applicants_applications where company_database.id = applicant_schedules.client_id and applicants_applications.id = applicant_schedules.applicant_id
+        $schedules = ApplicantSchedule::join('company_databases', 'applicant_schedules.client_id', '=', 'company_databases.id')
+        ->join('applicants_applications', 'applicant_schedules.applicant_id', '=', 'applicants_applications.id')
+        ->where('company_databases.id', $companyId)
+        ->select('applicant_schedules.*', 'company_databases.company_name', 'applicants_applications.firstname', 'applicants_applications.lastname')
+        ->orderBy('applicant_schedules.created_at', 'desc')
+        ->get();
+        if ($schedules->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'data' => null,
+                'message' => 'No schedule found for this company'
+            ], 404);
+        }
+        $scheduleData = [];
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Schedule found',
+            'data' => $schedules,
+        ]);
+
+    }
+
+    public function SaveSchedule(Request $request){
+        $validator = Validator::make($request->all(), [
+            'applicant_id' => 'required|exists:applicants_applications,id',
+            'client_id' => 'required|exists:company_databases,id',
+            'job_posting_id' => 'required|exists:job_postings,id',
+            'subject' => 'required|string|max:255',
+            'attendee' => 'required|string|max:255',
+            'start_schedule_date' => 'required|date',
+            'start_schedule_time' => 'required',
+            'end_schedule_date' => 'required|date',
+            'end_schedule_time' => 'required',
+            'schedule_type' => 'required|string|max:50',
+            'location' => 'nullable|string|max:255',
+            // Add other validation rules as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $schedule = new ApplicantSchedule();
+        $schedule->applicant_id = $request->applicant_id;
+        $schedule->client_id = $request->client_id;
+        $schedule->job_posting_id = $request->job_posting_id;
+        $schedule->subject = $request->subject;
+        $schedule->attendee = $request->attendee;
+        $schedule->start_schedule_date = $request->start_schedule_date;
+        $schedule->start_schedule_time = $request->start_schedule_time;
+        $schedule->end_schedule_date = $request->end_schedule_date;
+        $schedule->end_schedule_time = $request->end_schedule_time;
+        $schedule->schedule_type = $request->schedule_type;
+        $schedule->location = $request->location;
+        $schedule->status = 'Pending';
+        $schedule->remarks = $request->remarks ?? null;
+        $schedule->meeting_link = $request->schedule_link ?? null;
+        $schedule->save();
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Schedule saved successfully',
+            'data' => $schedule,
+        ]);
+
+    }
+
+
+    public function ApproveInvites(Request $request){
+        $validator = Validator::make($request->all(), [
+            'schedule_id' => 'required|exists:applicant_schedules,id',
+            'status' => 'required|string|max:50',
+            // Add other validation rules as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'timestamp' => Carbon::now()->toDateTimeString()
+            ], 422);
+        }
+
+        $schedule = ApplicantSchedule::find($request->schedule_id);
+        $applicantID = $schedule->applicant_id;
+        $subject = $schedule->subject;
+        $attendees = json_decode($schedule->attendee, true);
+        
+       // Convert to ISO 8601 format with timezone
+       // Convert to ISO 8601 format with timezone
+       $startRaw = $schedule->start_schedule_date . ' ' . $schedule->start_schedule_time;
+        $endRaw = $schedule->end_schedule_date . ' ' . $schedule->end_schedule_time;
+
+        try {
+            $start_schedule = Carbon::createFromFormat('m/d/Y h:i A', $startRaw, 'Asia/Manila')->toIso8601String();
+            $end_schedule = Carbon::createFromFormat('m/d/Y h:i A', $endRaw, 'Asia/Manila')->toIso8601String();
+        } catch (\Exception $e) {
+            Log::error('Datetime parsing failed', [
+                'startRaw' => $startRaw,
+                'endRaw' => $endRaw,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Invalid date/time format'], 500);
+        }
+
+
+        $applicant = ApplicantsApplication::find($applicantID);
+        $email = $applicant->email ?? null;
+        $attendees[] = $email;
+
+        
+       
+        if($schedule->status == 'Accepted'){
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Schedule already accepted',
+            ], 422);
+        }
+        
+        if($request->status == 'Accepted'){
+            //check if the schedule is already accepted
+            
+
+            $graph = new MicrosoftGraphService();
+            try {
+                $response = $graph->createTeamsMeeting(
+                    $subject,
+                    $start_schedule,
+                    $end_schedule,
+                    $attendees
+                );
+                $schedule->meeting_link= $response['onlineMeeting']['joinUrl'] ?? null;
+                $schedule->meetingid = $response['id'] ?? null;
+                $schedule->status = $request->status;
+                $schedule->save();
+                return response()->json([
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Teams meeting created successfully',
+                    'data' => [
+                        'url' =>  $response['onlineMeeting']['joinUrl'] ?? null,
+                        'meeting_id' => $response['id'] ?? null,
+
+                    ],
+                ]);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'status' => 'failed',
+                    'code' => 500,
+                    'message' => 'Error creating Teams meeting: ' . $e->getMessage(),
+                ], 500);
+            }
+
+        }
+
+       
+    }
+
+    public function UpdateStatusSchedule(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'schedule_id' => 'required|exists:applicant_schedules,id',
+        'subject' => 'required|string|max:255',
+        'start_schedule_date' => 'required|string',
+        'start_schedule_time' => 'required|string',
+        'end_schedule_date' => 'required|string',
+        'end_schedule_time' => 'required|string',
+        'schedule_type' => 'required|string|in:online,physical',
+        'location' => 'required|string|max:255',
+        'remarks' => 'nullable|string',
+        'attendee' => 'nullable|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    try {
+        $schedule = ApplicantSchedule::findOrFail($request->schedule_id);
+        
+        $companyId = $this->getCompanyIdByToken($request);
+        if (!$companyId || $schedule->client_id != $companyId) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'You do not have permission to update this schedule',
+            ], 403);
+        }
+        
+        
+        $schedule->subject = $request->subject;
+        $schedule->start_schedule_date = $request->start_schedule_date;
+        $schedule->start_schedule_time = $request->start_schedule_time;
+        $schedule->end_schedule_date = $request->end_schedule_date;
+        $schedule->end_schedule_time = $request->end_schedule_time;
+        $schedule->schedule_type = $request->schedule_type;
+        $schedule->location = $request->location;
+        $schedule->remarks = $request->remarks;
+        $schedule->attendee = $request->attendee;
+        
+        if ($schedule->status === 'Accepted' && $schedule->meetingid && $schedule->schedule_type === 'online') {
+            try {
+             
+                $attendees = [];
+                
+                if ($request->attendee) {
+                    if (is_string($request->attendee) && 
+                        (str_starts_with($request->attendee, '[') || str_starts_with($request->attendee, '{'))) {
+                        
+                        $attendees = json_decode($request->attendee, true) ?? [];
+                    } else {
+                        
+                        $attendees = array_map('trim', explode(',', $request->attendee));
+                    }
+                }
+                
+                
+                $applicant = ApplicantsApplication::find($schedule->applicant_id);
+                if ($applicant && $applicant->email) {
+                    $attendees[] = $applicant->email;
+                }
+                
+               
+                $startRaw = $request->start_schedule_date . ' ' . $request->start_schedule_time;
+                $endRaw = $request->end_schedule_date . ' ' . $request->end_schedule_time;
+                
+                try {
+                    $start_schedule = Carbon::createFromFormat('m/d/Y h:i A', $startRaw, 'Asia/Manila')->toIso8601String();
+                    $end_schedule = Carbon::createFromFormat('m/d/Y h:i A', $endRaw, 'Asia/Manila')->toIso8601String();
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'status' => 'failed',
+                        'message' => 'Invalid date/time format',
+                    ], 422);
+                }
+                
+                
+                $graph = new MicrosoftGraphService();
+                $graph->updateTeamsMeeting(
+                    $schedule->meetingid,
+                    $request->subject,
+                    $start_schedule,
+                    $end_schedule,
+                    array_unique($attendees)
+                );
+            } catch (\Exception $e) {
+                \Log::error('Failed to update Teams meeting: ' . $e->getMessage());
+            }
+        }
+        
+        $schedule->save();
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Schedule updated successfully',
+            'data' => $schedule,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Error updating schedule: ' . $e->getMessage(),
+        ], 500);
+    }
+}
+
+
+    public function cancelSchedule(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'meeting_id' => 'required|exists:applicant_schedules,meetingid',
+            'message' => 'nullable|string|max:255', // Optional cancellation message
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            $schedule = ApplicantSchedule::where('meetingid', $request->meeting_id)->first();
+
+            if (!$schedule) {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Schedule not found',
+                ], 404);
+            }
+
+            $companyId = $this->getCompanyIdByToken($request);
+            if (!$companyId || $schedule->client_id != $companyId) {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'You do not have permission to cancel this schedule',
+                ], 403);
+            }
+
+            if ($schedule->status === 'Accepted' && $schedule->meetingid) {
+                try {
+                    $graph = new MicrosoftGraphService();
+                    $graph->cancelTeamsMeeting($schedule->meetingid);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to cancel Teams meeting: ' . $e->getMessage());
+                    
+                }
+            }
+            
+            $schedule->status = 'Cancelled';
+            $schedule->save();
+
+            try {
+                $applicant = ApplicantsApplication::find($schedule->applicant_id);
+                if ($applicant && $applicant->email) {
+                  
+                }
+            } catch (\Exception $e) {
+                \Log::error('Failed to send cancellation notification: ' . $e->getMessage());
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Interview cancelled successfully',
+                'data' => $schedule,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'failed',
+                'code' => 500,
+                'message' => 'Error cancelling interview: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
