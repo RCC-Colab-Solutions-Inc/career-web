@@ -3,337 +3,468 @@
 <!-- Main Container -->
 <div class="flex" id="main-container">
     
-   @include('includes.side')
+    @include('includes.side')
     
     <!-- Main Content -->
-    <div class="flex-1 overflow-x-hidden overflow-y-auto transition-colors duration-300 bg-slate-50 dark:bg-slate-900" id="content-area">
+    <div class="flex-1 overflow-x-hidden overflow-y-auto bg-white dark:bg-slate-900 transition-colors duration-300" id="content-area">
         
-    @include('includes.nav')
+        @include('includes.nav')
         
         <!-- Dashboard Content -->
-        <main class="min-h-screen p-6 transition-colors duration-300">
-            <!-- Page Title -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-white transition-colors duration-300">Dashboard</h1>
-                <p class="text-slate-600 dark:text-blue-200/70 transition-colors duration-300">Welcome back, Kent Cortiguerra</p>
+        <main class="min-h-screen p-6">
+            <!-- Filters Row -->
+            <div class="grid grid-cols-5 gap-3 mb-6">
+                <div class="border dark:border-slate-700 rounded shadow-md">
+                    <div class="p-3">
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium dark:text-gray-200">Date</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border dark:border-slate-700 rounded shadow-md">
+                    <div class="p-3">
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium dark:text-gray-200">Last 30 Days</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border dark:border-slate-700 rounded shadow-md">
+                    <div class="p-3">
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium dark:text-gray-200">All Client</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border dark:border-slate-700 rounded shadow-md">
+                    <div class="p-3">
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium dark:text-gray-200">Job Position</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-medium rounded h-full transition-colors duration-200">
+                    Search
+                </button>
             </div>
             
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Total Jobs Card -->
-                <div class="bg-white dark:bg-gradient-to-br dark:from-blue-900/80 dark:to-blue-950/90 rounded-xl shadow-lg border border-slate-200 dark:border-blue-800/50 backdrop-blur-sm p-6 transition-colors duration-300">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Total Jobs</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
-                            {{ $totalJob }}
-                            </h2>
-                        </div>
-                        <div class="bg-blue-100 dark:bg-blue-600/30 p-3 rounded-full transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center text-sm">
-                       
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <!-- Total Applicants Card -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm text-gray-500 dark:text-gray-400 font-medium">Total Applicants</h3>
+                    <p class="text-2xl font-bold mt-1 dark:text-white">1,260</p>
+                </div>
+                
+                <!-- Success Rate Card -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm text-gray-500 dark:text-gray-400 font-medium">Success Rate (Hired%)</h3>
+                    <p class="text-2xl font-bold mt-1 dark:text-white">28.6%</p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                        <div class="bg-blue-500 h-1.5 rounded-full" style="width: 28.6%"></div>
                     </div>
                 </div>
                 
-                <!-- Active Applicants Card -->
-                <div class="bg-white dark:bg-gradient-to-br dark:from-indigo-900/80 dark:to-indigo-950/90 rounded-xl shadow-lg border border-slate-200 dark:border-indigo-800/50 backdrop-blur-sm p-6 transition-colors duration-300">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Active Applicants</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
-                                {{ $totalApplicant }}
-                            </h2>
-                        </div>
-                        <div class="bg-indigo-100 dark:bg-indigo-600/30 p-3 rounded-full transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center text-sm">
-                       
+                <!-- Failure Rate Card -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm text-gray-500 dark:text-gray-400 font-medium">Failure Rate (Rejected%)</h3>
+                    <p class="text-2xl font-bold mt-1 dark:text-white">28.6%</p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 28.6%"></div>
                     </div>
                 </div>
                 
-                <!-- New Applications Card -->
-                <div class="bg-white dark:bg-gradient-to-br dark:from-purple-900/80 dark:to-purple-950/90 rounded-xl shadow-lg border border-slate-200 dark:border-purple-800/50 backdrop-blur-sm p-6 transition-colors duration-300">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">New Applications</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
-                            {{ $totalNewApplicant }}
-                            </h2>
-                        </div>
-                        <div class="bg-purple-100 dark:bg-purple-600/30 p-3 rounded-full transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </div>
+                <!-- Pending Rate Card -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm text-gray-500 dark:text-gray-400 font-medium">Pending/Shortlisted Rate</h3>
+                    <p class="text-2xl font-bold mt-1 dark:text-white">19.4%</p>
+                </div>
+            </div>
+            
+            <!-- Monthly Trends Chart -->
+            <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 mb-6 shadow-md">
+                <h3 class="text-sm font-medium mb-4 dark:text-white">Monthly Trends of Application</h3>
+                <div class="h-48">
+                    <canvas id="monthlyTrendsChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Success vs Failure Chart -->
+            <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 mb-6 shadow-md">
+                <h3 class="text-sm font-medium mb-4 dark:text-white">Success vs Failure Rate per Client</h3>
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-sm mr-1"></div>
+                        <span class="text-xs dark:text-gray-300">Success Rate</span>
                     </div>
-                    <div class="mt-4 flex items-center text-sm">
-                        
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-red-500 rounded-sm mr-1"></div>
+                        <span class="text-xs dark:text-gray-300">Failure Rate</span>
+                    </div>
+                </div>
+                <div class="h-48">
+                    <canvas id="successFailureChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Two Column Charts -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <!-- Applicant Drop-off Rate Chart -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm font-medium mb-4 dark:text-white">Applicant Drop-Off Rate</h3>
+                    <div class="h-48">
+                        <canvas id="dropOffChart"></canvas>
                     </div>
                 </div>
                 
-                <!-- Hired Candidates Card -->
-                <div class="bg-white dark:bg-gradient-to-br dark:from-cyan-900/80 dark:to-cyan-950/90 rounded-xl shadow-lg border border-slate-200 dark:border-cyan-800/50 backdrop-blur-sm p-6 transition-colors duration-300">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-slate-500 dark:text-blue-200/90 text-sm font-medium transition-colors duration-300">Hired Candidates</p>
-                            <h2 class="text-3xl font-bold text-slate-800 dark:text-white mt-1 transition-colors duration-300">
-                            {{ $hiredCount }}
-                            </h2>
-                        </div>
-                        <div class="bg-cyan-100 dark:bg-cyan-600/30 p-3 rounded-full transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-600 dark:text-blue-100 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                <!-- Where Candidates Found Us Chart -->
+                <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                    <h3 class="text-sm font-medium mb-4 dark:text-white">Where Candidates Found Us</h3>
+                    <div class="flex justify-center">
+                        <div class="w-40 h-40">
+                            <canvas id="candidateSourceChart"></canvas>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center text-sm">
-                       
+                    <div class="flex flex-wrap gap-2 justify-center mt-2">
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-red-500 rounded-sm"></div>
+                            <span class="text-xs dark:text-gray-300">Facebook</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-blue-400 rounded-sm"></div>
+                            <span class="text-xs dark:text-gray-300">LinkedIn</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-green-500 rounded-sm"></div>
+                            <span class="text-xs dark:text-gray-300">Google</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-purple-500 rounded-sm"></div>
+                            <span class="text-xs dark:text-gray-300">Indeed.net</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Enhanced Application Trends Chart (Full Width) -->
-            <div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
-                <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">Application Trends</h3>
-                <div class="relative h-96">
-                    <canvas id="applicationTrendsChart"></canvas>
-                </div>
+            <!-- Company Table -->
+            <div class="border dark:border-slate-700 rounded-md p-4 bg-white dark:bg-slate-800 transition-colors duration-300 shadow-md">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b dark:border-slate-700">
+                            <th class="text-left py-3 font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                Company
+                            </th>
+                            <th class="text-center py-3 font-medium text-gray-500 dark:text-gray-400">Success Rate</th>
+                            <th class="text-center py-3 font-medium text-gray-500 dark:text-gray-400">Failed Rate</th>
+                            <th class="text-center py-3 font-medium text-gray-500 dark:text-gray-400">Average Time/Stage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(range(1, 4) as $i)
+                        <tr class="border-b dark:border-slate-700">
+                            <td class="py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                        E
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium dark:text-white">Enjay LTD</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">example@gmail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center py-4 dark:text-gray-300">9%</td>
+                            <td class="text-center py-4 dark:text-gray-300">9%</td>
+                            <td class="text-center py-4 dark:text-gray-300">9%</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Referral Sources Section -->
-<div class="bg-white dark:bg-slate-800/60 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm p-6 mb-8 transition-colors duration-300">
-  <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 transition-colors duration-300">
-    Where Candidates Found Us
-  </h3>
-  
-  @php
-    // Map each source to its Chart.js color & badge bg
-    $colorMap = [
-      'LinkedIn' => '#0A66C2',
-      'Facebook' => '#1877F2',
-      'Google'   => '#EA4335',
-      // add more sources here…
-    ];
-  @endphp
-
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Chart -->
-    <div class="lg:col-span-2">
-      <div class="relative h-96">
-        <canvas id="referralChart" class="w-full max-w-xs mx-auto"></canvas>
-        
-        <div class="flex flex-wrap justify-center gap-4 mt-6">
-        
-        </div>
-      </div>
-    </div>
-    
-    <!-- Stats/Details -->
-    <div class="space-y-4">
-      @foreach($sources as $i => $source)
-        @php
-          $color = $colorMap[$source] ?? '#888';
-          $count = $counts[$i];     // raw candidate count
-          $pct   = $data[$i];       // percentage
-        @endphp
-
-        <div class="bg-slate-50 dark:bg-slate-700/30 rounded-lg p-4 transition-colors duration-300">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              
-              <div>
-                <h4 class="text-slate-800 dark:text-white font-medium transition-colors duration-300">
-                  {{ $source }}
-                </h4>
-                <p class="text-slate-500 dark:text-blue-200/70 text-sm transition-colors duration-300">
-                  {{ $count }} candidates
-                </p>
-              </div>
-            </div>
-            <span class="text-lg font-semibold text-slate-800 dark:text-white transition-colors duration-300">
-              {{ $pct }}%
-            </span>
-          </div>
-        </div>
-      @endforeach
-    </div>
-  </div>
-</div>
-
-            
-            
         </main>
     </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('referralChart').getContext('2d');
-        const labels = @json($sources);  // ['Facebook','LinkedIn','Google',…]
-        const data   = @json($data);     // [48.0,32.0,20.0,…]
-        const backgroundColors = labels.map((_, i) => {
-            // spread hues evenly around the 360° color wheel
-            const hue = Math.round((360 * i) / labels.length);
-            return `hsl(${hue}, 65%, 50%)`;
-        });
-        new Chart(ctx, {
-        type: 'doughnut',
+document.addEventListener('DOMContentLoaded', function() {
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+    
+    const trendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    
+    const monthlyTrendsChart = new Chart(trendsCtx, {
+        type: 'line',
         data: {
-          labels,
-          datasets: [{
-            data,
-            backgroundColor: backgroundColors,
-            borderWidth: 0,
-            borderRadius: 4
-          }]
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Applications',
+                data: [100, 125, 150, 175, 200, 175, 150, 140, 125, 135, 50, 100],
+                backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 3
+            }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          cutout: '70%',
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-              padding: 10,
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              displayColors: true,
-              callbacks: {
-                label: ctx => `${ctx.label}: ${ctx.parsed}%`
-              }
-            }
-          }
-        }
-      });
-  });
-
-  // Application Trends Chart
-const appCtx = document.getElementById('applicationTrendsChart').getContext('2d');
-
-const monthlyData = {
-        labels: @json($labels),
-        barData: @json($barData),
-        
-    };
-
-const areaGradient = appCtx.createLinearGradient(0, 0, 0, 400);
-areaGradient.addColorStop(0, 'rgba(99, 102, 241, 0.6)');
-areaGradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
-
-const applicationChart = new Chart(appCtx, {
-    type: 'bar',
-    data: {
-        labels: monthlyData.labels,
-        datasets: [
-            {
-                type: 'bar',
-                label: 'Applications',
-                data: monthlyData.barData,
-                backgroundColor: document.querySelector('html').classList.contains('dark') 
-                    ? 'rgb(59, 130, 246)'
-                    : 'rgb(96, 165, 250)',
-                borderRadius: 4,
-                order: 2
-            },
-            
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                max: 200,
-                grid: {
-                    color: document.querySelector('html').classList.contains('dark') 
-                        ? 'rgba(148, 163, 184, 0.1)' 
-                        : 'rgba(203, 213, 225, 0.5)',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 250,
+                    ticks: {
+                        stepSize: 50,
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor,
+                        drawBorder: false
+                    }
                 },
-                ticks: {
-                    color: document.querySelector('html').classList.contains('dark') 
-                        ? 'rgba(147, 197, 253, 0.8)' 
-                        : 'rgb(100, 116, 139)'
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: textColor
+                    }
                 }
             },
-            x: {
-                grid: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    window.monthlyTrendsChart = monthlyTrendsChart;
+    
+    const successFailureCtx = document.getElementById('successFailureChart').getContext('2d');
+    
+    const successFailureChart = new Chart(successFailureCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Client A', 'Client B', 'Client C', 'Client D', 'Client E', 'Client A', 'Client B', 'Client C', 'Client D', 'Client E'],
+            datasets: [
+                {
+                    label: 'Success Rate',
+                    data: [30, 20, 20, 30, 20, 30, 20, 20, 30, 20],
+                    backgroundColor: 'rgb(59, 130, 246)',
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.7
+                },
+                {
+                    label: 'Failure Rate',
+                    data: [10, 20, 15, 10, 20, 10, 20, 15, 10, 20],
+                    backgroundColor: 'rgb(239, 68, 68)',
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.7
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 50,
+                    stacked: false,
+                    ticks: {
+                        stepSize: 10,
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor,
+                        drawBorder: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: textColor
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    window.successFailureChart = successFailureChart;
+    
+    // Applicant Drop-Off Chart
+    const dropOffCtx = document.getElementById('dropOffChart').getContext('2d');
+    
+    const dropOffChart = new Chart(dropOffCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Applied', 'Shortlisted', 'Interview', 'Hired'],
+            datasets: [{
+                axis: 'y',
+                data: [100, 65, 35, 15],
+                backgroundColor: [
+                    'rgb(59, 130, 246)',
+                    'rgb(239, 68, 68)',
+                    'rgb(20, 184, 166)',
+                    'rgb(124, 58, 237)'
+                ],
+                barPercentage: 0.8
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        },
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: textColor
+                    }
+                }
+            },
+            plugins: {
+                legend: {
                     display: false
                 },
-                ticks: {
-                    color: document.querySelector('html').classList.contains('dark') 
-                        ? 'rgba(147, 197, 253, 0.8)' 
-                        : 'rgb(100, 116, 139)'
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.x + '%';
+                        }
+                    }
                 }
             }
+        }
+    });
+    
+    window.dropOffChart = dropOffChart;
+    
+    // Candidate Source Chart
+    const sourceCtx = document.getElementById('candidateSourceChart').getContext('2d');
+    
+    const candidateSourceChart = new Chart(sourceCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Facebook', 'LinkedIn', 'Google', 'Indeed.net'],
+            datasets: [{
+                data: [40, 30, 20, 10],
+                backgroundColor: [
+                    'rgb(239, 68, 68)',
+                    'rgb(14, 165, 233)',
+                    'rgb(34, 197, 94)',
+                    'rgb(168, 85, 247)'
+                ],
+                borderWidth: 0,
+                hoverOffset: 5
+            }]
         },
-        plugins: {
-            legend: {
-                position: 'top',
-                align: 'end',
-                labels: {
-                    boxWidth: 12,
-                    usePointStyle: false,
-                    padding: 20,
-                    color: document.querySelector('html').classList.contains('dark') 
-                        ? 'rgba(147, 197, 253, 0.8)' 
-                        : 'rgb(71, 85, 105)'
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    bodyColor: textColor
                 }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                padding: 10,
-                titleColor: '#fff',
-                bodyColor: '#fff',
-                cornerRadius: 6,
-                displayColors: true
             }
-        },
-        interaction: {
-            mode: 'index',
-            intersect: false
-        },
-        animation: {
-            duration: 1000
+        }
+    });
+    
+    window.candidateSourceChart = candidateSourceChart;
+    
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            setTimeout(() => {
+                updateChartsTheme();
+            }, 100);
+        });
+    }
+    
+    function updateChartsTheme() {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+        
+        if (window.monthlyTrendsChart) {
+            window.monthlyTrendsChart.data.datasets[0].backgroundColor = isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.2)';
+            window.monthlyTrendsChart.options.scales.y.grid.color = gridColor;
+            window.monthlyTrendsChart.options.scales.y.ticks.color = textColor;
+            window.monthlyTrendsChart.options.scales.x.ticks.color = textColor;
+            window.monthlyTrendsChart.update();
+        }
+
+        if (window.successFailureChart) {
+            window.successFailureChart.options.scales.y.grid.color = gridColor;
+            window.successFailureChart.options.scales.y.ticks.color = textColor;
+            window.successFailureChart.options.scales.x.ticks.color = textColor;
+            window.successFailureChart.update();
+        }
+     
+        if (window.dropOffChart) {
+            window.dropOffChart.options.scales.x.grid.color = gridColor;
+            window.dropOffChart.options.scales.x.ticks.color = textColor;
+            window.dropOffChart.options.scales.y.ticks.color = textColor;
+            window.dropOffChart.update();
+        }
+        
+        if (window.candidateSourceChart) {
+            window.candidateSourceChart.update();
         }
     }
 });
-
-const updateChartTheme = () => {
-    const isDarkMode = document.querySelector('html').classList.contains('dark');
-    
-    applicationChart.data.datasets[0].backgroundColor = isDarkMode ? 'rgb(59, 130, 246)' : 'rgb(96, 165, 250)';
-    
-    applicationChart.options.scales.y.grid.color = isDarkMode 
-        ? 'rgba(148, 163, 184, 0.1)' 
-        : 'rgba(203, 213, 225, 0.5)';
-        
-    applicationChart.options.scales.y.ticks.color = isDarkMode 
-        ? 'rgba(147, 197, 253, 0.8)' 
-        : 'rgb(100, 116, 139)';
-        
-    applicationChart.options.scales.x.ticks.color = isDarkMode 
-        ? 'rgba(147, 197, 253, 0.8)' 
-        : 'rgb(100, 116, 139)';
-        
-    applicationChart.options.plugins.legend.labels.color = isDarkMode 
-        ? 'rgba(147, 197, 253, 0.8)' 
-        : 'rgb(71, 85, 105)';
-    
-    applicationChart.update();
-};
-
-document.addEventListener('themeChanged', updateChartTheme);
 </script>
 
 @include('includes.footer')
