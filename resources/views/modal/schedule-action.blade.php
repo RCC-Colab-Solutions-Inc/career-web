@@ -151,21 +151,7 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
                                             <textarea name="remarks" x-model="remarks" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" rows="3"></textarea>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reason</label>
-                                            <input type="text" name="reason" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Propose Date</label>
-                                            <input type="text" name="propose_date" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" placeholder="MM/DD/YYYY">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Propose Time</label>
-                                            <input type="text" name="propose_time" class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300" placeholder="HH:MM AM/PM">
-                                        </div>
+                                        </div>      
                                         <div x-show="meetingLink">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Meeting Link</label>
                                             <div class="flex items-center space-x-2">
@@ -181,10 +167,10 @@
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
                                             <div class="flex space-x-2">
                                                 <button type="button" @click="$dispatch('approve-schedule', {scheduleId: scheduleId, status: 'Accepted'})" class="flex-1 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                                    Accept
+                                                    Approve
                                                 </button>
                                                 <button type="button" @click="$dispatch('approve-schedule', {scheduleId: scheduleId, status: 'Declined'})" class="flex-1 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                                                    Decline
+                                                    Disapprove
                                                 </button>
                                             </div>
                                         </div>

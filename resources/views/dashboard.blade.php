@@ -159,7 +159,7 @@
                         </div>
                         <div class="flex items-center gap-1">
                             <div class="w-3 h-3 bg-purple-500 rounded-sm"></div>
-                            <span class="text-xs dark:text-gray-300">Indeed.net</span>
+                            <span class="text-xs dark:text-gray-300">JobStreet</span>
                         </div>
                     </div>
                 </div>

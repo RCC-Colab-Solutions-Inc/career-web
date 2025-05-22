@@ -33,8 +33,8 @@ class RegistrationAPIControllers extends Controller
 
         $email = $request->email;
         $subject = "Your account has been created";
-        $cc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
-    $bcc = ['automatic-message@rcccolabsolutions.com']; // Convert to an array
+        $cc = ['automatic-message@rcccolabsolutions.com'];
+        $bcc = ['automatic-message@rcccolabsolutions.com'];
         //get the blade for the body
         $body = view('emails.registration', [
             'email' => $request->email,

@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('schedule_type');
             $table->string('location');
             $table->enum('status', ['Pending', 'Accepted', 'Declined','Cancelled'])->default('Pending');
+            $table->enum('is_applicant', ['1', '0'])->default('0');
+            $table->string('proposed_time')->nullable();
+            $table->string('proposed_date')->nullable();
             $table->text('remarks')->nullable();
             $table->text('meetingid')->nullable();
             $table->text('meeting_link')->nullable();
