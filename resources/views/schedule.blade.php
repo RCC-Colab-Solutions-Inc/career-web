@@ -47,15 +47,6 @@
             <!-- Filter content remains the same -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</label>
-                            <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
-                                <option>Today</option>
-                                <option>This Week</option>
-                                <option>This Month</option>
-                                <option>Custom Range</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Interview Type</label>
                             <select class="w-full bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg py-2.5 px-4 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors duration-300">
                                 <option>All Types</option>
@@ -290,54 +281,22 @@
 <!-- Add Calendar Navigation Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const calendarMonth = document.getElementById('calendarMonth');
-    const prevMonth = document.getElementById('prevMonth');
-    const nextMonth = document.getElementById('nextMonth');
-    
-    let currentDate = new Date();
-    
-    function updateCalendarDisplay() {
-        const options = { year: 'numeric', month: 'long' };
-        calendarMonth.textContent = currentDate.toLocaleDateString('en-US', options);
-    }
-    
-    if (prevMonth) {
-        prevMonth.addEventListener('click', function() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            updateCalendarDisplay();
-        });
-    }
-    
-    if (nextMonth) {
-        nextMonth.addEventListener('click', function() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            updateCalendarDisplay();
-        });
-    }
-});
-
-function openEditModal(candidate, position, date, time, status) {
-    const modal = document.querySelector('[x-data*="open: false"]');
-    if (modal) {
-        const alpineData = Alpine.data(modal);
-        if (alpineData) {
-            alpineData.open = true;
-            alpineData.currentCandidate = candidate;
-            alpineData.currentPosition = position;
-            alpineData.currentDate = date;
-            alpineData.currentTime = time;
-            alpineData.currentStatus = status;
-        }
-    }
-}
-
-// Schedule Modal
-document.addEventListener('DOMContentLoaded', function() {
     // New Schedule Form
     const newScheduleForm = document.getElementById('new-schedule-form');
     if (newScheduleForm) {
-        newScheduleForm.addEventListener('submit', function(e) {
+        
+        const newForm = newScheduleForm.cloneNode(true);
+        newScheduleForm.parentNode.replaceChild(newForm, newScheduleForm);
+        
+        newForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+            
             const formData = new FormData(this);
             
             fetch('/schedule/save', {
@@ -350,21 +309,56 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    Alpine.store('scheduleModal').closeModal();
+                    
+                    const modalElement = this.closest('[x-data]');
+                    if (modalElement && modalElement.__x) {
+                        modalElement.__x.$data.open = false;
+                    }
                     window.location.reload();
                 } else {
                     alert('Error: ' + data.message);
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                    }
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
             });
+            
+            return false;
         });
+        
+        // Schedule type change handler
+        const scheduleTypeSelect = newForm.querySelector('select[name="schedule_type"]');
+        const locationInput = newForm.querySelector('input[name="location"]');
+        
+        if (scheduleTypeSelect && locationInput) {
+            scheduleTypeSelect.addEventListener('change', function() {
+                if (this.value === 'online') {
+                    locationInput.value = 'Teams';
+                    locationInput.parentElement.style.display = 'none';
+                } else {
+                    locationInput.value = '';
+                    locationInput.parentElement.style.display = 'block';
+                }
+            });
+            
+            if (scheduleTypeSelect.value === 'online') {
+                locationInput.value = 'Teams';
+                locationInput.parentElement.style.display = 'none';
+            }
+        }
     }
     
     // Edit Schedule Form
     document.addEventListener('submit-edit-schedule', function(e) {
-        const formData = new FormData(document.getElementById('edit-schedule-form'));
+        e.preventDefault();
+        const form = document.getElementById('edit-schedule-form');
+        const formData = new FormData(form);
         
         fetch('/schedule/update', {
             method: 'POST',
@@ -376,7 +370,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                Alpine.store('editModal').open = false;
+                const modalElement = form.closest('[x-data]');
+                if (modalElement && modalElement.__x) {
+                    modalElement.__x.$data.open = false;
+                }
                 window.location.reload();
             } else {
                 alert('Error: ' + data.message);
@@ -444,11 +441,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         });
     });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Open modal for new schedule
+    
+    // Open modal handler
     document.addEventListener('open-modal', function(e) {
+      
         if (e.detail.time && !e.detail.time.toLowerCase().includes('am') && !e.detail.time.toLowerCase().includes('pm')) {
             try {
                 const timeParts = e.detail.time.split(':');
@@ -488,106 +484,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Edit Schedule Form
-    document.addEventListener('submit-edit-schedule', function(e) {
-        const form = document.getElementById('edit-schedule-form');
-        const formData = new FormData(form);
-        const startTime = formData.get('start_schedule_time');
-        const endTime = formData.get('end_schedule_time');
-        
-        fetch('/schedule/update', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                const modalElement = form.closest('[x-data]');
-                if (modalElement && modalElement.__x) {
-                    modalElement.__x.$data.open = false;
-                } else {
-                    const modals = document.querySelectorAll('[x-data*="open: "]');
-                    modals.forEach(modal => {
-                        if (modal.__x && modal.__x.$data) {
-                            modal.__x.$data.open = false;
-                        }
-                    });
-                }
-                window.location.reload();
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-    // New Schedule Form
-    const newScheduleForm = document.getElementById('new-schedule-form');
-    if (newScheduleForm) {
-        newScheduleForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            
-            fetch('/schedule/save', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    const modalElement = this.closest('[x-data]');
-                    if (modalElement && modalElement.__x) {
-                        modalElement.__x.$data.open = false;
-                    } else {
-                        const modals = document.querySelectorAll('[x-data*="open: "]');
-                        modals.forEach(modal => {
-                            if (modal.__x && modal.__x.$data) {
-                                modal.__x.$data.open = false;
-                            }
-                        });
-                    }
-                    window.location.reload();
-                } else {
-                
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-        
-        const scheduleTypeSelect = newScheduleForm.querySelector('select[name="schedule_type"]');
-        const locationInput = newScheduleForm.querySelector('input[name="location"]');
-        
-        if (scheduleTypeSelect && locationInput) {
-            scheduleTypeSelect.addEventListener('change', function() {
-                if (this.value === 'online') {
-                    locationInput.value = 'Teams';
-                    locationInput.parentElement.style.display = 'none';
-                } else {
-                    locationInput.value = '';
-                    locationInput.parentElement.style.display = 'block';
-                }
-            });
-            
-            if (scheduleTypeSelect.value === 'online') {
-                locationInput.value = 'Teams';
-                locationInput.parentElement.style.display = 'none';
-            }
-        }
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
+    // Calendar functionality
     const calendarMonth = document.getElementById('calendarMonth');
     const prevMonth = document.getElementById('prevMonth');
     const nextMonth = document.getElementById('nextMonth');
@@ -597,9 +494,206 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentDate = new Date();
     let schedules = @json($schedules);
     
-    // Initialize the calendar
+    function updateCalendarDisplay() {
+        const options = { year: 'numeric', month: 'long' };
+        calendarMonth.textContent = currentDate.toLocaleDateString('en-US', options);
+    }
+    
+    function clearCalendarGrid() {
+        const headerCells = [];
+        for (let i = 0; i < 7; i++) {
+            const header = calendarGrid.querySelector(`div:nth-child(${i+1})`);
+            if (header) {
+                headerCells.push(header.cloneNode(true));
+            }
+        }
+        
+        calendarGrid.innerHTML = '';
+        
+        headerCells.forEach(header => {
+            calendarGrid.appendChild(header);
+        });
+    }
+    
+    function generateCalendar(date) {
+        const headerRow = calendarGrid.querySelectorAll('div:nth-child(-n+7)');
+        calendarGrid.innerHTML = '';
+        headerRow.forEach(header => {
+            calendarGrid.appendChild(header);
+        });
+        
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const firstDayOfWeek = firstDay.getDay();
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        
+        const today = new Date();
+        const isCurrentMonth = today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear();
+        const currentDay = today.getDate();
+        
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 bg-gray-50/30 dark:bg-slate-900/30';
+            calendarGrid.appendChild(emptyCell);
+        }
+        
+        const calendarMonth = date.getMonth() + 1;
+        const calendarYear = date.getFullYear();
+        
+        // Generate days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 hover:bg-gray-50/70 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer backdrop-blur-sm group';
+            
+            const dayContent = document.createElement('div');
+            dayContent.className = 'p-3 h-full flex flex-col';
+            
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'flex items-center justify-between mb-1';
+            
+            if (isCurrentMonth && day === currentDay) {
+                const currentDayDiv = document.createElement('div');
+                currentDayDiv.className = 'w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center shrink-0';
+                const dayText = document.createElement('span');
+                dayText.className = 'text-xs font-bold text-white';
+                dayText.textContent = day;
+                currentDayDiv.appendChild(dayText);
+                dayHeader.appendChild(currentDayDiv);
+            } else {
+                const dayText = document.createElement('span');
+                dayText.className = 'text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-200';
+                dayText.textContent = day;
+                dayHeader.appendChild(dayText);
+            }
+            
+            dayContent.appendChild(dayHeader);
+            
+            const eventsContainer = document.createElement('div');
+            eventsContainer.className = 'space-y-1 overflow-y-auto flex-1';
+            
+            const daySchedules = schedules.filter(schedule => {
+                if (!schedule.start_schedule_date) return false;
+                const scheduleDate = new Date(schedule.start_schedule_date);
+                return scheduleDate.getDate() === day && 
+                       scheduleDate.getMonth() + 1 === calendarMonth && 
+                       scheduleDate.getFullYear() === calendarYear;
+            });
+            
+            // Add events
+            daySchedules.forEach(schedule => {
+                const event = document.createElement('div');
+                
+                let colorClass = '';
+                switch(schedule.status) {
+                    case 'Pending':
+                        colorClass = 'bg-yellow-100/90 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200 border-yellow-200/50 dark:border-yellow-800/50';
+                        break;
+                    case 'Accepted':
+                        colorClass = 'bg-green-100/90 text-green-800 dark:bg-green-900/50 dark:text-green-200 border-green-200/50 dark:border-green-800/50';
+                        break;
+                    case 'Declined':
+                        colorClass = 'bg-red-100/90 text-red-800 dark:bg-red-900/50 dark:text-red-200 border-red-200/50 dark:border-red-800/50';
+                        break;
+                    case 'Cancelled':
+                        colorClass = 'bg-gray-100/90 text-gray-800 dark:bg-gray-700/50 dark:text-gray-300 border-gray-200/50 dark:border-gray-700/50';
+                        break;
+                    default:
+                        colorClass = 'bg-blue-100/90 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200 border-blue-200/50 dark:border-blue-800/50';
+                }
+                
+                event.className = `px-2 py-1 text-xs rounded-md ${colorClass} border shadow-sm backdrop-blur-sm transform transition-all duration-200 cursor-pointer`;
+                
+                let formattedTime = 'N/A';
+                if (schedule.start_schedule_time) {
+                    try {
+                        if (schedule.start_schedule_time.toLowerCase().includes('am') || schedule.start_schedule_time.toLowerCase().includes('pm')) {
+                            formattedTime = schedule.start_schedule_time;
+                        } else {
+                            const timeParts = schedule.start_schedule_time.split(':');
+                            let hours = parseInt(timeParts[0]);
+                            const minutes = timeParts[1].split(' ')[0];
+                            let period = 'AM';
+                            
+                            if (hours >= 12) {
+                                period = 'PM';
+                                if (hours > 12) hours -= 12;
+                            }
+                            if (hours === 0) hours = 12;
+                            
+                            formattedTime = `${hours}:${minutes} ${period}`;
+                        }
+                    } catch (error) {
+                        formattedTime = schedule.start_schedule_time;
+                    }
+                }
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'font-medium';
+                timeDiv.textContent = formattedTime;
+                
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'text-xs opacity-90';
+                subjectDiv.textContent = schedule.subject || 'Unnamed Schedule';
+                
+                event.appendChild(timeDiv);
+                event.appendChild(subjectDiv);
+                
+                event.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    window.dispatchEvent(new CustomEvent('open-modal', {
+                        detail: {
+                            scheduleId: schedule.id,
+                            applicant: `${schedule.firstname} ${schedule.lastname}`,
+                            subject: schedule.subject,
+                            date: schedule.start_schedule_date,
+                            time: schedule.start_schedule_time,
+                            endDate: schedule.end_schedule_date,
+                            endTime: schedule.end_schedule_time,
+                            location: schedule.location,
+                            status: schedule.status,
+                            scheduleType: schedule.schedule_type,
+                            attendee: schedule.attendee,
+                            remarks: schedule.remarks,
+                            meetingLink: schedule.meeting_link
+                        }
+                    }));
+                });
+                
+                eventsContainer.appendChild(event);
+            });
+            
+            dayContent.appendChild(eventsContainer);
+            dayElement.appendChild(dayContent);
+            calendarGrid.appendChild(dayElement);
+            
+            dayElement.addEventListener('click', function(e) {
+                if (e.target === dayElement || e.target === dayContent || e.target === dayHeader) {
+                    const selectedDate = new Date(date.getFullYear(), date.getMonth(), day);
+                    const formattedDate = `${selectedDate.getMonth() + 1}/${selectedDate.getDate()}/${selectedDate.getFullYear()}`;
+                    
+                    document.dispatchEvent(new CustomEvent('new-schedule', {
+                        detail: {
+                            prefilledDate: formattedDate
+                        }
+                    }));
+                }
+            });
+        }
+        
+        const lastDayOfWeek = (firstDayOfWeek + daysInMonth - 1) % 7;
+        const remainingCells = lastDayOfWeek === 6 ? 0 : 6 - lastDayOfWeek;
+        
+        for (let i = 0; i < remainingCells; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 bg-gray-50/30 dark:bg-slate-900/30';
+            calendarGrid.appendChild(emptyCell);
+        }
+    }
+
     generateCalendar(currentDate);
     
+    // Calendar navigation
     if (prevMonth) {
         prevMonth.addEventListener('click', function() {
             currentDate.setMonth(currentDate.getMonth() - 1);
@@ -627,227 +721,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function clearCalendarGrid() {
-    // Get the weekday headers
-    const headerCells = [];
-    for (let i = 0; i < 7; i++) {
-        const header = calendarGrid.querySelector(`div:nth-child(${i+1})`);
-        if (header) {
-            headerCells.push(header.cloneNode(true));
-        }
-    }
-   
-    calendarGrid.innerHTML = '';
-    
-    headerCells.forEach(header => {
-        calendarGrid.appendChild(header);
-    });
-}
-    
-    function updateCalendarDisplay() {
-        const options = { year: 'numeric', month: 'long' };
-        calendarMonth.textContent = currentDate.toLocaleDateString('en-US', options);
-    }
-    
-    function generateCalendar(date) {
-        // Clear previous calendar days (except weekday headers)
-        const headerRow = calendarGrid.querySelectorAll('div:nth-child(-n+7)');
-        calendarGrid.innerHTML = '';
-        headerRow.forEach(header => {
-            calendarGrid.appendChild(header);
-        });
-        
-        // Get the first day of the month
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const firstDayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
-        
-        // Get the last day of the month
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        const daysInMonth = lastDay.getDate();
-        
-        // Get today's date for highlighting
-        const today = new Date();
-        const isCurrentMonth = today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear();
-        const currentDay = today.getDate();
-        
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 bg-gray-50/30 dark:bg-slate-900/30';
-            calendarGrid.appendChild(emptyCell);
-        }
-        
-        // Get the month and year for schedule filtering
-        const calendarMonth = date.getMonth() + 1;
-        const calendarYear = date.getFullYear();
-        
-        // Generate days of the month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 hover:bg-gray-50/70 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer backdrop-blur-sm group';
-            
-            const dayContent = document.createElement('div');
-            dayContent.className = 'p-3 h-full flex flex-col';
-            
-            const dayHeader = document.createElement('div');
-            dayHeader.className = 'flex items-center justify-between mb-1';
-            
-            if (isCurrentMonth && day === currentDay) {
-                const currentDayDiv = document.createElement('div');
-                currentDayDiv.className = 'w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center shrink-0';
-                
-                const dayText = document.createElement('span');
-                dayText.className = 'text-xs font-bold text-white';
-                dayText.textContent = day;
-                
-                currentDayDiv.appendChild(dayText);
-                dayHeader.appendChild(currentDayDiv);
-            } else {
-                const dayText = document.createElement('span');
-                dayText.className = 'text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-200';
-                dayText.textContent = day;
-                dayHeader.appendChild(dayText);
-            }
-            
-            dayContent.appendChild(dayHeader);
-            
-            // Add events for this day from schedules
-            const eventsContainer = document.createElement('div');
-            eventsContainer.className = 'space-y-1 overflow-y-auto flex-1';
-            
-            // Filter schedules for this day
-            const daySchedules = schedules.filter(schedule => {
-                if (!schedule.start_schedule_date) return false;
-                
-                const scheduleDate = new Date(schedule.start_schedule_date);
-                return scheduleDate.getDate() === day && 
-                       scheduleDate.getMonth() + 1 === calendarMonth && 
-                       scheduleDate.getFullYear() === calendarYear;
-            });
-            
-            // Add events to calendar
-            daySchedules.forEach(schedule => {
-                const event = document.createElement('div');
-                
-                // Color based on status
-                let colorClass = '';
-                switch(schedule.status) {
-                    case 'Pending':
-                        colorClass = 'bg-yellow-100/90 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200 border-yellow-200/50 dark:border-yellow-800/50';
-                        break;
-                    case 'Accepted':
-                        colorClass = 'bg-green-100/90 text-green-800 dark:bg-green-900/50 dark:text-green-200 border-green-200/50 dark:border-green-800/50';
-                        break;
-                    case 'Declined':
-                        colorClass = 'bg-red-100/90 text-red-800 dark:bg-red-900/50 dark:text-red-200 border-red-200/50 dark:border-red-800/50';
-                        break;
-                    case 'Cancelled':
-                        colorClass = 'bg-gray-100/90 text-gray-800 dark:bg-gray-700/50 dark:text-gray-300 border-gray-200/50 dark:border-gray-700/50';
-                        break;
-                    default:
-                        colorClass = 'bg-blue-100/90 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200 border-blue-200/50 dark:border-blue-800/50';
-                }
-                
-                event.className = `px-2 py-1 text-xs rounded-md ${colorClass} border shadow-sm backdrop-blur-sm transform transition-all duration-200 cursor-pointer`;
-                
-                // Format time for display
-                let formattedTime = 'N/A';
-                if (schedule.start_schedule_time) {
-                    try {
-                        const timeParts = schedule.start_schedule_time.split(':');
-                        if (timeParts.length >= 2) {
-                            
-                            if (schedule.start_schedule_time.toLowerCase().includes('am') || schedule.start_schedule_time.toLowerCase().includes('pm')) {
-                                formattedTime = schedule.start_schedule_time;
-                            } else {
-                                let hours = parseInt(timeParts[0]);
-                                const minutes = timeParts[1].split(' ')[0];
-                                let period = 'AM';
-                                
-                                if (hours >= 12) {
-                                    period = 'PM';
-                                    if (hours > 12) hours -= 12;
-                                }
-                                if (hours === 0) hours = 12;
-                                
-                                formattedTime = `${hours}:${minutes} ${period}`;
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error formatting time:', error);
-                        formattedTime = schedule.start_schedule_time;
-                    }
-                }
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'font-medium';
-                timeDiv.textContent = formattedTime;
-                
-                const subjectDiv = document.createElement('div');
-                subjectDiv.className = 'text-xs opacity-90';
-                subjectDiv.textContent = schedule.subject || 'Unnamed Schedule';
-                
-                event.appendChild(timeDiv);
-                event.appendChild(subjectDiv);
-                
-                event.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    const eventDetail = {
-                        scheduleId: schedule.id,
-                        applicant: `${schedule.firstname} ${schedule.lastname}`,
-                        subject: schedule.subject,
-                        date: schedule.start_schedule_date,
-                        time: schedule.start_schedule_time,
-                        endDate: schedule.end_schedule_date,
-                        endTime: schedule.end_schedule_time,
-                        location: schedule.location,
-                        status: schedule.status,
-                        scheduleType: schedule.schedule_type,
-                        attendee: schedule.attendee,
-                        remarks: schedule.remarks,
-                        meetingLink: schedule.meeting_link
-                    };
-                    
-                    window.dispatchEvent(new CustomEvent('open-modal', {
-                        detail: eventDetail
-                    }));
-                    
-                    console.log('Calendar event clicked, dispatched open-modal window event');
-                });
-                
-                eventsContainer.appendChild(event);
-            });
-            
-            dayContent.appendChild(eventsContainer);
-            dayElement.appendChild(dayContent);
-            calendarGrid.appendChild(dayElement);
-            
-         
-            dayElement.addEventListener('click', function(e) {
-                
-                if (e.target === dayElement || e.target === dayContent || e.target === dayHeader) {
-                    const selectedDate = new Date(date.getFullYear(), date.getMonth(), day);
-                    const formattedDate = `${selectedDate.getMonth() + 1}/${selectedDate.getDate()}/${selectedDate.getFullYear()}`;
-
-                    document.dispatchEvent(new CustomEvent('new-schedule', {
-                        detail: {
-                            prefilledDate: formattedDate
-                        }
-                    }));
-                }
-            });
-        }
-        
-        // Fill remaining cells
-        const lastDayOfWeek = (firstDayOfWeek + daysInMonth - 1) % 7;
-        const remainingCells = lastDayOfWeek === 6 ? 0 : 6 - lastDayOfWeek;
-        
-        for (let i = 0; i < remainingCells; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.className = 'h-28 border-b border-r border-gray-200/30 dark:border-slate-700/50 bg-gray-50/30 dark:bg-slate-900/30';
-            calendarGrid.appendChild(emptyCell);
-        }
-    }
+// New Schedule Event
     document.addEventListener('new-schedule', function(e) {
         if (e.detail && e.detail.prefilledDate) {
             setTimeout(() => {

@@ -116,3 +116,7 @@ Route::middleware(['web', 'auth'])->controller(App\Http\Controllers\MessageContr
     Route::get('/admin/messages-conversations', 'adminGetConversations');
     Route::get('/admin/messages-conversation/{conversationId}', 'adminGetMessages');
 });
+
+Route::get('/schedule/respond/{scheduleId}/{response}', [App\Http\Controllers\ScheduleController::class, 'respondToInvitation'])
+    ->name('schedule.respond')
+    ->middleware('signed');

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use App\Services\MicrosoftGraphService;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
+use App\Http\Controllers\MailSettingController;
+use Illuminate\Support\Facades\URL;
 
 class ScheduleController extends Controller
 {
@@ -24,6 +26,7 @@ class ScheduleController extends Controller
         return view('schedule', compact('schedules'));
     }
     
+    // Create new schedule
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -49,10 +52,12 @@ class ScheduleController extends Controller
         }
 
         try {
+            $applicant = ApplicantsApplication::find($request->applicant_id);
+            
             $schedule = new ApplicantSchedule();
             $schedule->applicant_id = $request->applicant_id;
-            $schedule->client_id = $request->client_id ?? null;
-            $schedule->job_posting_id = $request->job_posting_id ?? null;
+            $schedule->client_id = $applicant->client_id ?? 0;
+            $schedule->job_posting_id = $applicant->job_posting_id ?? 0;
             $schedule->subject = $request->subject;
             $schedule->attendee = $request->attendee;
             $schedule->start_schedule_date = $request->start_schedule_date;
@@ -80,121 +85,7 @@ class ScheduleController extends Controller
         }
     }
     
-    public function update(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'schedule_id' => 'required|exists:applicant_schedules,id',
-            'subject' => 'required|string|max:255',
-            'start_schedule_date' => 'required|string',
-            'start_schedule_time' => 'required|string',
-            'end_schedule_date' => 'required|string',
-            'end_schedule_time' => 'required|string',
-            'schedule_type' => 'required|string|in:online,physical',
-            'location' => 'required|string|max:255',
-            'remarks' => 'nullable|string',
-            'attendee' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            ToastMagic::error("Error!", implode(", ", $validator->errors()->all()));
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            $schedule = ApplicantSchedule::findOrFail($request->schedule_id);
-        
-            $start_time = $request->start_schedule_time;
-            if (!preg_match('/am|pm/i', $start_time)) {
-                $time = \DateTime::createFromFormat('H:i', $start_time);
-                if ($time) {
-                    $start_time = $time->format('g:i A');
-                }
-            }
-            
-            $end_time = $request->end_schedule_time;
-            if (!preg_match('/am|pm/i', $end_time)) {
-                $time = \DateTime::createFromFormat('H:i', $end_time);
-                if ($time) {
-                    $end_time = $time->format('g:i A');
-                }
-            }
-            
-            $schedule->subject = $request->subject;
-            $schedule->start_schedule_date = $request->start_schedule_date;
-            $schedule->start_schedule_time = $start_time;
-            $schedule->end_schedule_date = $request->end_schedule_date;
-            $schedule->end_schedule_time = $end_time;
-            $schedule->schedule_type = $request->schedule_type;
-            $schedule->location = $request->location;
-            $schedule->remarks = $request->remarks;
-            $schedule->attendee = $request->attendee;
-            
-            if ($schedule->status === 'Accepted' && $schedule->meetingid && $schedule->schedule_type === 'online') {
-                try {
-                    $attendees = [];
-                    
-                    if ($request->attendee) {
-                        if (is_string($request->attendee) && 
-                            (str_starts_with($request->attendee, '[') || str_starts_with($request->attendee, '{'))) {
-                            $attendees = json_decode($request->attendee, true) ?? [];
-                        } else {
-                            $attendees = array_map('trim', explode(',', $request->attendee));
-                        }
-                    }
-                    
-                    $applicant = ApplicantsApplication::find($schedule->applicant_id);
-                    if ($applicant && $applicant->email) {
-                        $attendees[] = $applicant->email;
-                    }
-                    
-                    $startRaw = $request->start_schedule_date . ' ' . $request->start_schedule_time;
-                    $endRaw = $request->end_schedule_date . ' ' . $request->end_schedule_time;
-                    
-                    try {
-                        $start_schedule = Carbon::createFromFormat('m/d/Y h:i A', $startRaw, 'Asia/Manila')->toIso8601String();
-                        $end_schedule = Carbon::createFromFormat('m/d/Y h:i A', $endRaw, 'Asia/Manila')->toIso8601String();
-                    } catch (\Exception $e) {
-                        ToastMagic::error("Error!", "Invalid date/time format");
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Invalid date/time format',
-                        ], 422);
-                    }
-                    
-                    $graph = new MicrosoftGraphService();
-                    $graph->updateTeamsMeeting(
-                        $schedule->meetingid,
-                        $request->subject,
-                        $start_schedule,
-                        $end_schedule,
-                        array_unique($attendees)
-                    );
-                } catch (\Exception $e) {
-                    Log::error('Failed to update Teams meeting: ' . $e->getMessage());
-                }
-            }
-            
-            $schedule->save();
-            
-            ToastMagic::success('Success', 'Schedule updated successfully');
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Schedule updated successfully',
-                'data' => $schedule,
-            ]);
-        } catch (\Exception $e) {
-            ToastMagic::error("Error!", "Error updating schedule: " . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error updating schedule: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
-    
+    // Approve or decline schedule
     public function approve(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -219,8 +110,30 @@ class ScheduleController extends Controller
         $endRaw = $schedule->end_schedule_date . ' ' . $schedule->end_schedule_time;
 
         try {
-            $start_schedule = Carbon::createFromFormat('m/d/Y h:i A', $startRaw, 'Asia/Manila')->toIso8601String();
-            $end_schedule = Carbon::createFromFormat('m/d/Y h:i A', $endRaw, 'Asia/Manila')->toIso8601String();
+            $formats = [
+                'Y-m-d g:i A',
+                'Y-m-d H:i:s', 
+                'm/d/Y g:i A',
+                'd/m/Y g:i A',
+                'Y-m-d H:i'
+            ];
+            
+            $start_schedule = null;
+            $end_schedule = null;
+            
+            foreach ($formats as $format) {
+                try {
+                    $start_schedule = Carbon::createFromFormat($format, $startRaw, 'Asia/Manila')->toIso8601String();
+                    $end_schedule = Carbon::createFromFormat($format, $endRaw, 'Asia/Manila')->toIso8601String();
+                    break;
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+            
+            if (!$start_schedule || !$end_schedule) {
+                throw new \Exception('Could not parse date format. Start: ' . $startRaw . ', End: ' . $endRaw);
+            }
         } catch (\Exception $e) {
             Log::error('Datetime parsing failed', [
                 'startRaw' => $startRaw,
@@ -236,6 +149,11 @@ class ScheduleController extends Controller
 
         $applicant = ApplicantsApplication::find($applicantID);
         $email = $applicant->email ?? null;
+        
+        if (!is_array($attendees)) {
+            $attendees = [];
+        }
+        
         if ($email && !in_array($email, $attendees)) {
             $attendees[] = $email;
         }
@@ -249,44 +167,46 @@ class ScheduleController extends Controller
         }
         
         if($request->status == 'Accepted'){
-            if ($schedule->schedule_type == 'online') {
-                $graph = new MicrosoftGraphService();
-                try {
-                    $response = $graph->createTeamsMeeting(
-                        $subject,
-                        $start_schedule,
-                        $end_schedule,
-                        $attendees
-                    );
-                    $schedule->meeting_link = $response['onlineMeeting']['joinUrl'] ?? null;
-                    $schedule->meetingid = $response['id'] ?? null;
-                    $schedule->status = $request->status;
-                    $schedule->save();
-                    
-                    ToastMagic::success('Success', 'Teams meeting created successfully');
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'Teams meeting created successfully',
-                        'data' => [
-                            'url' => $response['onlineMeeting']['joinUrl'] ?? null,
-                            'meeting_id' => $response['id'] ?? null,
-                        ],
-                    ]);
-                } catch (\Throwable $e) {
-                    ToastMagic::error("Error!", "Error creating Teams meeting: " . $e->getMessage());
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Error creating Teams meeting: ' . $e->getMessage(),
-                    ], 500);
-                }
-            } else {
-                $schedule->status = $request->status;
-                $schedule->save();
+
+            $schedule->status = $request->status;
+            $schedule->save();
+            
+            // Send invitation email
+            try {
+                $mail = new MailSettingController();
+                $urls = $this->generateSecureUrls($schedule->id);
+
+                $displayDate = Carbon::parse($schedule->start_schedule_date)->format('F d, Y');
                 
-                ToastMagic::success('Success', 'Schedule accepted successfully');
+                $emailBody = view('emails.invitation', [
+                    'interviewTitle' => $subject,
+                    'title' => $subject,
+                    'date' => $displayDate,
+                    'time' => $schedule->start_schedule_time . ' - ' . $schedule->end_schedule_time,
+                    'acceptUrl' => $urls['acceptUrl'],
+                    'declineUrl' => $urls['declineUrl']
+                ])->render();
+                
+                $mail->sendMail(
+                    $email,
+                    'Interview Invitation - ' . $subject,
+                    $emailBody,
+                    [],
+                    []
+                );
+                
+                ToastMagic::success('Success', 'Schedule approved and invitation sent');
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Schedule accepted successfully',
+                    'message' => 'Schedule approved and invitation sent',
+                    'data' => $schedule,
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to send invitation email: ' . $e->getMessage());
+                ToastMagic::warning('Warning', 'Schedule approved but email failed to send');
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Schedule approved but email failed to send',
                     'data' => $schedule,
                 ]);
             }
@@ -303,6 +223,157 @@ class ScheduleController extends Controller
         }
     }
     
+    private function generateSecureUrls($scheduleId)
+    {
+        $acceptUrl = URL::temporarySignedRoute(
+            'schedule.respond',
+            now()->addDays(7),
+            ['scheduleId' => $scheduleId, 'response' => 'accept']
+        );
+        
+        $declineUrl = URL::temporarySignedRoute(
+            'schedule.respond',
+            now()->addDays(7),
+            ['scheduleId' => $scheduleId, 'response' => 'decline']
+        );
+        
+        return compact('acceptUrl', 'declineUrl');
+    }
+
+    // Respond to invitation
+    public function respondToInvitation(Request $request, $scheduleId, $response)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(401, 'Invalid or expired link');
+        }
+        
+        $schedule = ApplicantSchedule::find($scheduleId);
+        if (!$schedule) {
+            abort(404, 'Schedule not found');
+        }
+        
+        if ($schedule->status !== 'Accepted') {
+            abort(400, 'This invitation is no longer valid');
+        }
+        
+        $applicant = ApplicantsApplication::find($schedule->applicant_id);
+        
+        if ($response === 'accept') {
+            $schedule->is_applicant = '1';
+            $schedule->save();
+            
+            // Create Teams meeting if online
+            if ($schedule->schedule_type == 'online') {
+                try {
+                    $attendees = json_decode($schedule->attendee, true) ?: [];
+                    if ($applicant->email && !in_array($applicant->email, $attendees)) {
+                        $attendees[] = $applicant->email;
+                    }
+                    
+                    $startRaw = $schedule->start_schedule_date . ' ' . $schedule->start_schedule_time;
+                    $endRaw = $schedule->end_schedule_date . ' ' . $schedule->end_schedule_time;
+                
+                    $formats = [
+                        'Y-m-d g:i A',
+                        'Y-m-d H:i:s', 
+                        'm/d/Y g:i A',
+                        'd/m/Y g:i A',
+                        'Y-m-d H:i'
+                    ];
+                    
+                    $start_schedule = null;
+                    $end_schedule = null;
+                    
+                    foreach ($formats as $format) {
+                        try {
+                            $start_schedule = Carbon::createFromFormat($format, $startRaw, 'Asia/Manila')->toIso8601String();
+                            $end_schedule = Carbon::createFromFormat($format, $endRaw, 'Asia/Manila')->toIso8601String();
+                            break;
+                        } catch (\Exception $e) {
+                            continue;
+                        }
+                    }
+                    
+                    if (!$start_schedule || !$end_schedule) {
+                        throw new \Exception('Could not parse date format');
+                    }
+                    
+                    $graph = new MicrosoftGraphService();
+                    $response = $graph->createTeamsMeeting(
+                        $schedule->subject,
+                        $start_schedule,
+                        $end_schedule,
+                        $attendees
+                    );
+                    
+                    $schedule->meeting_link = $response['onlineMeeting']['joinUrl'] ?? null;
+                    $schedule->meetingid = $response['id'] ?? null;
+                    $schedule->save();
+                    
+                    // Send meeting link email
+                    $mail = new MailSettingController();
+                    $emailBody = view('emails.meeting-confirmation', [
+                        'applicantName' => $applicant->firstname . ' ' . $applicant->lastname,
+                        'interviewTitle' => $schedule->subject,
+                        'date' => Carbon::parse($schedule->start_schedule_date)->format('F d, Y'),
+                        'time' => $schedule->start_schedule_time . ' - ' . $schedule->end_schedule_time,
+                        'meetingLink' => $schedule->meeting_link,
+                        'location' => $schedule->location
+                    ])->render();
+                    
+                    $mail->sendMail(
+                        $applicant->email,
+                        'Interview Confirmed - Meeting Details',
+                        $emailBody,
+                        [],
+                        []
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to create meeting or send email: ' . $e->getMessage());
+                }
+            } else {
+                // Send physical location confirmation
+                try {
+                    $mail = new MailSettingController();
+                    $emailBody = view('emails.meeting-confirmation', [
+                        'applicantName' => $applicant->firstname . ' ' . $applicant->lastname,
+                        'interviewTitle' => $schedule->subject,
+                        'date' => Carbon::parse($schedule->start_schedule_date)->format('F d, Y'),
+                        'time' => $schedule->start_schedule_time . ' - ' . $schedule->end_schedule_time,
+                        'meetingLink' => null,
+                        'location' => $schedule->location
+                    ])->render();
+                    
+                    $mail->sendMail(
+                        $applicant->email,
+                        'Interview Confirmed - Location Details',
+                        $emailBody,
+                        [],
+                        []
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to send confirmation email: ' . $e->getMessage());
+                }
+            }
+            
+            return view('emails.response', [
+                'status' => 'accepted',
+                'message' => 'You have successfully accepted the interview invitation. Meeting details have been sent to your email.'
+            ]);
+        } else {
+            // Handle decline
+            $schedule->status = 'Declined';
+            $schedule->remarks = 'Declined by applicant';
+            $schedule->save();
+            
+            return view('emails.response', [
+                'status' => 'declined',
+                'message' => 'You have declined the interview invitation.'
+            ]);
+        }
+    }
+
+    // Cancel schedule
     public function cancel(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -330,6 +401,7 @@ class ScheduleController extends Controller
                 ], 404);
             }
 
+            // Cancel Teams meeting if exists
             if ($schedule->status === 'Accepted' && $schedule->meetingid && $schedule->schedule_type === 'online') {
                 try {
                     $graph = new MicrosoftGraphService();
@@ -342,6 +414,31 @@ class ScheduleController extends Controller
             $schedule->status = 'Cancelled';
             $schedule->remarks = $request->message ?? 'Cancelled by admin';
             $schedule->save();
+            
+            // Send cancellation email if applicant email exists
+            $applicant = ApplicantsApplication::find($schedule->applicant_id);
+            if ($applicant && $applicant->email && $schedule->status !== 'Pending') {
+                try {
+                    $mail = new MailSettingController();
+                    $emailBody = view('emails.interview-cancelled', [
+                        'applicantName' => $applicant->firstname . ' ' . $applicant->lastname,
+                        'interviewTitle' => $schedule->subject,
+                        'date' => Carbon::parse($schedule->start_schedule_date)->format('F d, Y'),
+                        'time' => $schedule->start_schedule_time,
+                        'reason' => $request->message ?? 'No reason provided'
+                    ])->render();
+                    
+                    $mail->sendMail(
+                        $applicant->email,
+                        'Interview Cancelled - ' . $schedule->subject,
+                        $emailBody,
+                        [],
+                        []
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to send cancellation email: ' . $e->getMessage());
+                }
+            }
 
             ToastMagic::success('Success', 'Schedule cancelled successfully');
             return response()->json([
